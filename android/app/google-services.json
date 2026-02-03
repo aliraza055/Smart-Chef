@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654346857124",
+    "project_id": "smart-chef-ef910",
+    "storage_bucket": "smart-chef-ef910.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654346857124:android:9edeaa183007d1bdea5431",
+        "android_client_info": {
+          "package_name": "com.example.smart_chef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1nRqcqds5CeQsA7ElMlbfRNhUvzYuw-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,16 @@
+buildscript {
+    val kotlinVersion = "2.1.21" 
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.2.1") // Use 8.2.1 (stable)
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("com.google.gms:google-services:4.4.4")
+    }
+}
 allprojects {
     repositories {
         google()
