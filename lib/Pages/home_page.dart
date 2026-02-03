@@ -11,15 +11,29 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text('Smart Chef'),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Center(child: Text('This is my new flutter project'))],
+      body: Container(
+        padding: EdgeInsets.only(top: 30, left: 20, right: 20),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Image.network(
+                  'https://share.google/15OjwHpiiBMti9hhk',
+                  height: 50,
+                  width: 50,
+                ),
+                Text(
+                  "Smart Chef",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
