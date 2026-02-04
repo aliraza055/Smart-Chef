@@ -22,6 +22,7 @@ class _HomepageState extends State<Homepage> {
                   height: 50,
                   width: 50,
                 ),
+
                 Text(
                   "Smart Chef",
                   style: TextStyle(
