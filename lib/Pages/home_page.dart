@@ -17,15 +17,15 @@ class _HomepageState extends State<Homepage> {
           children: [
             Row(
               children: [
-                Image.network(
-                  'https://share.google/15OjwHpiiBMti9hhk',
-                  height: 50,
-                  width: 50,
-                ),
+                // Image.network(
+                //   'https://share.google/15OjwHpiiBMti9hhk',
+                //   height: 50,
+                //   width: 50,
+                // ),
                 Text(
                   "Smart Chef",
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Colors.amber,
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
