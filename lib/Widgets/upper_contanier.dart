@@ -15,7 +15,6 @@ class UpperContanier extends StatelessWidget {
           bottomRight: Radius.circular(40),
         ),
       ),
-      //margin: EdgeInsets.only(left: 20),
       padding: EdgeInsets.only(top: 40, left: 20, right: 20),
       child: Column(
         children: [

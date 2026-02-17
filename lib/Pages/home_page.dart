@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
 class Homepage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomepageState extends State<Homepage> {
           SizedBox(height: 10),
           Container(
             margin: EdgeInsets.only(left: 10),
-            child: Text('Categories'),
+            child: Column(children: [Text('Categories'), CategoryTile()]),
           ),
         ],
       ),
