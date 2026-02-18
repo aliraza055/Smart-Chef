@@ -9,7 +9,7 @@ class UpperContanier extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height / 3.8,
       decoration: BoxDecoration(
-        color: Colors.amber,
+        color: Colors.green,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),

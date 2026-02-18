@@ -5,7 +5,6 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Example: Recipe Categories List
     List<String> categories = [
       'Breakfast',
       'Lunch',
@@ -16,20 +15,28 @@ class CategoryTile extends StatelessWidget {
       'Fast Food',
     ];
 
-    return ListView.builder(
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.amber,
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(100),
-          ),
+    return Container(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.only(right: 5),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(100),
+            ),
 
-          child: Text(categories[index]),
-          padding: EdgeInsets.all(10),
-        );
-      },
+            child: Text(
+              categories[index],
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          );
+        },
+      ),
     );
   }
 }
