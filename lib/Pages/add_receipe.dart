@@ -14,7 +14,7 @@ class _AddReceipeState extends State<AddReceipe> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-        title: Text('Add Receipe'),
+        title: Text('Add New Receipe'),
       ),
       body: Column(children: [Container()]),
     );
