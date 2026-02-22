@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UpperContanier extends StatelessWidget {
@@ -5,6 +6,7 @@ class UpperContanier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser!;
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height / 3.8,
@@ -25,7 +27,7 @@ class UpperContanier extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("hi Mr. Ali Raza"),
+                  Text("hi! ${user.displayName}"),
                   Text('Checking the amazing receipes...'),
                 ],
               ),

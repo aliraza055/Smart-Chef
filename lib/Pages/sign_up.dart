@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Models/auth_model.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -136,8 +137,11 @@ class _SignUpState extends State<SignUp> {
                   GestureDetector(
                     onTap: () {
                       if (_keyform.currentState!.validate()) {
-                        print(
-                          '${_nameCont.text.toString() + _gmailCont.text.toString()}',
+                        AuthModel().signup(
+                          context,
+                          _nameCont.text,
+                          _gmailCont.text,
+                          _passwordCont.text,
                         );
                       }
                     },
