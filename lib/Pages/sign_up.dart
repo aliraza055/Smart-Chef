@@ -17,16 +17,17 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(
             height: MediaQuery.of(context).size.height / 3,
             width: double.infinity,
 
-            decoration: BoxDecoration(color: Color(0xffffefbf)),
+            decoration: BoxDecoration(color: Colors.white),
             child: Center(
               child: Image.asset(
-                'images/receipe1.jpg',
+                'images/chef.jpg',
                 height: 130,
                 width: 130,
                 fit: BoxFit.contain,
@@ -38,7 +39,7 @@ class _SignUpState extends State<SignUp> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
+              color: Color(0xffffefbf),
             ),
             child: Form(
               key: _keyform,
