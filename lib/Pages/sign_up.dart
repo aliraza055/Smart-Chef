@@ -59,6 +59,7 @@ class _SignUpState extends State<SignUp> {
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   Container(
+                    height: 50,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     padding: EdgeInsets.only(left: 20, right: 20),
                     decoration: BoxDecoration(
@@ -67,6 +68,13 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: TextFormField(
                       controller: _nameCont,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter your name';
+                        } else {
+                          return null;
+                        }
+                      },
                       decoration: InputDecoration(
                         hint: Text('Enter your name'),
                         border: InputBorder.none,
@@ -86,6 +94,13 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: TextFormField(
                       controller: _gmailCont,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter valid gmail';
+                        } else {
+                          return null;
+                        }
+                      },
                       decoration: InputDecoration(
                         hint: Text('Enter your gmail'),
                         border: InputBorder.none,
@@ -105,6 +120,12 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: TextFormField(
                       controller: _passwordCont,
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'Enter strong password';
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                         hint: Text('Enter your password'),
                         border: InputBorder.none,
@@ -112,7 +133,13 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (_keyform.currentState!.validate()) {
+                        print(
+                          '${_nameCont.text.toString() + _gmailCont.text.toString()}',
+                        );
+                      }
+                    },
                     child: Container(
                       margin: EdgeInsets.only(top: 20),
                       padding: EdgeInsets.symmetric(
