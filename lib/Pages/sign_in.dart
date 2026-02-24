@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/auth_model.dart';
+import 'package:smart_chef/Pages/sign_up.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -58,29 +59,7 @@ class _SignInState extends State<SignIn> {
                     'Name',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.black12,
-                    ),
-                    child: TextFormField(
-                      controller: _nameCont,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter your name';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter your name'),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
+
                   Text(
                     'Gmail',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -156,12 +135,20 @@ class _SignInState extends State<SignIn> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text('If you dont have account!'),
-                      Text(
-                        'Singup',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.blue,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => SignUp()),
+                          );
+                        },
+                        child: Text(
+                          'Singup',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ],
