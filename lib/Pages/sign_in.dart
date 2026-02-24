@@ -114,7 +114,11 @@ class _SignInState extends State<SignIn> {
                   GestureDetector(
                     onTap: () {
                       if (_keyform.currentState!.validate()) {
-                        AuthModel().signIn(_gmailCont.text, _passwordCont.text);
+                        AuthModel().signIn(
+                          context,
+                          _gmailCont.text,
+                          _passwordCont.text,
+                        );
                       }
                     },
                     child: Container(

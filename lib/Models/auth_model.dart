@@ -59,11 +59,20 @@ class AuthModel {
     }
   }
 
-  Future<void> signIn(String gmail, String password) async {
+  Future<void> signIn(
+    BuildContext context,
+    String gmail,
+    String password,
+  ) async {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: gmail, password: password)
           .then((value) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => Homepage()),
+              (route) => false,
+            );
             ToastError().showToast(
               message: 'login Sucessful!',
               bgColor: Colors.green,

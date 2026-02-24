@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/add_receipe.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
@@ -37,6 +38,15 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddReceipe()),
+          );
+        },
       ),
     );
   }
