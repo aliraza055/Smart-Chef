@@ -59,7 +59,36 @@ class AuthModel {
     }
   }
 
-  Future userData(String id, Map<String, dynamic> userinfo) async {
-    await FirebaseFirestore.instance.collection('Users').doc(id).set(userinfo);
+  Future<void> signIn(String gmail, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: gmail, password: password)
+          .then((value) {
+            ToastError().showToast(
+              message: 'login Sucessful!',
+              bgColor: Colors.green,
+            );
+          });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ToastError().showToast(message: 'User not found!', bgColor: Colors.red);
+      } else if (e.code == 'wrong-password') {
+        ToastError().showToast(
+          message: 'incorrect password',
+          bgColor: Colors.red,
+        );
+      } else {
+        ToastError().showToast(
+          message: 'Error:${e.message}',
+          bgColor: Colors.red,
+        );
+      }
+    } catch (e) {
+      ToastError().showToast(message: 'Unexpected error', bgColor: Colors.red);
+    }
   }
+}
+
+Future userData(String id, Map<String, dynamic> userinfo) async {
+  await FirebaseFirestore.instance.collection('Users').doc(id).set(userinfo);
 }
