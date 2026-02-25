@@ -33,20 +33,23 @@ class _AddReceipeState extends State<AddReceipe> {
           child: Column(
             children: [
               SizedBox(height: 40),
-              Center(
-                child: DottedBorder(
-                  child: Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.camera_alt),
-                        SizedBox(height: 20),
-                        Text("Add Images"),
-                      ],
+              GestureDetector(
+                onTap: () {},
+                child: Center(
+                  child: DottedBorder(
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      decoration: BoxDecoration(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera_alt),
+                          SizedBox(height: 20),
+                          Text("Add Images"),
+                        ],
+                      ),
                     ),
                   ),
                 ),
