@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_chef/Models/toast_error.dart';
 
 class AddReceipe extends StatefulWidget {
   const AddReceipe({super.key});
@@ -28,6 +29,17 @@ class _AddReceipeState extends State<AddReceipe> {
     'Beverages',
     'Fast Food',
   ];
+  bool validateImage() {
+    if (image == null) {
+      ToastError().showToast(
+        message: 'Please select an image',
+        bgColor: Colors.red,
+      );
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,6 +141,12 @@ class _AddReceipeState extends State<AddReceipe> {
                 SizedBox(height: 20),
 
                 DropdownButtonFormField<String>(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a category';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.blueGrey.shade100,
@@ -188,7 +206,12 @@ class _AddReceipeState extends State<AddReceipe> {
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (!_formkey.currentState!.validate()) return;
+                    if (!validateImage()) return;
+
+                    print('Ready to submit');
+                  },
                   child: Container(
                     height: 40,
                     width: 120,
