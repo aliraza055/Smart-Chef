@@ -22,7 +22,6 @@ class _PracticePageState extends State<PracticePage> {
     if (response.statusCode == 200) {
       getData = jsonDecode(response.body);
       doneData = getData!['data'];
-      print(doneData);
     }
   }
 
