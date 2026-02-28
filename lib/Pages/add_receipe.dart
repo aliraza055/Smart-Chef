@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,11 +19,13 @@ class AddReceipe extends StatefulWidget {
 
 class _AddReceipeState extends State<AddReceipe> {
   String? selecItem;
+  String? difficulty;
   File? image;
   final _formkey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descritionController = TextEditingController();
   final ingridentsController = TextEditingController();
+  User? user = FirebaseAuth.instance.currentUser;
 
   List<String> receipes = [
     'Breakfast',
@@ -43,24 +48,49 @@ class _AddReceipeState extends State<AddReceipe> {
   }
 
   Future<String?> SendImage() async {
-    final uri = Uri.parse(
-      'https://api.cloudinary.com/v1_1/dhob4di7g/image/upload',
-    );
-    final request = http.MultipartRequest('post', uri);
-    request.fields['upload_preset'] = 'upload_preset_file';
-    request.files.add(await http.MultipartFile.fromPath('file', image!.path));
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      final resbody = await response.stream.bytesToString();
-      final decode = jsonDecode(resbody);
-      final imageUrl = decode['secure_url'];
-      return imageUrl;
-    } else {
-      ToastError().showToast(
-        message: 'Upload fails${response.statusCode}',
-        bgColor: Colors.red,
+    if (image != null) {
+      final uri = Uri.parse(
+        'https://api.cloudinary.com/v1_1/dhob4di7g/image/upload',
       );
+      final request = http.MultipartRequest('post', uri);
+      request.fields['upload_preset'] = 'upload_preset_file';
+      request.files.add(await http.MultipartFile.fromPath('file', image!.path));
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        final resbody = await response.stream.bytesToString();
+        final decode = jsonDecode(resbody);
+        final imageUrl = decode['secure_url'];
+        return imageUrl;
+      } else {
+        ToastError().showToast(
+          message: 'Upload fails${response.statusCode}',
+          bgColor: Colors.red,
+        );
+      }
+    } else {
+      ToastError().showToast(message: 'Select image', bgColor: Colors.red);
     }
+  }
+
+  Future sendData() async {
+    final image = await SendImage();
+    final receipe = ReceipeModel(
+      name: titleController.text,
+      description: descritionController.text,
+      category: selecItem!,
+      image: image!,
+      userName: user!.displayName!,
+      ingridents: ingridentsController.text,
+      difficulity: difficulty!,
+      userphoto: user!.photoURL!,
+      likes: 0,
+      rated: 0,
+      time: 20,
+    );
+    await FirebaseFirestore.instance
+        .collection('Receipes')
+        .doc('1')
+        .set(receipe.toMap());
   }
 
   @override
@@ -202,7 +232,33 @@ class _AddReceipeState extends State<AddReceipe> {
                   },
                 ),
                 SizedBox(height: 20),
-                DropdownButtonFormField(items: [], onChanged: (value) {}),
+                DropdownButtonFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a category';
+                    }
+                    return null;
+                  },
+                  hint: Text('Select difficulty level'),
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.blueGrey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  items: ['easy', 'medium', 'hard'].map((e) {
+                    return DropdownMenuItem(value: e, child: Text(e));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      difficulty = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
                 Container(
                   height: 150,
                   width: double.infinity,
@@ -233,10 +289,9 @@ class _AddReceipeState extends State<AddReceipe> {
                   onTap: () {
                     if (!_formkey.currentState!.validate()) return;
                     if (!validateImage()) return;
-
-                    print('Ready to submit');
                   },
                   child: Container(
+                    margin: EdgeInsets.only(bottom: 40),
                     height: 40,
                     width: 120,
                     decoration: BoxDecoration(

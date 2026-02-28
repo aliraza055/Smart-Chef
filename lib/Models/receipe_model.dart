@@ -5,7 +5,7 @@ class ReceipeModel {
   String description;
   String image;
   String category;
-  List<String> ingridents;
+  String ingridents;
   String userName;
   String userphoto;
   String difficulity;
