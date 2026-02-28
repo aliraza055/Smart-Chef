@@ -61,7 +61,7 @@ class _AddReceipeState extends State<AddReceipe> {
         final resbody = await response.stream.bytesToString();
         final decode = jsonDecode(resbody);
         final imageUrl = decode['secure_url'];
-        return imageUrl;
+        return imageUrl as String;
       } else {
         ToastError().showToast(
           message: 'Upload fails${response.statusCode}',
@@ -71,6 +71,7 @@ class _AddReceipeState extends State<AddReceipe> {
     } else {
       ToastError().showToast(message: 'Select image', bgColor: Colors.red);
     }
+    return null;
   }
 
   Future sendData() async {
