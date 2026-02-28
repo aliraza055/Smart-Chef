@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chef/Models/toast_error.dart';
+import 'package:http/http.dart' as http;
 
 class AddReceipe extends StatefulWidget {
   const AddReceipe({super.key});
@@ -38,6 +40,21 @@ class _AddReceipeState extends State<AddReceipe> {
       return false;
     }
     return true;
+  }
+
+  Future SendImage() async {
+    final uri = Uri.parse(
+      'https://api.cloudinary.com/v1_1/dhob4di7g/image/upload',
+    );
+    final request = http.MultipartRequest('post', uri);
+    request.fields['upload_preset'] = 'upload_preset_file';
+    request.files.add(await http.MultipartFile.fromPath('file', image!.path));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final resbody = await response.stream.bytesToString();
+      final decode = jsonDecode(resbody);
+      final imageUrl = decode['secure_url'];
+    }
   }
 
   @override
