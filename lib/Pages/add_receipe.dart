@@ -6,6 +6,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:random_string/random_string.dart';
 import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:http/http.dart' as http;
@@ -73,23 +74,24 @@ class _AddReceipeState extends State<AddReceipe> {
   }
 
   Future sendData() async {
+    final id = randomAlphaNumeric(10);
     final image = await SendImage();
     final receipe = ReceipeModel(
       name: titleController.text,
       description: descritionController.text,
       category: selecItem!,
       image: image!,
-      userName: user!.displayName!,
+      userName: user?.displayName ?? '',
       ingridents: ingridentsController.text,
       difficulity: difficulty!,
-      userphoto: user!.photoURL!,
+      userphoto: user?.photoURL ?? '',
       likes: 0,
       rated: 0,
       time: 20,
     );
     await FirebaseFirestore.instance
         .collection('Receipes')
-        .doc('1')
+        .doc(id)
         .set(receipe.toMap());
   }
 
@@ -289,6 +291,11 @@ class _AddReceipeState extends State<AddReceipe> {
                   onTap: () {
                     if (!_formkey.currentState!.validate()) return;
                     if (!validateImage()) return;
+                    sendData();
+                    ToastError().showToast(
+                      message: 'Recipe Added Successfully!',
+                      bgColor: Colors.green,
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 40),
