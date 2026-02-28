@@ -42,7 +42,7 @@ class _AddReceipeState extends State<AddReceipe> {
     return true;
   }
 
-  Future SendImage() async {
+  Future<String?> SendImage() async {
     final uri = Uri.parse(
       'https://api.cloudinary.com/v1_1/dhob4di7g/image/upload',
     );
@@ -54,6 +54,12 @@ class _AddReceipeState extends State<AddReceipe> {
       final resbody = await response.stream.bytesToString();
       final decode = jsonDecode(resbody);
       final imageUrl = decode['secure_url'];
+      return imageUrl;
+    } else {
+      ToastError().showToast(
+        message: 'Upload fails${response.statusCode}',
+        bgColor: Colors.red,
+      );
     }
   }
 
