@@ -72,7 +72,7 @@ class ReceipeContainer extends StatelessWidget {
                     horizontal: 20,
                     vertical: 8,
                   ),
-                  child: Text('Time'),
+                  child: Text('time'),
                 ),
               ),
               Container(
