@@ -19,14 +19,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Bottom Navigation Demo')),
       body: _pages[_currentIndex],
 
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex, // highlight the selected tab
+        currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index; // change tab
+            _currentIndex = index;
           });
         },
         selectedItemColor: Colors.blue,
@@ -35,7 +34,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
         // define your bottom items
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'favorite',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

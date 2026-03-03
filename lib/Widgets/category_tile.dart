@@ -6,6 +6,7 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> categories = [
+      'All',
       'Breakfast',
       'Lunch',
       'Dinner',
@@ -23,7 +24,7 @@ class CategoryTile extends StatelessWidget {
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.only(right: 5),
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.green,
               border: Border.all(),
