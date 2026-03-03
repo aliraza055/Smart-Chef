@@ -6,6 +6,7 @@ class ReceipeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: 10),
       margin: EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
         color: Colors.white10,
@@ -72,17 +73,19 @@ class ReceipeContainer extends StatelessWidget {
                     horizontal: 20,
                     vertical: 8,
                   ),
-                  child: Text('time'),
+                  child: Center(child: Text('time')),
                 ),
               ),
               Container(
+                height: 35,
+                width: 70,
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade100,
+                  color: Colors.amber,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Time'),
+                  child: Center(child: Text('Time')),
                 ),
               ),
               Container(

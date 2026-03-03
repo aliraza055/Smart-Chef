@@ -51,7 +51,8 @@ class _HomepageState extends State<Homepage> {
                         itemCount: receipes.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: EdgeInsets.only(right: 20),
+                            padding: EdgeInsets.only(bottom: 8),
+                            margin: EdgeInsets.only(right: 20, bottom: 20),
                             decoration: BoxDecoration(
                               color: Colors.white10,
                               border: Border.all(
@@ -114,6 +115,8 @@ class _HomepageState extends State<Homepage> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Container(
+                                      height: 35,
+                                      width: 70,
                                       decoration: BoxDecoration(
                                         color: Colors.amber,
                                         borderRadius: BorderRadius.circular(16),
@@ -123,27 +126,45 @@ class _HomepageState extends State<Homepage> {
                                           horizontal: 20,
                                           vertical: 8,
                                         ),
-                                        child: Text(receipes[index]['like']),
+                                        child: Center(
+                                          child: Text(
+                                            receipes[index]['like'].toString(),
+                                          ),
+                                        ),
                                       ),
                                     ),
+
                                     Container(
+                                      height: 35,
+                                      width: 70,
                                       decoration: BoxDecoration(
-                                        color: Colors.amber.shade100,
+                                        color: Colors.amber,
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(receipes[index]['time']),
+                                        child: Center(
+                                          child: Text(
+                                            receipes[index]['time'].toString(),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Container(
+                                      height: 35,
+                                      width: 70,
                                       decoration: BoxDecoration(
-                                        color: Colors.amber.shade100,
+                                        color: Colors.amber,
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(receipes[index]['rating']),
+                                        child: Center(
+                                          child: Text(
+                                            receipes[index]['rating']
+                                                .toString(),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
