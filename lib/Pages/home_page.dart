@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Pages/add_receipe.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
@@ -13,7 +12,19 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final stream = FirebaseFirestore.instance.collection('Receipes').snapshots();
+  String selectedCategory = 'All';
+
+  Stream<QuerySnapshot> _getRecipesStream() {
+    if (selectedCategory == 'All') {
+      return FirebaseFirestore.instance.collection('Receipes').snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection('Receipes')
+          .where('category', isEqualTo: selectedCategory)
+          .snapshots();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,40 +32,52 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           children: [
             UpperContanier(),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              margin: EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Categories',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 10),
-                  CategoryTile(),
-                  SizedBox(height: 10),
-                  ReceipeContainer(),
+                  const SizedBox(height: 10),
+
+                  // CategoryTile with callback
+                  CategoryTile(
+                    onCategorySelected: (value) {
+                      setState(() {
+                        selectedCategory = value;
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // StreamBuilder based on selectedCategory
                   StreamBuilder(
-                    stream: stream,
+                    stream: _getRecipesStream(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const Center(child: CircularProgressIndicator());
                       }
-                      if (!snapshot.hasData) {
-                        return ReceipeContainer();
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return const Center(child: Text('No recipes found'));
                       }
-                      final receipes = snapshot.data!.docs;
+
+                      final recipes = snapshot.data!.docs;
                       return ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: receipes.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: recipes.length,
                         itemBuilder: (context, index) {
+                          final data = recipes[index];
                           return Container(
-                            padding: EdgeInsets.only(bottom: 8),
-                            margin: EdgeInsets.only(right: 20, bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 8),
+                            margin: const EdgeInsets.only(bottom: 20),
                             decoration: BoxDecoration(
-                              color: Colors.white10,
+                              color: Colors.white,
                               border: Border.all(
                                 color: Colors.greenAccent,
                                 width: 1.5,
@@ -68,106 +91,42 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               ],
                             ),
-
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadiusGeometry.vertical(
+                                  borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(16),
                                   ),
                                   child: Image.network(
-                                    receipes[index]['image'],
+                                    data['image'],
                                     height: 180,
-                                    fit: BoxFit.cover,
                                     width: double.infinity,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        receipes[index]['name'],
+                                        data['name'],
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
-                                          color: Colors.black87,
                                         ),
                                       ),
                                       Text(
-                                        receipes[index]['description'],
-
+                                        data['description'],
                                         style: TextStyle(
                                           color: Colors.grey[700],
                                           fontSize: 14,
-                                          height: 1.2,
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      height: 35,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 8,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            receipes[index]['like'].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      height: 35,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            receipes[index]['time'].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 35,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            receipes[index]['rating']
-                                                .toString(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),

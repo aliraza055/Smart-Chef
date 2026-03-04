@@ -13,7 +13,6 @@ class PracticePage extends StatefulWidget {
 class _PracticePageState extends State<PracticePage> {
   Map<String, dynamic>? getData;
   List? doneData;
-
   Future getapi() async {
     http.Response response;
     response = await http.get(
