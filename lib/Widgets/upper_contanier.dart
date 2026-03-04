@@ -6,7 +6,7 @@ class UpperContanier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser!;
+    User? user = FirebaseAuth.instance.currentUser;
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height / 3.8,
@@ -27,7 +27,7 @@ class UpperContanier extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("hi! ${user.displayName}"),
+                  Text("hi! ${user?.displayName ?? 'ALI RAZA'} "),
                   Text('Checking the amazing receipes...'),
                 ],
               ),

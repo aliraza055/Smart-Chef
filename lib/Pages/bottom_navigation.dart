@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Pages/add_receipe.dart';
+import 'package:smart_chef/Pages/favorite_item.dart';
 import 'package:smart_chef/Pages/home_page.dart';
-import 'package:smart_chef/Pages/practice_page.dart';
+import 'package:smart_chef/Pages/user_info.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -13,34 +14,142 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
-  // pages for each tab
-  final List<Widget> _pages = const [Homepage(), AddReceipe(), PracticePage()];
+  final List<Widget> _pages = const [
+    Homepage(),
+    FavoriteItem(),
+    SizedBox(), // Placeholder for center FAB
+    UserInfo(),
+    Scaffold(body: Center(child: Text('Settings Page'))),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+      // 🌟 Floating Add Button in Center
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        shape: const CircleBorder(),
+        elevation: 6,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddReceipe()),
+          );
         },
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
+        child: const Icon(Icons.add, size: 32, color: Colors.white),
+      ),
 
-        // define your bottom items
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'favorite',
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      // 🌈 Custom Bottom Bar
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8,
+        color: Colors.white,
+        elevation: 10,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Left side icons
+              Row(
+                children: [
+                  _buildNavItem(Icons.home, 0, "Home"),
+                  const SizedBox(width: 20),
+                  _buildNavItem(Icons.favorite, 1, "Favorite"),
+                ],
+              ),
+
+              // Right side icons
+              Row(
+                children: [
+                  _buildNavItem(Icons.person, 3, "Profile"),
+                  const SizedBox(width: 20),
+                  _buildNavItem(Icons.settings, 4, "Settings"),
+                ],
+              ),
+            ],
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, int index, String label) {
+    final bool isSelected = _currentIndex == index;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? Colors.blue : Colors.grey,
+            size: isSelected ? 28 : 24,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.blue : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:smart_chef/Pages/favorite_item.dart';
+// import 'package:smart_chef/Pages/home_page.dart';
+// import 'package:smart_chef/Pages/user_info.dart';
+
+// class BottomNavigation extends StatefulWidget {
+//   const BottomNavigation({super.key});
+
+//   @override
+//   State<BottomNavigation> createState() => _BottomNavigationState();
+// }
+
+// class _BottomNavigationState extends State<BottomNavigation> {
+//   int _currentIndex = 0;
+
+//   // pages for each tab
+//   final List<Widget> _pages = const [Homepage(), FavoriteItem(), UserInfo()];
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: _pages[_currentIndex],
+
+//       bottomNavigationBar: BottomNavigationBar(
+//         currentIndex: _currentIndex,
+//         onTap: (index) {
+//           setState(() {
+//             _currentIndex = index;
+//           });
+//         },
+//         selectedItemColor: Colors.blue,
+//         unselectedItemColor: Colors.grey,
+
+//         // define your bottom items
+//         items: const [
+//           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.favorite),
+//             label: 'favorite',
+//           ),
+//           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+//         ],
+//       ),
+//     );
+//   }
+// }

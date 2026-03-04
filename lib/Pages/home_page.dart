@@ -182,15 +182,6 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => AddReceipe()),
-          );
-        },
-      ),
     );
   }
 }

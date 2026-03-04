@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CategoryTile extends StatelessWidget {
+class CategoryTile extends StatefulWidget {
   const CategoryTile({super.key});
 
+  @override
+  State<CategoryTile> createState() => _CategoryTileState();
+}
+
+class _CategoryTileState extends State<CategoryTile> {
   @override
   Widget build(BuildContext context) {
     List<String> categories = [
@@ -10,12 +15,9 @@ class CategoryTile extends StatelessWidget {
       'Breakfast',
       'Lunch',
       'Dinner',
-      'Snacks',
-      'Desserts',
-      'Beverages',
+      'Biryani',
       'Fast Food',
     ];
-
     return Container(
       height: 40,
       child: ListView.builder(
