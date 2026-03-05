@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
-import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
 class Homepage extends StatefulWidget {
@@ -55,7 +54,6 @@ class _HomepageState extends State<Homepage> {
 
                   const SizedBox(height: 20),
 
-                  // StreamBuilder based on selectedCategory
                   StreamBuilder(
                     stream: _getRecipesStream(),
                     builder: (context, snapshot) {
