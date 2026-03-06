@@ -10,6 +10,9 @@ class DeitalPage extends StatefulWidget {
 class _DeitalPageState extends State<DeitalPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Text('helo')]));
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(children: [Text('')]),
+    );
   }
 }
