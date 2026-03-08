@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class DeitalPage extends StatefulWidget {
@@ -53,6 +55,7 @@ class _DeitalPageState extends State<DeitalPage> {
                   'Receipe by',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
