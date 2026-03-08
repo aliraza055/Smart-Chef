@@ -32,6 +32,8 @@ class _DeitalPageState extends State<DeitalPage> {
               color: Colors.blueGrey.shade100,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,6 +46,66 @@ class _DeitalPageState extends State<DeitalPage> {
                       ),
                     ),
                     Text('⭐'),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Receipe by',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Image.asset(
+                            'images/boy.jpg',
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ali RAza Maqbool',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text('Chef'),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blueAccent.shade100,
+                          ),
+                          child: Icon(Icons.call),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blueAccent.shade100,
+                          ),
+                          child: Icon(Icons.message),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
