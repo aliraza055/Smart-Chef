@@ -12,7 +12,17 @@ class _DeitalPageState extends State<DeitalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(children: [Text('hu')]),
+      body: Column(
+        children: [
+          ClipRRect(
+            child: Image.asset(
+              'images/receipe1.jpg',
+              width: double.infinity,
+              // height: 100,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
