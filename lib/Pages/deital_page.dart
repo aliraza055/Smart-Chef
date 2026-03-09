@@ -81,7 +81,7 @@ class _DeitalPageState extends State<DeitalPage> {
                                 fontSize: 16,
                               ),
                             ),
-                            Text('Chef'),
+                            Text('Chef App'),
                           ],
                         ),
                       ],
@@ -89,8 +89,8 @@ class _DeitalPageState extends State<DeitalPage> {
                     Row(
                       children: [
                         Container(
-                          height: 60,
-                          width: 60,
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent.shade100,
@@ -99,8 +99,8 @@ class _DeitalPageState extends State<DeitalPage> {
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 10),
-                          height: 60,
-                          width: 60,
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent.shade100,
