@@ -75,7 +75,7 @@ class _DeitalPageState extends State<DeitalPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Ali RAza Maqbool',
+                              'Ali RAza ',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
