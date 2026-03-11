@@ -81,7 +81,7 @@ class _DeitalPageState extends State<DeitalPage> {
                                 fontSize: 16,
                               ),
                             ),
-                            Text('Chef App'),
+                            Text('Chef Ap'),
                           ],
                         ),
                       ],
