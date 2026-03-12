@@ -122,22 +122,69 @@ class _DeitalPageState extends State<DeitalPage> {
                 Row(
                   children: [
                     Container(
-                      height: 60,
+                      padding: EdgeInsets.all(10),
+                      height: 70,
                       width: 160,
                       decoration: BoxDecoration(
                         color: Colors.white10,
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(16),
                       ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(child: Icon(Icons.notifications)),
+                          ),
+                          Column(
+                            children: [
+                              Text('Cusine'),
+                              Text(
+                                'Itlian',
+                                style: TextStyle(color: Colors.deepOrange),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     Container(
+                      padding: EdgeInsets.all(10),
                       margin: EdgeInsets.only(left: 10),
-                      height: 60,
+                      height: 70,
                       width: 160,
                       decoration: BoxDecoration(
                         color: Colors.white10,
-                        border: Border.all(),
+                        border: Border.all(width: 0.3),
                         borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(child: Icon(Icons.notifications)),
+                          ),
+                          Column(
+                            children: [
+                              Text('Cusine'),
+                              // SizedBox(height: 10),
+                              Text(
+                                'Itlian',
+                                style: TextStyle(color: Colors.deepOrange),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],
