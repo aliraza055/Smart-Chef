@@ -109,6 +109,39 @@ class _DeitalPageState extends State<DeitalPage> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10),
+                Text(
+                  'Description',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  ' This is the descripition about our receipe that is super amazing cool',
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 160,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      height: 60,
+                      width: 160,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
