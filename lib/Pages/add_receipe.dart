@@ -155,7 +155,7 @@ class _AddReceipeState extends State<AddReceipe> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextFormField(
-                      controller: descritionController,
+                      controller: titleController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Enter the title';
@@ -164,7 +164,7 @@ class _AddReceipeState extends State<AddReceipe> {
                         }
                       },
                       decoration: InputDecoration(
-                        hint: Text('Enter Description'),
+                        hint: Text('Enter title'),
                         border: InputBorder.none,
                       ),
                     ),
@@ -179,16 +179,16 @@ class _AddReceipeState extends State<AddReceipe> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextFormField(
-                      controller: titleController,
+                      controller: descritionController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Enter the title';
+                          return 'Enter the Description';
                         } else {
                           return null;
                         }
                       },
                       decoration: InputDecoration(
-                        hint: Text('Enter tile'),
+                        hint: Text('Enter Description'),
                         border: InputBorder.none,
                       ),
                     ),

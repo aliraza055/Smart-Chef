@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/toast_error.dart';
-import 'package:smart_chef/Pages/home_page.dart';
+import 'package:smart_chef/Pages/bottom_navigation.dart';
 
 class AuthModel {
   Future<void> signup(
@@ -30,7 +30,7 @@ class AuthModel {
             );
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => Homepage()),
+              MaterialPageRoute(builder: (_) => BottomNavigation()),
               (route) => false,
             );
           });
@@ -70,7 +70,7 @@ class AuthModel {
           .then((value) {
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => Homepage()),
+              MaterialPageRoute(builder: (_) => BottomNavigation()),
               (route) => false,
             );
             ToastError().showToast(
