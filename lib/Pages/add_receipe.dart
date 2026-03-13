@@ -29,12 +29,11 @@ class _AddReceipeState extends State<AddReceipe> {
   User? user = FirebaseAuth.instance.currentUser;
 
   List<String> receipes = [
+    'All',
     'Breakfast',
     'Lunch',
     'Dinner',
-    'Snacks',
-    'Desserts',
-    'Beverages',
+    'Biryani',
     'Fast Food',
   ];
   bool validateImage() {

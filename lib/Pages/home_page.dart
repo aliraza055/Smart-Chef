@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Pages/deital_page.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
+import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
 class Homepage extends StatefulWidget {
@@ -12,6 +13,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  bool inselected = false;
   String selectedCategory = 'All';
 
   Stream<QuerySnapshot> _getRecipesStream() {
@@ -44,7 +46,6 @@ class _HomepageState extends State<Homepage> {
                   ),
                   const SizedBox(height: 10),
 
-                  // CategoryTile with callback
                   CategoryTile(
                     onCategorySelected: (value) {
                       setState(() {
@@ -82,63 +83,16 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               );
                             },
-                            child: Container(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              margin: const EdgeInsets.only(bottom: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.greenAccent,
-                                  width: 1.5,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(16),
-                                    ),
-                                    child: Image.network(
-                                      data['image'],
-                                      height: 180,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data['name'],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          data['description'],
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            child: RecipeCard(
+                              image: data['image'],
+                              name: data['name'],
+                              description: data['description'],
+                              time: data['time'].toString(),
+                              likes: data['likes'].toString(),
+                              isFavorite: inselected,
+                              onFavoriteToggle: () {
+                                setState(() {});
+                              },
                             ),
                           );
                         },
