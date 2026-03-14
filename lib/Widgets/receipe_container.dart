@@ -83,7 +83,7 @@ class RecipeCard extends StatelessWidget {
           child: GestureDetector(
             onTap: onFavoriteToggle,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(12),
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 //color: Colors.black,
