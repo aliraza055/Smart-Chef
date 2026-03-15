@@ -76,14 +76,17 @@ class RecipeCard extends StatelessWidget {
           ),
         ),
 
-        // Favorite Icon on top right
         Positioned(
-          top: 10,
-          right: 24,
+          //   top: 6,
+          right: 2,
           child: GestureDetector(
             onTap: onFavoriteToggle,
             child: Container(
               padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 //color: Colors.black,
