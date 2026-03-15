@@ -16,8 +16,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   final List<Widget> _pages = const [
     Homepage(),
-    FavoriteItem(),
-    SizedBox(), // Placeholder for center FAB
+    FavoritePage(favoriteRecipes: []),
+    SizedBox(),
     UserInfo(),
     Scaffold(body: Center(child: Text('Settings Page'))),
   ];
@@ -107,49 +107,3 @@ class _BottomNavigationState extends State<BottomNavigation> {
     );
   }
 }
-// import 'package:flutter/material.dart';
-// import 'package:smart_chef/Pages/favorite_item.dart';
-// import 'package:smart_chef/Pages/home_page.dart';
-// import 'package:smart_chef/Pages/user_info.dart';
-
-// class BottomNavigation extends StatefulWidget {
-//   const BottomNavigation({super.key});
-
-//   @override
-//   State<BottomNavigation> createState() => _BottomNavigationState();
-// }
-
-// class _BottomNavigationState extends State<BottomNavigation> {
-//   int _currentIndex = 0;
-
-//   // pages for each tab
-//   final List<Widget> _pages = const [Homepage(), FavoriteItem(), UserInfo()];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: _pages[_currentIndex],
-
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _currentIndex,
-//         onTap: (index) {
-//           setState(() {
-//             _currentIndex = index;
-//           });
-//         },
-//         selectedItemColor: Colors.blue,
-//         unselectedItemColor: Colors.grey,
-
-//         // define your bottom items
-//         items: const [
-//           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.favorite),
-//             label: 'favorite',
-//           ),
-//           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-//         ],
-//       ),
-//     );
-//   }
-// }

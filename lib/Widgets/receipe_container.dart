@@ -88,8 +88,8 @@ class RecipeCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                //color: Colors.black,
+                Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.black,
                 size: 28,
               ),
             ),

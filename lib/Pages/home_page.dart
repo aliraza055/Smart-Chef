@@ -13,7 +13,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  bool inselected = false;
+  List<Map<String, dynamic>> favoriteRecipes = [];
   String selectedCategory = 'All';
 
   Stream<QuerySnapshot> _getRecipesStream() {
@@ -74,6 +74,7 @@ class _HomepageState extends State<Homepage> {
                         itemBuilder: (context, index) {
                           final data =
                               recipes[index].data() as Map<String, dynamic>;
+                          bool isFev = favoriteRecipes.contains(data);
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -89,9 +90,15 @@ class _HomepageState extends State<Homepage> {
                               description: data['description'],
                               time: data['time'].toString(),
                               likes: data['likes'].toString(),
-                              isFavorite: inselected,
+                              isFavorite: isFev,
                               onFavoriteToggle: () {
-                                setState(() {});
+                                setState(() {
+                                  if (isFev) {
+                                    favoriteRecipes.remove(data);
+                                  } else {
+                                    favoriteRecipes.add(data);
+                                  }
+                                });
                               },
                             ),
                           );
