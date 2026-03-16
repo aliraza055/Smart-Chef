@@ -13,7 +13,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List<Map<String, dynamic>> favoriteRecipes = [];
   String selectedCategory = 'All';
 
   Stream<QuerySnapshot> _getRecipesStream() {
@@ -35,8 +34,9 @@ class _HomepageState extends State<Homepage> {
           children: [
             UpperContanier(),
             const SizedBox(height: 10),
+
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,6 +44,7 @@ class _HomepageState extends State<Homepage> {
                     'Categories',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+
                   const SizedBox(height: 10),
 
                   CategoryTile(
@@ -56,17 +57,19 @@ class _HomepageState extends State<Homepage> {
 
                   const SizedBox(height: 20),
 
-                  StreamBuilder(
+                  StreamBuilder<QuerySnapshot>(
                     stream: _getRecipesStream(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
+
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                         return const Center(child: Text('No recipes found'));
                       }
 
                       final recipes = snapshot.data!.docs;
+
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -74,7 +77,7 @@ class _HomepageState extends State<Homepage> {
                         itemBuilder: (context, index) {
                           final data =
                               recipes[index].data() as Map<String, dynamic>;
-                          bool isFev = favoriteRecipes.contains(data);
+
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -84,22 +87,16 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               );
                             },
+
                             child: RecipeCard(
                               image: data['image'],
                               name: data['name'],
                               description: data['description'],
                               time: data['time'].toString(),
                               likes: data['likes'].toString(),
-                              isFavorite: isFev,
-                              onFavoriteToggle: () {
-                                setState(() {
-                                  if (isFev) {
-                                    favoriteRecipes.remove(data);
-                                  } else {
-                                    favoriteRecipes.add(data);
-                                  }
-                                });
-                              },
+                              isFavorite: false,
+
+                              onFavoriteToggle: () {},
                             ),
                           );
                         },

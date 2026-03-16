@@ -14,20 +14,26 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    Homepage(),
-    FavoritePage(favoriteRecipes: []),
-    SizedBox(),
-    UserInfo(),
-    Scaffold(body: Center(child: Text('Settings Page'))),
-  ];
+  List<Map<String, dynamic>> favoriteRecipes = [];
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      Homepage(),
+
+      FavoritePage(),
+
+      const SizedBox(),
+
+      const UserInfo(),
+
+      const Scaffold(body: Center(child: Text('Settings Page'))),
+    ];
+
     return Scaffold(
       body: _pages[_currentIndex],
 
-      // 🌟 Floating Add Button in Center
+      // Floating Add Button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         shape: const CircleBorder(),
@@ -43,18 +49,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      // 🌈 Custom Bottom Bar
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         color: Colors.white,
         elevation: 10,
+
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
-              // Left side icons
               Row(
                 children: [
                   _buildNavItem(Icons.home, 0, "Home"),
@@ -63,7 +70,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
 
-              // Right side icons
               Row(
                 children: [
                   _buildNavItem(Icons.person, 3, "Profile"),
@@ -87,6 +93,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           _currentIndex = index;
         });
       },
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -95,6 +102,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             color: isSelected ? Colors.blue : Colors.grey,
             size: isSelected ? 28 : 24,
           ),
+
           Text(
             label,
             style: TextStyle(
