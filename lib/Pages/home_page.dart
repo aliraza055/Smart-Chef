@@ -94,7 +94,7 @@ class _HomepageState extends State<Homepage> {
                               description: data['description'],
                               time: data['time'].toString(),
                               likes: data['likes'].toString(),
-                              isFavorite: true,
+                              isFavorite: false,
 
                               onFavoriteToggle: () {
                                 FirebaseFirestore.instance
