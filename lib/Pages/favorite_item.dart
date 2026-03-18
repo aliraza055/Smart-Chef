@@ -41,7 +41,7 @@ class _FavoritePageState extends State<FavoritePage> {
                 description: data['description'],
                 time: data['time'].toString(),
                 likes: data['likes'].toString(),
-                isFavorite: true,
+                isFavorite: data['isFav'] ?? true,
 
                 onFavoriteToggle: () {
                   FirebaseFirestore.instance
