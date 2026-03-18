@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Widgets/receipe_container.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -14,10 +14,9 @@ class _FavoritePageState extends State<FavoritePage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Favorite Recipes")),
 
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return Container();
-        },
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('Receipes').snapshots(),
+        builder: (context, snapshot) {},
       ),
     );
   }

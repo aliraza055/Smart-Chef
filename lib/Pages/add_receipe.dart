@@ -88,6 +88,7 @@ class _AddReceipeState extends State<AddReceipe> {
       likes: 0,
       rated: 0,
       time: 20,
+      isFav: false,
     );
     await FirebaseFirestore.instance
         .collection('Receipes')

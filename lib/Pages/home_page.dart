@@ -96,7 +96,12 @@ class _HomepageState extends State<Homepage> {
                               likes: data['likes'].toString(),
                               isFavorite: true,
 
-                              onFavoriteToggle: () {},
+                              onFavoriteToggle: () {
+                                FirebaseFirestore.instance
+                                    .collection('Receipes')
+                                    .doc(recipes[index].id)
+                                    .update({'isFav': true});
+                              },
                             ),
                           );
                         },

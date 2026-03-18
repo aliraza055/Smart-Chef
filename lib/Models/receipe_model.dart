@@ -11,6 +11,7 @@ class ReceipeModel {
   String difficulity;
   double time;
   double rated;
+  bool isFav;
   int likes;
   ReceipeModel({
     required this.name,
@@ -24,6 +25,7 @@ class ReceipeModel {
     required this.likes,
     required this.rated,
     required this.time,
+    required this.isFav,
   });
   Map<String, dynamic> toMap() {
     return {
@@ -37,6 +39,7 @@ class ReceipeModel {
       'time': time,
       'rating': rated,
       'like': likes,
+      'isFav': isFav,
     };
   }
 }
