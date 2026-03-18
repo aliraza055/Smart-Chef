@@ -75,8 +75,10 @@ class _HomepageState extends State<Homepage> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: recipes.length,
                         itemBuilder: (context, index) {
-                          final data =
-                              recipes[index].data() as Map<String, dynamic>;
+                          final data = recipes[index].data() as Map;
+                          final isFav = (data['isFav'] is bool)
+                              ? data['isFav']
+                              : data['isFav'] == 'true';
 
                           return GestureDetector(
                             onTap: () {
@@ -94,13 +96,13 @@ class _HomepageState extends State<Homepage> {
                               description: data['description'],
                               time: data['time'].toString(),
                               likes: data['likes'].toString(),
-                              isFavorite: data['isFav'] ?? false,
+                              isFavorite: isFav ?? true,
 
                               onFavoriteToggle: () {
                                 FirebaseFirestore.instance
                                     .collection('Receipes')
                                     .doc(recipes[index].id)
-                                    .update({'isFav': true});
+                                    .update({'isFav': !isFav});
                               },
                             ),
                           );
