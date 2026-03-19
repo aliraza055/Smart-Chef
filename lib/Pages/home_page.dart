@@ -65,7 +65,7 @@ class _HomepageState extends State<Homepage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return const Center(child: Text('No recipes found'));
+                        return const Center(child: Text('No recipes found!'));
                       }
 
                       final recipes = snapshot.data!.docs;
