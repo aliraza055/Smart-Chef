@@ -17,7 +17,9 @@ class _UserInfoState extends State<UserInfo> {
         centerTitle: true,
       ),
       body: Column(children: [
-          
+          Container(
+            child: ,
+          )
         ],
       ),
     );
