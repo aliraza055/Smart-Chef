@@ -13,7 +13,7 @@ class _UserInfoState extends State<UserInfo> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('User'),
+        title: Text('User Detail'),
         centerTitle: true,
       ),
     );
