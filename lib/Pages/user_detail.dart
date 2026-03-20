@@ -10,6 +10,6 @@ class UserDetail extends StatefulWidget {
 class _UserDetailState extends State<UserDetail> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(appBar: AppBar(title: Text('App bar')));
   }
 }
