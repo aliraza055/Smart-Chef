@@ -16,12 +16,7 @@ class _UserInfoState extends State<UserInfo> {
         title: Text('User Detail'),
         centerTitle: true,
       ),
-      body: Column(children: [
-          Container(
-            child: ,
-          )
-        ],
-      ),
+      body: Column(children: [Container(child: Text('data'))]),
     );
   }
 }
