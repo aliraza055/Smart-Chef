@@ -8,7 +8,7 @@ class TextfieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(hint: hintText, prefix: prefix),
+      decoration: InputDecoration(hint: Text(hintText), prefix: prefix),
     );
   }
 }
