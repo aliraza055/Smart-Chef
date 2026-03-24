@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Models/app_user.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Pages/bottom_navigation.dart';
 
@@ -12,35 +15,42 @@ class AuthModel {
     String password,
   ) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) async {
-            User? user = FirebaseAuth.instance.currentUser!;
-            user.updateDisplayName(name);
-            await user.reload();
-            Map<String, dynamic> userinfo = {
-              'name': name,
-              'gmail': email,
-              'image': '',
-            };
-            await userData(user.uid, userinfo);
-            ToastError().showToast(
-              message: 'Create user successful!',
-              bgColor: Colors.green,
-            );
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => BottomNavigation()),
-              (route) => false,
-            );
-          });
+      UserCredential credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      User user = credential.user!;
+
+      user.updateDisplayName(name);
+      await user.reload();
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .set(
+            AppUser(
+              uid: user.uid,
+              name: name,
+              gmail: email,
+              imageUrl: 'imageUrl',
+              totalFavorites: 0,
+              totalRecipes: 0,
+              createdAt: DateTime.now(),
+            ).toMap(),
+          );
+      ToastError().showToast(
+        message: 'Create user successful!',
+        bgColor: Colors.green,
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => BottomNavigation()),
+        (route) => false,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         ToastError().showToast(
           message: "Your password is weak!",
           bgColor: Colors.red,
         );
-      } else if (e.code == 'email-already-use-in') {
+      } else if (e.code == 'email-already-in-use') {
         ToastError().showToast(
           message: "This email is already used!",
           bgColor: Colors.red,
@@ -96,8 +106,4 @@ class AuthModel {
       ToastError().showToast(message: 'Unexpected error', bgColor: Colors.red);
     }
   }
-}
-
-Future userData(String id, Map<String, dynamic> userinfo) async {
-  await FirebaseFirestore.instance.collection('Users').doc(id).set(userinfo);
 }

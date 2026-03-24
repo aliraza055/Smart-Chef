@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/auth_model.dart';
 import 'package:smart_chef/Pages/sign_in.dart';
@@ -16,6 +14,7 @@ class _SignUpState extends State<SignUp> {
   final _nameCont = TextEditingController();
   final _gmailCont = TextEditingController();
   final _passwordCont = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -35,8 +35,8 @@ class AppUser {
       name: map['name'],
       gmail: map['gmail'],
       imageUrl: map['imageUrl'],
-      totalFavorites: map['totalReceipes'],
-      totalRecipes: map['totalFavorites'],
+      totalFavorites: map['totalFavorites'],
+      totalRecipes: map['totalReceipes'],
       createdAt: map['createdAt'],
     );
   }
