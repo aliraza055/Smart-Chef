@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/update_user.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -114,7 +115,15 @@ class _UserInfoState extends State<UserInfo> {
               Expanded(
                 child: ListView(
                   children: [
-                    buildListTile(Icons.edit, "Edit Profile"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => UpdateUser()),
+                        );
+                      },
+                      child: buildListTile(Icons.edit, "Edit Profile"),
+                    ),
                     buildListTile(Icons.favorite, "Favorites"),
                     buildListTile(Icons.logout, "Logout"),
                   ],
