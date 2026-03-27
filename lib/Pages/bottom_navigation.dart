@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_chef/Pages/add_receipe.dart';
 import 'package:smart_chef/Pages/favorite_item.dart';
 import 'package:smart_chef/Pages/home_page.dart';
+import 'package:smart_chef/Pages/setting.dart';
 import 'package:smart_chef/Pages/user_info.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -26,8 +27,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       const SizedBox(),
 
       const UserInfo(),
-
-      const Scaffold(body: Center(child: Text('Settings Page'))),
+      const SettingsPage(),
     ];
 
     return Scaffold(
