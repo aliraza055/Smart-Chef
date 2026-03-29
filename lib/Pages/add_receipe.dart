@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:random_string/random_string.dart';
-import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Models/toast_error.dart';
+import 'package:smart_chef/Models/upload_recepies.dart';
 import 'package:smart_chef/Services/image_picker.dart';
 import 'package:smart_chef/Services/image_upload.dart';
 import 'package:smart_chef/Widgets/customDropdown.dart';
@@ -48,29 +46,6 @@ class _AddReceipeState extends State<AddReceipe> {
       return false;
     }
     return true;
-  }
-
-  Future sendData() async {
-    final id = randomAlphaNumeric(10);
-    final imageUrl = await imageUpload.uploadImage(image!);
-    final receipe = ReceipeModel(
-      name: titleController.text.trim(),
-      description: descritionController.text.trim(),
-      category: selecItem!,
-      image: imageUrl!,
-      userName: user?.displayName ?? '',
-      ingridents: ingridentsController.text.trim(),
-      difficulity: difficulty!,
-      userphoto: user?.photoURL ?? '',
-      likes: 0,
-      rated: 0,
-      time: 20,
-      isFav: false,
-    );
-    await FirebaseFirestore.instance
-        .collection('Receipes')
-        .doc(id)
-        .set(receipe.toMap());
   }
 
   @override
@@ -184,10 +159,18 @@ class _AddReceipeState extends State<AddReceipe> {
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (!_formkey.currentState!.validate()) return;
                     if (!validateImage()) return;
-                    sendData();
+                    await UploadRecepie().uploadReceipes(
+                      name: titleController.text.trim(),
+                      des: descritionController.text.trim(),
+                      category: selecItem!,
+                      user: user!,
+                      difficulity: difficulty!,
+                      ingridents: ingridentsController.text.trim(),
+                      image: image!,
+                    );
                     ToastError().showToast(
                       message: 'Recipe Added Successfully!',
                       bgColor: Colors.green,

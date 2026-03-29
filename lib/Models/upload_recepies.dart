@@ -5,7 +5,7 @@ import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Services/Receipe_services.dart';
 import 'package:smart_chef/Services/image_upload.dart';
 
-class UploadRecepies {
+class UploadRecepie {
   final ImageUploadService _imageUpload = ImageUploadService();
   Future<void> uploadReceipes({
     required String name,
