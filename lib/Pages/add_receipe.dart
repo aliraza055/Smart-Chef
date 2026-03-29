@@ -54,12 +54,12 @@ class _AddReceipeState extends State<AddReceipe> {
     final id = randomAlphaNumeric(10);
     final imageUrl = await imageUpload.uploadImage(image!);
     final receipe = ReceipeModel(
-      name: titleController.text,
-      description: descritionController.text,
+      name: titleController.text.trim(),
+      description: descritionController.text.trim(),
       category: selecItem!,
       image: imageUrl!,
       userName: user?.displayName ?? '',
-      ingridents: ingridentsController.text,
+      ingridents: ingridentsController.text.trim(),
       difficulity: difficulty!,
       userphoto: user?.photoURL ?? '',
       likes: 0,
