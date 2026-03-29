@@ -1,15 +1,16 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Models/toast_error.dart';
-import 'package:http/http.dart' as http;
+import 'package:smart_chef/Services/image_picker.dart';
+import 'package:smart_chef/Services/image_upload.dart';
+import 'package:smart_chef/Widgets/customDropdown.dart';
+import 'package:smart_chef/Widgets/textfield_widget.dart';
 
 class AddReceipe extends StatefulWidget {
   const AddReceipe({super.key});
@@ -27,6 +28,8 @@ class _AddReceipeState extends State<AddReceipe> {
   final descritionController = TextEditingController();
   final ingridentsController = TextEditingController();
   User? user = FirebaseAuth.instance.currentUser;
+  final imagePicker = ImagePickerService();
+  final imageUpload = ImageUploadService();
 
   List<String> receipes = [
     'All',
@@ -47,40 +50,14 @@ class _AddReceipeState extends State<AddReceipe> {
     return true;
   }
 
-  Future<String?> SendImage() async {
-    if (image != null) {
-      final uri = Uri.parse(
-        'https://api.cloudinary.com/v1_1/dhob4di7g/image/upload',
-      );
-      final request = http.MultipartRequest('post', uri);
-      request.fields['upload_preset'] = 'upload_preset_file';
-      request.files.add(await http.MultipartFile.fromPath('file', image!.path));
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        final resbody = await response.stream.bytesToString();
-        final decode = jsonDecode(resbody);
-        final imageUrl = decode['secure_url'];
-        return imageUrl as String;
-      } else {
-        ToastError().showToast(
-          message: 'Upload fails${response.statusCode}',
-          bgColor: Colors.red,
-        );
-      }
-    } else {
-      ToastError().showToast(message: 'Select image', bgColor: Colors.red);
-    }
-    return null;
-  }
-
   Future sendData() async {
     final id = randomAlphaNumeric(10);
-    final image = await SendImage();
+    final imageUrl = await imageUpload.uploadImage(image!);
     final receipe = ReceipeModel(
       name: titleController.text,
       description: descritionController.text,
       category: selecItem!,
-      image: image!,
+      image: imageUrl!,
       userName: user?.displayName ?? '',
       ingridents: ingridentsController.text,
       difficulity: difficulty!,
@@ -114,14 +91,10 @@ class _AddReceipeState extends State<AddReceipe> {
                 SizedBox(height: 40),
                 GestureDetector(
                   onTap: () async {
-                    final imageSource = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (imageSource == null) {
-                      return;
-                    } else {
+                    final pickedImage = await imagePicker.pickFromGallery();
+                    if (pickedImage != null) {
                       setState(() {
-                        image = File(imageSource.path);
+                        image = pickedImage;
                       });
                     }
                   },
@@ -152,22 +125,10 @@ class _AddReceipeState extends State<AddReceipe> {
                     color: Colors.blueGrey.shade100,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextFormField(
-                      controller: titleController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter the title';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter title'),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  child: CustomTextField(
+                    controller: titleController,
+                    hintText: 'Enter title',
+                    errorText: 'Enter the title',
                   ),
                 ),
                 SizedBox(height: 20),
@@ -176,91 +137,37 @@ class _AddReceipeState extends State<AddReceipe> {
                     color: Colors.blueGrey.shade100,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextFormField(
-                      controller: descritionController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter the Description';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter Description'),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  child: CustomTextField(
+                    controller: descritionController,
+                    hintText: 'Enter description',
+                    errorText: 'Enter your Description',
                   ),
                 ),
                 SizedBox(height: 20),
-
-                DropdownButtonFormField<String>(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a category';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.blueGrey.shade100,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  hint: const Text('Enter category'),
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  items: receipes
-                      .map(
-                        (e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                CustomDropdown(
+                  items: receipes,
+                  hintText: 'Select Cateogry',
                   onChanged: (value) {
                     setState(() {
                       selecItem = value;
                     });
                   },
+                  errorText: 'please select a category',
                 ),
+
                 SizedBox(height: 20),
-                DropdownButtonFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a category';
-                    }
-                    return null;
-                  },
-                  hint: Text('Select difficulty level'),
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.blueGrey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  items: ['easy', 'medium', 'hard'].map((e) {
-                    return DropdownMenuItem(value: e, child: Text(e));
-                  }).toList(),
+                CustomDropdown<String>(
+                  items: const ['easy', 'medium', 'hard'],
+                  hintText: 'Select difficulty',
+                  value: difficulty,
+                  errorText: 'Please select difficulty',
                   onChanged: (value) {
                     setState(() {
                       difficulty = value;
                     });
                   },
                 ),
+
                 SizedBox(height: 20),
                 Container(
                   height: 150,
@@ -269,29 +176,17 @@ class _AddReceipeState extends State<AddReceipe> {
                     color: Colors.blueGrey.shade100,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextFormField(
-                      controller: ingridentsController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter the Ingridents';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter ingridents'),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  child: CustomTextField(
+                    controller: ingridentsController,
+                    hintText: 'Enter ingridents',
+                    errorText: 'Enter the ingridents',
                   ),
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     if (!_formkey.currentState!.validate()) return;
-                    //  if (!validateImage()) return;
+                    if (!validateImage()) return;
                     sendData();
                     ToastError().showToast(
                       message: 'Recipe Added Successfully!',
