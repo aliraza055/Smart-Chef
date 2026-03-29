@@ -291,7 +291,7 @@ class _AddReceipeState extends State<AddReceipe> {
                 GestureDetector(
                   onTap: () {
                     if (!_formkey.currentState!.validate()) return;
-                    if (!validateImage()) return;
+                    //  if (!validateImage()) return;
                     sendData();
                     ToastError().showToast(
                       message: 'Recipe Added Successfully!',
