@@ -54,7 +54,7 @@ class _AddReceipeState extends State<AddReceipe> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-        title: Text('Add New Receipe'),
+        title: Text('Add New Receipes'),
       ),
       body: SingleChildScrollView(
         child: Padding(
