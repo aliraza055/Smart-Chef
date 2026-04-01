@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Services/image_picker.dart';
 
 class UpdateUser extends StatefulWidget {
   const UpdateUser({super.key});
@@ -8,9 +12,16 @@ class UpdateUser extends StatefulWidget {
 }
 
 class _UpdateUserState extends State<UpdateUser> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
-  bool isLoading = false;
+  TextEditingController? _nameController;
+  TextEditingController? _gmailController;
+  File? image;
+  User? user = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: user!.displayName);
+    _gmailController = TextEditingController(text: user!.email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,35 +32,48 @@ class _UpdateUserState extends State<UpdateUser> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            /// 👤 PROFILE IMAGE
             Stack(
               children: [
                 CircleAvatar(
                   radius: 55,
                   backgroundColor: Colors.grey[300],
-                  backgroundImage: _imageController.text.isNotEmpty
-                      ? NetworkImage(_imageController.text)
-                      : null,
-                  child: _imageController.text.isEmpty
-                      ? const Icon(Icons.person, size: 55)
+                  backgroundImage: image != null
+                      ? FileImage(image!)
+                      : (user?.photoURL != null
+                            ? NetworkImage(user!.photoURL!)
+                            : null),
+                  child: image == null && user?.photoURL == null
+                      ? const Icon(Icons.person, size: 40)
                       : null,
                 ),
+
                 Positioned(
                   bottom: 0,
-                  right: 0,
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: const Icon(
-                      Icons.edit,
-                      size: 18,
-                      color: Colors.white,
+                  right: 4,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final pickedImage = await ImagePickerService()
+                          .pickFromGallery();
+
+                      if (pickedImage != null) {
+                        setState(() {
+                          image = pickedImage;
+                        });
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: const Icon(
+                        Icons.edit,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 30),
 
             /// 🧾 INFO CARD
@@ -92,7 +116,7 @@ class _UpdateUserState extends State<UpdateUser> {
 
                   /// IMAGE URL
                   TextFormField(
-                    controller: _imageController,
+                    controller: _gmailController,
                     decoration: InputDecoration(
                       labelText: 'Profile Image URL',
                       filled: true,
