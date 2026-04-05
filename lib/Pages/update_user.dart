@@ -27,7 +27,7 @@ class _UpdateUserState extends State<UpdateUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(title: const Text('Edit Profile'), elevation: 0),
+      appBar: AppBar(title: const Text('Edit Profiles'), elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
