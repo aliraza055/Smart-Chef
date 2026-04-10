@@ -24,7 +24,7 @@ class UploadRecepie {
           description: des,
           category: category,
           image: imgUrl!,
-          userName: user.displayName ?? '',
+          userName: user.displayName ?? 'null',
           ingridents: ingridents,
           difficulity: difficulity,
           userphoto: user.displayName ?? '',

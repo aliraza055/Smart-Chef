@@ -144,13 +144,11 @@ class _UpdateUserState extends State<UpdateUser> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                onPressed: isLoading ? null : () {},
-                child: isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'Save Changes',
-                        style: TextStyle(fontSize: 16),
-                      ),
+                onPressed: () {},
+                child: const Text(
+                  'Save Changes',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
           ],
