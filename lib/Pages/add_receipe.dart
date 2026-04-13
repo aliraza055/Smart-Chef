@@ -166,7 +166,7 @@ class _AddReceipeState extends State<AddReceipe> {
                       name: titleController.text.trim(),
                       des: descritionController.text.trim(),
                       category: selecItem!,
-                      user: user!,
+                      user: user,
                       difficulity: difficulty!,
                       ingridents: ingridentsController.text.trim(),
                       image: image!,

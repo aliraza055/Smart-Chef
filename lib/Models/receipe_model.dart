@@ -6,8 +6,8 @@ class ReceipeModel {
   String image;
   String category;
   String ingridents;
-  String userName;
-  String userphoto;
+  String? userName;
+  String? userphoto;
   String difficulity;
   double time;
   double rated;
