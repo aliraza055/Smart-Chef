@@ -31,8 +31,10 @@ class UpperContanier extends StatelessWidget {
                   Text('Checking the amazing receipes...'),
                 ],
               ),
-              ClipOval(
-                child: Image.asset('images/boy.jpg', height: 60, width: 60),
+              CircleAvatar(
+                backgroundImage: user?.photoURL != null
+                    ? NetworkImage(user!.photoURL!)
+                    : AssetImage('assets/download.png') as ImageProvider,
               ),
             ],
           ),

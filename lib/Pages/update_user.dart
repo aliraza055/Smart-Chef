@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/bottom_navigation.dart';
 import 'package:smart_chef/Services/image_picker.dart';
+import 'package:smart_chef/Services/image_upload.dart';
 
 class UpdateUser extends StatefulWidget {
   const UpdateUser({super.key});
@@ -144,7 +147,38 @@ class _UpdateUserState extends State<UpdateUser> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  String? imageUrl;
+
+                  // 1️⃣ Upload image if selected
+                  if (image != null) {
+                    imageUrl = await ImageUploadService().uploadImage(image!);
+                  }
+
+                  // 2️⃣ Update Firebase Auth
+                  await user!.updateDisplayName(_nameController!.text);
+
+                  if (imageUrl != null) {
+                    await user!.updatePhotoURL(imageUrl);
+                  }
+
+                  // 3️⃣ Update Firestore user document
+                  await FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(user!.uid)
+                      .update({
+                        'name': _nameController!.text,
+                        'imageUrl': imageUrl ?? user!.photoURL,
+                      });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Profile updated')),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => BottomNavigation()),
+                  );
+                },
                 child: const Text(
                   'Save Changes',
                   style: TextStyle(fontSize: 16),
