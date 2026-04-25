@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/deital_page.dart';
+import 'package:smart_chef/Pages/favorite_item.dart';
+import 'package:smart_chef/Pages/home_page.dart';
+import 'package:smart_chef/Pages/setting.dart';
+import 'package:smart_chef/Pages/sign_in.dart';
+import 'package:smart_chef/Pages/sign_up.dart';
+import 'package:smart_chef/Pages/update_user.dart';
+import 'package:smart_chef/Pages/user_info.dart';
+
+class PageRouter {
+  static const initial = '/';
+  static const singUp = 'singUp';
+  static const homePage = '/homePage';
+  static const detailPage = '/detailPage';
+  static const favoritePage = '/favoritePage';
+  static const userProfile = '/userProfile';
+  static const updateProfile = '/update profile';
+  static const settingPage = '/settingPage';
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case initial:
+        return MaterialPageRoute(builder: (_) => SignIn());
+      case singUp:
+        return MaterialPageRoute(builder: (_) => SignUp());
+      case homePage:
+        return MaterialPageRoute(builder: (_) => Homepage());
+      case detailPage:
+        final receipe = settings.arguments as Map;
+        return MaterialPageRoute(builder: (_) => DeitalPage(receipe: receipe));
+      case favoritePage:
+        return MaterialPageRoute(builder: (_) => FavoritePage());
+      case userProfile:
+        return MaterialPageRoute(builder: (_) => UserInfo());
+      case updateProfile:
+        return MaterialPageRoute(builder: (_) => UpdateUser());
+      case settingPage:
+        return MaterialPageRoute(builder: (_) => SettingsPage());
+      default:
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(body: Center(child: Text('no page found'))),
+        );
+    }
+  }
+}
