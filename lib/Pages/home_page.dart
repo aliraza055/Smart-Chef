@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Pages/deital_page.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
@@ -84,11 +85,10 @@ class _HomepageState extends State<Homepage> {
 
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (_) => DeitalPage(receipe: data),
-                                ),
+                                PageRouter.detailPage,
+                                arguments: data,
                               );
                             },
 

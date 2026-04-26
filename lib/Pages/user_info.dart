@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Pages/update_user.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -117,10 +118,7 @@ class _UserInfoState extends State<UserInfo> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => UpdateUser()),
-                        );
+                        Navigator.pushNamed(context, PageRouter.updateProfile);
                       },
                       child: buildListTile(Icons.edit, "Edit Profile"),
                     ),

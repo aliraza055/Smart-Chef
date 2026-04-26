@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/auth_model.dart';
 import 'package:smart_chef/Pages/sign_up.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -141,10 +142,7 @@ class _SignInState extends State<SignIn> {
                       Text('If you dont have account!'),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => SignUp()),
-                          );
+                          Navigator.pushNamed(context, PageRouter.singUp);
                         },
                         child: Text(
                           'Singup',

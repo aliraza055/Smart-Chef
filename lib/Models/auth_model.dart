@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/app_user.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Pages/bottom_navigation.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 
 class AuthModel {
   Future<void> signup(
@@ -17,6 +18,8 @@ class AuthModel {
     try {
       UserCredential credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
+
       User user = credential.user!;
 
       user.updateDisplayName(name);
@@ -38,11 +41,6 @@ class AuthModel {
       ToastError().showToast(
         message: 'Create user successful!',
         bgColor: Colors.green,
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => BottomNavigation()),
-        (route) => false,
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -78,11 +76,7 @@ class AuthModel {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: gmail, password: password)
           .then((value) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => BottomNavigation()),
-              (route) => false,
-            );
+            Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
             ToastError().showToast(
               message: 'login Sucessful!',
               bgColor: Colors.green,

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Pages/bottom_navigation.dart';
-import 'package:smart_chef/Pages/sign_up.dart';
+import 'package:smart_chef/Pages/welcome_page.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignUp(),
+      home: SmartChefSplashScreen(),
+      //  initialRoute: PageRouter.initial,
+      //  onGenerateRoute: PageRouter.generateRoute,
     );
   }
 }

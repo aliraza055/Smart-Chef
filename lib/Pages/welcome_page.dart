@@ -1,0 +1,165 @@
+import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_colors.dart';
+
+class SmartChefSplashScreen extends StatefulWidget {
+  const SmartChefSplashScreen({super.key});
+
+  @override
+  State<SmartChefSplashScreen> createState() => _SmartChefSplashScreenState();
+}
+
+class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                flex: 52,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 60),
+                      Container(
+                        width: 110,
+                        height: 110,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.18),
+                              blurRadius: 32,
+                              spreadRadius: 4,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.restaurant,
+                          color: AppColors.primary,
+                          size: 52,
+                        ),
+                      ),
+
+                      const SizedBox(height: 36),
+
+                      // Title
+                      const Text(
+                        'Smart Chef',
+                        style: TextStyle(
+                          fontSize: 38,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primary,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Subtitle
+                      Text(
+                        'Your culinary journey starts here.',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.1,
+                        ),
+                      ),
+
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Bottom section – kitchen image
+              Expanded(flex: 48, child: _KitchenImage()),
+            ],
+          ),
+
+          // Floating bottom action bar
+          Positioned(
+            bottom: 24,
+            left: 20,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.92),
+                borderRadius: BorderRadius.circular(40),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'CRAFTING YOUR PERSONALIZED MENU',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Icon(
+                    Icons.storefront_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _KitchenImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
+      ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('images/download.jpg', fit: BoxFit.cover),
+
+          // Gradient overlay
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFFF5F3F0).withOpacity(0.92),
+                  const Color(0xFFF5F3F0).withOpacity(0.55),
+                  Colors.transparent,
+                ],
+                stops: const [0.0, 0.3, 1.0],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

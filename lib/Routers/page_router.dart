@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/bottom_navigation.dart';
 import 'package:smart_chef/Pages/deital_page.dart';
 import 'package:smart_chef/Pages/favorite_item.dart';
 import 'package:smart_chef/Pages/home_page.dart';
@@ -14,7 +15,7 @@ class PageRouter {
   static const homePage = '/homePage';
   static const detailPage = '/detailPage';
   static const favoritePage = '/favoritePage';
-  static const userProfile = '/userProfile';
+  static const bottomNav = '/bottomNav';
   static const updateProfile = '/update profile';
   static const settingPage = '/settingPage';
 
@@ -31,8 +32,8 @@ class PageRouter {
         return MaterialPageRoute(builder: (_) => DeitalPage(receipe: receipe));
       case favoritePage:
         return MaterialPageRoute(builder: (_) => FavoritePage());
-      case userProfile:
-        return MaterialPageRoute(builder: (_) => UserInfo());
+      case bottomNav:
+        return MaterialPageRoute(builder: (_) => BottomNavigation());
       case updateProfile:
         return MaterialPageRoute(builder: (_) => UpdateUser());
       case settingPage:
