@@ -23,7 +23,7 @@ class AppUser {
       'name': name,
       'gmail': gmail,
       'imageUrl': imageUrl,
-      'totalReceipes': totalFavorites,
+      'totalReceipes': totalRecipes,
       'totalFavorites': totalFavorites,
       'createdAt': createdAt,
     };

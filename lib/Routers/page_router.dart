@@ -28,8 +28,8 @@ class PageRouter {
       case homePage:
         return MaterialPageRoute(builder: (_) => Homepage());
       case detailPage:
-        final receipe = settings.arguments as Map;
-        return MaterialPageRoute(builder: (_) => DeitalPage(receipe: receipe));
+        final recipe = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(builder: (_) => DetailPage(recipe: recipe));
       case favoritePage:
         return MaterialPageRoute(builder: (_) => FavoritePage());
       case bottomNav:

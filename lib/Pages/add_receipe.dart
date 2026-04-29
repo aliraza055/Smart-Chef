@@ -1,14 +1,212 @@
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:dotted_border/dotted_border.dart';
+// import 'package:dotted_border/dotted_border.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:smart_chef/Models/toast_error.dart';
+// import 'package:smart_chef/Models/upload_recepies.dart';
+// import 'package:smart_chef/Services/image_picker.dart';
+// import 'package:smart_chef/Services/image_upload.dart';
+// import 'package:smart_chef/Widgets/customDropdown.dart';
+// import 'package:smart_chef/Widgets/textfield_widget.dart';
+
+// class AddReceipe extends StatefulWidget {
+//   const AddReceipe({super.key});
+
+//   @override
+//   State<AddReceipe> createState() => _AddReceipeState();
+// }
+
+// class _AddReceipeState extends State<AddReceipe> {
+//   String? selecItem;
+//   String? difficulty;
+//   File? image;
+//   final _formkey = GlobalKey<FormState>();
+//   final titleController = TextEditingController();
+//   final descritionController = TextEditingController();
+//   final ingridentsController = TextEditingController();
+//   User? user = FirebaseAuth.instance.currentUser;
+//   final imagePicker = ImagePickerService();
+//   final imageUpload = ImageUploadService();
+
+//   List<String> receipes = [
+//     'All',
+//     'Breakfast',
+//     'Lunch',
+//     'Dinner',
+//     'Biryani',
+//     'Fast Food',
+//   ];
+//   bool validateImage() {
+//     if (image == null) {
+//       ToastError().showToast(
+//         message: 'Please select an image',
+//         bgColor: Colors.red,
+//       );
+//       return false;
+//     }
+//     return true;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.blue,
+//         centerTitle: true,
+//         title: Text('Add New Receipes here'),
+//       ),
+//       body: SingleChildScrollView(
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 20),
+//           child: Form(
+//             key: _formkey,
+//             child: Column(
+//               children: [
+//                 SizedBox(height: 40),
+//                 GestureDetector(
+//                   onTap: () async {
+//                     final pickedImage = await imagePicker.pickFromGallery();
+//                     if (pickedImage != null) {
+//                       setState(() {
+//                         image = pickedImage;
+//                       });
+//                     }
+//                   },
+//                   child: Center(
+//                     child: DottedBorder(
+//                       child: Container(
+//                         height: 150,
+//                         width: 150,
+//                         decoration: BoxDecoration(),
+//                         child: image != null
+//                             ? Image.file(image!, fit: BoxFit.cover)
+//                             : Column(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 crossAxisAlignment: CrossAxisAlignment.center,
+//                                 children: [
+//                                   Icon(Icons.camera_alt),
+//                                   SizedBox(height: 20),
+//                                   Text("Add Images"),
+//                                 ],
+//                               ),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 SizedBox(height: 20),
+//                 Container(
+//                   decoration: BoxDecoration(
+//                     color: Colors.blueGrey.shade100,
+//                     borderRadius: BorderRadius.circular(16),
+//                   ),
+//                   child: CustomTextField(
+//                     controller: titleController,
+//                     hintText: 'Enter title',
+//                     errorText: 'Enter the title',
+//                   ),
+//                 ),
+//                 SizedBox(height: 20),
+//                 Container(
+//                   decoration: BoxDecoration(
+//                     color: Colors.blueGrey.shade100,
+//                     borderRadius: BorderRadius.circular(16),
+//                   ),
+//                   child: CustomTextField(
+//                     controller: descritionController,
+//                     hintText: 'Enter description',
+//                     errorText: 'Enter your Description',
+//                   ),
+//                 ),
+//                 SizedBox(height: 20),
+//                 CustomDropdown(
+//                   items: receipes,
+//                   hintText: 'Select Cateogry',
+//                   onChanged: (value) {
+//                     setState(() {
+//                       selecItem = value;
+//                     });
+//                   },
+//                   errorText: 'please select a category',
+//                 ),
+
+//                 SizedBox(height: 20),
+//                 CustomDropdown<String>(
+//                   items: const ['easy', 'medium', 'hard'],
+//                   hintText: 'Select difficulty',
+//                   value: difficulty,
+//                   errorText: 'Please select difficulty',
+//                   onChanged: (value) {
+//                     setState(() {
+//                       difficulty = value;
+//                     });
+//                   },
+//                 ),
+
+//                 SizedBox(height: 20),
+//                 Container(
+//                   height: 150,
+//                   width: double.infinity,
+//                   decoration: BoxDecoration(
+//                     color: Colors.blueGrey.shade100,
+//                     borderRadius: BorderRadius.circular(16),
+//                   ),
+//                   child: CustomTextField(
+//                     controller: ingridentsController,
+//                     hintText: 'Enter ingridents',
+//                     errorText: 'Enter the ingridents',
+//                   ),
+//                 ),
+//                 SizedBox(height: 20),
+//                 GestureDetector(
+//                   onTap: () async {
+//                     if (!_formkey.currentState!.validate()) return;
+//                     if (!validateImage()) return;
+//                     await UploadRecepie().uploadReceipes(
+//                       name: titleController.text.trim(),
+//                       des: descritionController.text.trim(),
+//                       category: selecItem!,
+//                       user: user,
+//                       difficulity: difficulty!,
+//                       ingridents: ingridentsController.text.trim(),
+//                       image: image!,
+//                     );
+//                     ToastError().showToast(
+//                       message: 'Recipe Added Successfully!',
+//                       bgColor: Colors.green,
+//                     );
+//                   },
+//                   child: Container(
+//                     margin: EdgeInsets.only(bottom: 40),
+//                     height: 40,
+//                     width: 120,
+//                     decoration: BoxDecoration(
+//                       color: Colors.green,
+//                       borderRadius: BorderRadius.circular(16),
+//                     ),
+//                     child: Center(child: Text('Done')),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Models/upload_recepies.dart';
 import 'package:smart_chef/Services/image_picker.dart';
 import 'package:smart_chef/Services/image_upload.dart';
-import 'package:smart_chef/Widgets/customDropdown.dart';
-import 'package:smart_chef/Widgets/textfield_widget.dart';
+import 'package:smart_chef/Widgets/image_container.dart';
+import 'package:smart_chef/Widgets/ingridients_container.dart';
+import 'package:smart_chef/Widgets/steps_contanier.dart';
+import 'package:smart_chef/widgets/category_selector.dart';
 
 class AddReceipe extends StatefulWidget {
   const AddReceipe({super.key});
@@ -18,29 +216,80 @@ class AddReceipe extends StatefulWidget {
 }
 
 class _AddReceipeState extends State<AddReceipe> {
-  String? selecItem;
-  String? difficulty;
-  File? image;
-  final _formkey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
-  final descritionController = TextEditingController();
-  final ingridentsController = TextEditingController();
-  User? user = FirebaseAuth.instance.currentUser;
-  final imagePicker = ImagePickerService();
-  final imageUpload = ImageUploadService();
+  // ── State ──────────────────────────────────────────────
+  File? _image;
+  String? _selectedCategory;
+  bool _isLoading = false;
 
-  List<String> receipes = [
-    'All',
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
+  // Dynamic ingredients list
+  final List<TextEditingController> _ingredientControllers = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  // Dynamic steps list
+  final List<TextEditingController> _stepControllers = [
+    TextEditingController(),
+  ];
+
+  final _imagePicker = ImagePickerService();
+  final _imageUpload = ImageUploadService();
+  final User? _user = FirebaseAuth.instance.currentUser;
+
+  static const List<String> _categories = [
     'Breakfast',
     'Lunch',
     'Dinner',
-    'Biryani',
-    'Fast Food',
+    'Dessert',
+    'Vegan',
   ];
-  bool validateImage() {
-    if (image == null) {
+
+  // ── Helpers ────────────────────────────────────────────
+  void _addIngredient() {
+    setState(() => _ingredientControllers.add(TextEditingController()));
+  }
+
+  void _deleteIngredient(int index) {
+    if (_ingredientControllers.length <= 1) return;
+    setState(() {
+      _ingredientControllers[index].dispose();
+      _ingredientControllers.removeAt(index);
+    });
+  }
+
+  void _addStep() {
+    setState(() => _stepControllers.add(TextEditingController()));
+  }
+
+  void _deleteStep(int index) {
+    if (_stepControllers.length <= 1) return;
+    setState(() {
+      _stepControllers[index].dispose();
+      _stepControllers.removeAt(index);
+    });
+  }
+
+  bool _validate() {
+    if (_image == null) {
       ToastError().showToast(
-        message: 'Please select an image',
+        message: 'Please select a recipe photo',
+        bgColor: Colors.red,
+      );
+      return false;
+    }
+    if (_titleController.text.trim().isEmpty) {
+      ToastError().showToast(
+        message: 'Please enter a recipe title',
+        bgColor: Colors.red,
+      );
+      return false;
+    }
+    if (_selectedCategory == null) {
+      ToastError().showToast(
+        message: 'Please select a category',
         bgColor: Colors.red,
       );
       return false;
@@ -48,150 +297,318 @@ class _AddReceipeState extends State<AddReceipe> {
     return true;
   }
 
+  // add_recipe_page.dart mein _publish() function yeh hoga:
+
+  Future<void> _publish() async {
+    if (!_validate()) return;
+    setState(() => _isLoading = true);
+
+    final List<String> ingredients = _ingredientControllers
+        .map((c) => c.text.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    final List<String> steps = _stepControllers
+        .map((c) => c.text.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    await UploadRecepie().uploadReceipes(
+      name: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      category: _selectedCategory!,
+      user: _user,
+      difficulty: 'easy',
+      ingredients: ingredients, // ✅ List<String>
+      steps: steps, // ✅ List<String>
+      image: _image!,
+    );
+
+    setState(() => _isLoading = false);
+    ToastError().showToast(
+      message: 'Recipe Published Successfully! 🎉',
+      bgColor: Colors.green,
+    );
+  }
+
+  // ── Build ──────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-        title: Text('Add New Receipes here'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formkey,
-            child: Column(
-              children: [
-                SizedBox(height: 40),
-                GestureDetector(
-                  onTap: () async {
-                    final pickedImage = await imagePicker.pickFromGallery();
-                    if (pickedImage != null) {
-                      setState(() {
-                        image = pickedImage;
-                      });
-                    }
-                  },
-                  child: Center(
-                    child: DottedBorder(
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(),
-                        child: image != null
-                            ? Image.file(image!, fit: BoxFit.cover)
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt),
-                                  SizedBox(height: 20),
-                                  Text("Add Images"),
-                                ],
-                              ),
+      backgroundColor: AppTheme.background,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          // ── App Bar ──────────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppTheme.surface,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: AppTheme.cardShadow, blurRadius: 8),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: AppTheme.primary,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: CustomTextField(
-                    controller: titleController,
-                    hintText: 'Enter title',
-                    errorText: 'Enter the title',
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: CustomTextField(
-                    controller: descritionController,
-                    hintText: 'Enter description',
-                    errorText: 'Enter your Description',
-                  ),
-                ),
-                SizedBox(height: 20),
-                CustomDropdown(
-                  items: receipes,
-                  hintText: 'Select Cateogry',
-                  onChanged: (value) {
-                    setState(() {
-                      selecItem = value;
-                    });
-                  },
-                  errorText: 'please select a category',
-                ),
-
-                SizedBox(height: 20),
-                CustomDropdown<String>(
-                  items: const ['easy', 'medium', 'hard'],
-                  hintText: 'Select difficulty',
-                  value: difficulty,
-                  errorText: 'Please select difficulty',
-                  onChanged: (value) {
-                    setState(() {
-                      difficulty = value;
-                    });
-                  },
-                ),
-
-                SizedBox(height: 20),
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade100,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: CustomTextField(
-                    controller: ingridentsController,
-                    hintText: 'Enter ingridents',
-                    errorText: 'Enter the ingridents',
-                  ),
-                ),
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () async {
-                    if (!_formkey.currentState!.validate()) return;
-                    if (!validateImage()) return;
-                    await UploadRecepie().uploadReceipes(
-                      name: titleController.text.trim(),
-                      des: descritionController.text.trim(),
-                      category: selecItem!,
-                      user: user,
-                      difficulity: difficulty!,
-                      ingridents: ingridentsController.text.trim(),
-                      image: image!,
-                    );
-                    ToastError().showToast(
-                      message: 'Recipe Added Successfully!',
-                      bgColor: Colors.green,
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 40),
-                    height: 40,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(16),
+                  const SizedBox(width: 14),
+                  const Text(
+                    'Smart Chef',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.primary,
                     ),
-                    child: Center(child: Text('Done')),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+
+          // ── Title ────────────────────────────────────
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 28, 20, 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Create Recipe',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.textDark,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'Share your culinary masterpiece with the community.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppTheme.textMedium,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Image Picker ─────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: RecipeImagePicker(
+                image: _image,
+                onTap: () async {
+                  final picked = await _imagePicker.pickFromGallery();
+                  if (picked != null) setState(() => _image = picked);
+                },
+              ),
+            ),
+          ),
+
+          // ── Recipe Title Field ────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'RECIPE TITLE',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.primary,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: const Color(0xFFEEEEEE),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: TextField(
+                      controller: _titleController,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textDark,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: "e.g. Grandma's Secret Pasta",
+                        hintStyle: TextStyle(
+                          color: AppTheme.textLight,
+                          fontSize: 14,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Category ─────────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: CategorySelector(
+                categories: _categories,
+                selected: _selectedCategory,
+                onSelected: (val) => setState(() => _selectedCategory = val),
+              ),
+            ),
+          ),
+
+          // ── Ingredients ──────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              child: IngredientsEditor(
+                controllers: _ingredientControllers,
+                onAdd: _addIngredient,
+                onDelete: _deleteIngredient,
+              ),
+            ),
+          ),
+
+          // ── Preparation Steps ─────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+              child: PreparationStepsEditor(
+                controllers: _stepControllers,
+                onAdd: _addStep,
+                onDelete: _deleteStep,
+              ),
+            ),
+          ),
+
+          // ── Action Buttons ───────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 32, 20, 40),
+              child: Row(
+                children: [
+                  // Save Draft
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        ToastError().showToast(
+                          message: 'Draft saved!',
+                          bgColor: Colors.grey.shade700,
+                        );
+                      },
+                      child: Container(
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: AppTheme.primary,
+                            width: 1.8,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'SAVE DRAFT',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.primary,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  // Publish
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _isLoading ? null : _publish,
+                      child: Container(
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primary,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.4),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
+                              : const Text(
+                                  'PUBLISH RECIPE',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    for (final c in _ingredientControllers) {
+      c.dispose();
+    }
+    for (final c in _stepControllers) {
+      c.dispose();
+    }
+    super.dispose();
   }
 }

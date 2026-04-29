@@ -12,7 +12,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppTheme.background,
       body: Stack(
         children: [
           Column(
@@ -33,7 +33,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.18),
+                              color: AppTheme.primary.withOpacity(0.18),
                               blurRadius: 32,
                               spreadRadius: 4,
                               offset: const Offset(0, 8),
@@ -42,7 +42,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                         ),
                         child: const Icon(
                           Icons.restaurant,
-                          color: AppColors.primary,
+                          color: AppTheme.primary,
                           size: 52,
                         ),
                       ),
@@ -55,7 +55,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                         style: TextStyle(
                           fontSize: 38,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.primary,
+                          color: AppTheme.primary,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -108,7 +108,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                   Text(
                     'CRAFTING YOUR PERSONALIZED MENU',
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: AppTheme.primary,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                       letterSpacing: 0.8,
@@ -117,7 +117,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                   SizedBox(width: 10),
                   Icon(
                     Icons.storefront_rounded,
-                    color: AppColors.primary,
+                    color: AppTheme.primary,
                     size: 20,
                   ),
                 ],
