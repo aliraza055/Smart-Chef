@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/auth_model.dart';
-import 'package:smart_chef/Pages/sign_in.dart';
+import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Widgets/auth_header.dart';
+import 'package:smart_chef/Widgets/auth_social.dart';
+import 'package:smart_chef/Widgets/textfield_widget.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -10,182 +14,255 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final _keyform = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _nameCont = TextEditingController();
-  final _gmailCont = TextEditingController();
+  final _emailCont = TextEditingController();
   final _passwordCont = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _signUp() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+    await AuthModel().signup(
+      context,
+      _nameCont.text.trim(),
+      _emailCont.text.trim(),
+      _passwordCont.text,
+    );
+    if (mounted) setState(() => _isLoading = false);
+  }
+
+  @override
+  void dispose() {
+    _nameCont.dispose();
+    _emailCont.dispose();
+    _passwordCont.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 3,
-            width: double.infinity,
+      backgroundColor: AppTheme.background,
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              const SizedBox(height: 60),
 
-            decoration: BoxDecoration(color: Colors.white),
-            child: Center(
-              child: Image.asset(
-                'images/chef.jpg',
-                height: 130,
-                width: 130,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 220, left: 24, right: 24, bottom: 20),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Color(0xffffefbf),
-            ),
-            child: Form(
-              key: _keyform,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'Singup page',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+              // ── Brand ──────────────────────────────
+              const AuthBrandHeader(),
+
+              const SizedBox(height: 32),
+
+              // ── White Card ─────────────────────────
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 24,
+                      offset: const Offset(0, 8),
                     ),
-                  ),
-                  Text(
-                    'Name',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.black12,
-                    ),
-                    child: TextFormField(
-                      controller: _nameCont,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter your name';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter your name'),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'Gmail',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.black12,
-                    ),
-                    child: TextFormField(
-                      controller: _gmailCont,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter valid gmail';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter your gmail'),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'Password',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.black12,
-                    ),
-                    child: TextFormField(
-                      controller: _passwordCont,
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Enter strong password';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hint: Text('Enter your password'),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_keyform.currentState!.validate()) {
-                        AuthModel().signup(
-                          context,
-                          _nameCont.text,
-                          _gmailCont.text,
-                          _passwordCont.text,
-                        );
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 20),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Center(child: Text('Sinup')),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ],
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('If you have already account!'),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => SignIn()),
-                          );
+                      // Title
+                      const Text(
+                        'Create account',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.textDark,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Join thousands of home chefs today.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textMedium,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Social buttons ──────────────
+                      const SocialLoginRow(),
+
+                      const SizedBox(height: 24),
+
+                      // ── Name ────────────────────────
+                      AuthTextField(
+                        controller: _nameCont,
+                        label: 'Full name',
+                        hint: 'Gordon Ramsay',
+                        prefixIcon: Icons.person_outline_rounded,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter your name';
+                          return null;
                         },
-                        child: Text(
-                          'Singup',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.blue,
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // ── Email ───────────────────────
+                      AuthTextField(
+                        controller: _emailCont,
+                        label: 'Email address',
+                        hint: 'chef@example.com',
+                        prefixIcon: Icons.email_outlined,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter your email';
+                          if (!v.contains('@')) return 'Enter valid email';
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // ── Password ────────────────────
+                      AuthTextField(
+                        controller: _passwordCont,
+                        label: 'Password',
+                        hint: '••••••••',
+                        prefixIcon: Icons.lock_outline_rounded,
+                        isPassword: true,
+                        validator: (v) {
+                          if (v == null || v.length < 6) {
+                            return 'Min 6 characters required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      // ── Sign Up Button ──────────────
+                      GestureDetector(
+                        onTap: _isLoading ? null : _signUp,
+                        child: Container(
+                          height: 56,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primary,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primary.withOpacity(0.4),
+                                blurRadius: 16,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                           ),
+                          child: Center(
+                            child: _isLoading
+                                ? const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2.5,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Create Account',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Sign In link ────────────────
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Already have an account? ',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppTheme.textMedium,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                PageRouter.singIn,
+                              ),
+                              child: const Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              // ── Footer ─────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _FooterLink(label: 'Privacy Policy', onTap: () {}),
+                  const SizedBox(width: 32),
+                  _FooterLink(label: 'Terms of Service', onTap: () {}),
                 ],
               ),
-            ),
+
+              const SizedBox(height: 24),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterLink extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _FooterLink({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 13,
+          color: AppTheme.textMedium,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }

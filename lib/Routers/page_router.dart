@@ -7,11 +7,12 @@ import 'package:smart_chef/Pages/setting.dart';
 import 'package:smart_chef/Pages/sign_in.dart';
 import 'package:smart_chef/Pages/sign_up.dart';
 import 'package:smart_chef/Pages/update_user.dart';
-import 'package:smart_chef/Pages/user_info.dart';
+import 'package:smart_chef/Pages/welcome_page.dart';
 
 class PageRouter {
   static const initial = '/';
   static const singUp = 'singUp';
+  static const singIn = 'singIn';
   static const homePage = '/homePage';
   static const detailPage = '/detailPage';
   static const favoritePage = '/favoritePage';
@@ -22,9 +23,11 @@ class PageRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case initial:
-        return MaterialPageRoute(builder: (_) => SignIn());
+        return MaterialPageRoute(builder: (_) => SmartChefSplashScreen());
       case singUp:
         return MaterialPageRoute(builder: (_) => SignUp());
+      case singIn:
+        return MaterialPageRoute(builder: (_) => SignIn());
       case homePage:
         return MaterialPageRoute(builder: (_) => Homepage());
       case detailPage:

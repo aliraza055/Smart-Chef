@@ -1,8 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Pages/bottom_navigation.dart';
-import 'package:smart_chef/Pages/home_page.dart';
-import 'package:smart_chef/Pages/welcome_page.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 
 void main() async {

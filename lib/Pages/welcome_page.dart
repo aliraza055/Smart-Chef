@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 
 class SmartChefSplashScreen extends StatefulWidget {
   const SmartChefSplashScreen({super.key});
@@ -86,41 +87,48 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
 
           // Floating bottom action bar
           Positioned(
-            bottom: 24,
+            bottom: 40,
             left: 20,
             right: 20,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.92),
-                borderRadius: BorderRadius.circular(40),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'CRAFTING YOUR PERSONALIZED MENU',
-                    style: TextStyle(
-                      color: AppTheme.primary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                      letterSpacing: 0.8,
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, PageRouter.singIn),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 18,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.primary,
+                  borderRadius: BorderRadius.circular(40),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Icon(
-                    Icons.storefront_rounded,
-                    color: AppTheme.primary,
-                    size: 20,
-                  ),
-                ],
+                  ],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Started',
+                      style: TextStyle(
+                        color: AppTheme.surface,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.storefront_rounded,
+                      color: AppTheme.surface,
+                      size: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
