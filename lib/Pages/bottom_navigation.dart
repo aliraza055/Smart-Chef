@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Pages/add_receipe.dart';
 import 'package:smart_chef/Pages/favorite_item.dart';
 import 'package:smart_chef/Pages/home_page.dart';
@@ -35,7 +36,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
       // Floating Add Button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.primary,
         shape: const CircleBorder(),
         elevation: 6,
         onPressed: () {
@@ -99,14 +100,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
         children: [
           Icon(
             icon,
-            color: isSelected ? Colors.blue : Colors.grey,
+            color: isSelected ? AppTheme.primary : Colors.grey,
             size: isSelected ? 28 : 24,
           ),
 
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.blue : Colors.grey,
+              color: isSelected ? AppTheme.primary : Colors.grey,
               fontSize: 12,
             ),
           ),

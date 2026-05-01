@@ -91,12 +91,12 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 20),
 
                       // ── Social buttons ──────────────
-                      const SocialLoginRow(),
+                      //     const SocialLoginRow(),
 
-                      const SizedBox(height: 24),
+                      // const SizedBox(height: 24),
 
                       // ── Email ───────────────────────
                       AuthTextField(
@@ -112,9 +112,24 @@ class _SignInState extends State<SignIn> {
                         },
                       ),
 
-                      const SizedBox(height: 18),
+                      //   const SizedBox(height: 18),
 
                       // ── Password label with Forgot ──
+                      //   const SizedBox(height: 8),
+                      AuthTextField(
+                        controller: _passwordCont,
+                        label: '',
+                        hint: '••••••••',
+                        prefixIcon: Icons.lock_outline_rounded,
+                        isPassword: true,
+                        validator: (v) {
+                          if (v == null || v.length < 6) {
+                            return 'Min 6 characters required';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -138,20 +153,6 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 8),
-                      AuthTextField(
-                        controller: _passwordCont,
-                        label: '',
-                        hint: '••••••••',
-                        prefixIcon: Icons.lock_outline_rounded,
-                        isPassword: true,
-                        validator: (v) {
-                          if (v == null || v.length < 6) {
-                            return 'Min 6 characters required';
-                          }
-                          return null;
-                        },
                       ),
 
                       const SizedBox(height: 28),

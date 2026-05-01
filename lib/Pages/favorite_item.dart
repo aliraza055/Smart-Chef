@@ -148,7 +148,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 0.78,
+                    childAspectRatio: 0.76,
                   ),
                 ),
               );
