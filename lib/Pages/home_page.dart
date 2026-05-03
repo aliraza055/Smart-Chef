@@ -19,18 +19,17 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String _selectedCategory = 'All';
 
-  // ✅ FavoriteService — ek baar banao
   final _favService = FavoriteService();
 
-  // ✅ Current user ke favorite IDs — live update hote rahenge
-  Set<String> _favoriteIds = {};
+  //Set<String> _favoriteIds = {};
+  final _favoriteIds = ValueNotifier<Set<String>>(<String>{});
 
   @override
   void initState() {
     super.initState();
     // ✅ favoritesStream subscribe karo — jab bhi change ho, setState
     _favService.favoritesStream().listen((ids) {
-      if (mounted) setState(() => _favoriteIds = ids);
+      if (mounted) _favoriteIds.value = ids;
     });
   }
 
@@ -132,25 +131,27 @@ class _HomepageState extends State<Homepage> {
                     final data = recipes[index].data() as Map<String, dynamic>;
                     final docId = recipes[index].id;
 
-                    // ✅ Set mein check karo — instant, no async needed
-                    final isFav = _favoriteIds.contains(docId);
-
-                    return RecipeCard(
-                      image: data['image'] ?? '',
-                      name: data['name'] ?? '',
-                      description: data['description'] ?? '',
-                      time: data['time']?.toString() ?? '',
-                      likes: data['likes']?.toString() ?? '0',
-                      // ✅ Sahi isFav aa raha hai
-                      isFavorite: isFav,
-                      tag: data['tag'] ?? '',
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        PageRouter.detailPage,
-                        arguments: {...data, 'docId': docId},
-                      ),
-                      // ✅ Toggle — Firestore update + stream auto refresh karega
-                      onFavoriteToggle: () => _favService.toggleFavorite(docId),
+                    return ValueListenableBuilder<Set<String>>(
+                      valueListenable: _favoriteIds,
+                      builder: (context, favIds, _) {
+                        return RecipeCard(
+                          isFavorite: favIds.contains(docId),
+                          onFavoriteToggle: () =>
+                              _favService.toggleFavorite(docId),
+                          // baki sab same
+                          image: data['image'] ?? '',
+                          name: data['name'] ?? '',
+                          description: data['description'] ?? '',
+                          time: data['time']?.toString() ?? '',
+                          likes: data['likes']?.toString() ?? '0',
+                          tag: data['tag'] ?? '',
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            PageRouter.detailPage,
+                            arguments: {...data, 'docId': docId},
+                          ),
+                        );
+                      },
                     );
                   }, childCount: recipes.length),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
