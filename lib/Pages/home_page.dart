@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
+import 'package:smart_chef/Widgets/home_container.dart';
 import 'package:smart_chef/Widgets/home_header.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/search_bar.dart';
@@ -16,7 +18,21 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   String _selectedCategory = 'All';
-  int _navIndex = 0;
+
+  // ✅ FavoriteService — ek baar banao
+  final _favService = FavoriteService();
+
+  // ✅ Current user ke favorite IDs — live update hote rahenge
+  Set<String> _favoriteIds = {};
+
+  @override
+  void initState() {
+    super.initState();
+    // ✅ favoritesStream subscribe karo — jab bhi change ho, setState
+    _favService.favoritesStream().listen((ids) {
+      if (mounted) setState(() => _favoriteIds = ids);
+    });
+  }
 
   Stream<QuerySnapshot> _getRecipesStream() {
     final col = FirebaseFirestore.instance.collection('Receipes');
@@ -31,22 +47,17 @@ class _HomepageState extends State<Homepage> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ─── Header ───────────────────────────────────────────
           const SliverToBoxAdapter(child: HomeHeader()),
 
-          // ─── Search Bar ───────────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: SmartSearchBar(
-                onChanged: (val) {
-                  // Hook up search logic here
-                },
-              ),
+              child: SmartSearchBar(onChanged: (val) {}),
             ),
           ),
 
-          // ─── Categories ───────────────────────────────────────
+          const HomeContainer(),
+
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 0, 0),
@@ -76,16 +87,14 @@ class _HomepageState extends State<Homepage> {
                   ),
                   const SizedBox(height: 12),
                   CategoryRow(
-                    onCategorySelected: (val) {
-                      setState(() => _selectedCategory = val);
-                    },
+                    onCategorySelected: (val) =>
+                        setState(() => _selectedCategory = val),
                   ),
                 ],
               ),
             ),
           ),
 
-          // ─── "Popular Today" label ────────────────────────────
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 28, 20, 16),
@@ -93,7 +102,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
-          // ─── Recipe Grid ──────────────────────────────────────
           StreamBuilder<QuerySnapshot>(
             stream: _getRecipesStream(),
             builder: (context, snapshot) {
@@ -104,7 +112,6 @@ class _HomepageState extends State<Homepage> {
                   ),
                 );
               }
-
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const SliverFillRemaining(
                   child: Center(
@@ -123,9 +130,10 @@ class _HomepageState extends State<Homepage> {
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final data = recipes[index].data() as Map<String, dynamic>;
-                    final isFav = data['isFav'] is bool
-                        ? data['isFav'] as bool
-                        : data['isFav'] == 'true';
+                    final docId = recipes[index].id;
+
+                    // ✅ Set mein check karo — instant, no async needed
+                    final isFav = _favoriteIds.contains(docId);
 
                     return RecipeCard(
                       image: data['image'] ?? '',
@@ -133,21 +141,16 @@ class _HomepageState extends State<Homepage> {
                       description: data['description'] ?? '',
                       time: data['time']?.toString() ?? '',
                       likes: data['likes']?.toString() ?? '0',
+                      // ✅ Sahi isFav aa raha hai
                       isFavorite: isFav,
                       tag: data['tag'] ?? '',
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          PageRouter.detailPage,
-                          arguments: data,
-                        );
-                      },
-                      onFavoriteToggle: () {
-                        FirebaseFirestore.instance
-                            .collection('Receipes')
-                            .doc(recipes[index].id)
-                            .update({'isFav': !isFav});
-                      },
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        PageRouter.detailPage,
+                        arguments: {...data, 'docId': docId},
+                      ),
+                      // ✅ Toggle — Firestore update + stream auto refresh karega
+                      onFavoriteToggle: () => _favService.toggleFavorite(docId),
                     );
                   }, childCount: recipes.length),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -165,126 +168,3 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:smart_chef/Pages/deital_page.dart';
-// import 'package:smart_chef/Routers/page_router.dart';
-// import 'package:smart_chef/Widgets/category_tile.dart';
-// import 'package:smart_chef/Widgets/receipe_container.dart';
-// import 'package:smart_chef/Widgets/upper_contanier.dart';
-
-// class Homepage extends StatefulWidget {
-//   const Homepage({super.key});
-
-//   @override
-//   State<Homepage> createState() => _HomepageState();
-// }
-
-// class _HomepageState extends State<Homepage> {
-//   String selectedCategory = 'All';
-
-//   Stream<QuerySnapshot> _getRecipesStream() {
-//     if (selectedCategory == 'All') {
-//       return FirebaseFirestore.instance.collection('Receipes').snapshots();
-//     } else {
-//       return FirebaseFirestore.instance
-//           .collection('Receipes')
-//           .where('category', isEqualTo: selectedCategory)
-//           .snapshots();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     User? user = FirebaseAuth.instance.currentUser;
-//     return Scaffold(
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             UpperContanier(),
-//             const SizedBox(height: 10),
-
-//             Container(
-//               margin: const EdgeInsets.symmetric(horizontal: 20),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   const Text(
-//                     'Categories',
-//                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//                   ),
-
-//                   const SizedBox(height: 10),
-
-//                   CategoryTile(
-//                     onCategorySelected: (value) {
-//                       setState(() {
-//                         selectedCategory = value;
-//                       });
-//                     },
-//                   ),
-
-//                   const SizedBox(height: 20),
-
-//                   StreamBuilder<QuerySnapshot>(
-//                     stream: _getRecipesStream(),
-//                     builder: (context, snapshot) {
-//                       if (snapshot.connectionState == ConnectionState.waiting) {
-//                         return const Center(child: CircularProgressIndicator());
-//                       }
-
-//                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-//                         return const Center(child: Text('No recipes found!'));
-//                       }
-
-//                       final recipes = snapshot.data!.docs;
-
-//                       return ListView.builder(
-//                         shrinkWrap: true,
-//                         physics: const NeverScrollableScrollPhysics(),
-//                         itemCount: recipes.length,
-//                         itemBuilder: (context, index) {
-//                           final data = recipes[index].data() as Map;
-//                           final isFav = (data['isFav'] is bool)
-//                               ? data['isFav']
-//                               : data['isFav'] == 'true';
-
-//                           return GestureDetector(
-//                             onTap: () {
-//                               Navigator.pushNamed(
-//                                 context,
-//                                 PageRouter.detailPage,
-//                                 arguments: data,
-//                               );
-//                             },
-
-//                             child: RecipeCard(
-//                               image: data['image'],
-//                               name: data['name'],
-//                               description: data['description'],
-//                               time: data['time'].toString(),
-//                               likes: data['likes'].toString(),
-//                               isFavorite: isFav ?? true,
-
-//                               onFavoriteToggle: () {
-//                                 FirebaseFirestore.instance
-//                                     .collection('Receipes')
-//                                     .doc(recipes[index].id)
-//                                     .update({'isFav': !isFav});
-//                               },
-//                             ),
-//                           );
-//                         },
-//                       );
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

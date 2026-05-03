@@ -149,7 +149,7 @@ class _KitchenImage extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('images/download.jpg', fit: BoxFit.cover),
+          Image.asset('images/chef1.png', fit: BoxFit.cover),
 
           // Gradient overlay
           DecoratedBox(

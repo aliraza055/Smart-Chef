@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Models/app_user.dart';
 import 'package:smart_chef/Models/toast_error.dart';
-import 'package:smart_chef/Pages/bottom_navigation.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 
 class AuthModel {
@@ -17,7 +14,10 @@ class AuthModel {
   ) async {
     try {
       UserCredential credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(
+            email: email.trim(),
+            password: password.trim(),
+          );
       Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
 
       User user = credential.user!;
@@ -54,6 +54,7 @@ class AuthModel {
           bgColor: Colors.red,
         );
       } else {
+        print(e.message);
         ToastError().showToast(
           message: 'Error:${e.message}',
           bgColor: Colors.red,
@@ -74,7 +75,10 @@ class AuthModel {
   ) async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: gmail, password: password)
+          .signInWithEmailAndPassword(
+            email: gmail.trim(),
+            password: password.trim(),
+          )
           .then((value) {
             Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
             ToastError().showToast(

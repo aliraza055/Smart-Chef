@@ -3,14 +3,14 @@ class ReceipeModel {
   String description;
   String image;
   String category;
-  List<String> ingredients; // ✅ String se List<String> — multiple ingredients
-  List<String> steps; // ✅ Naya field — preparation steps
+  List<String> ingredients;
+  List<String> steps;
   String? userName;
   String? userPhoto;
   String difficulty;
   double time;
-  double rated;
-  bool isFav;
+  double avgRating;
+  int totalReviews;
   int likes;
 
   ReceipeModel({
@@ -24,9 +24,9 @@ class ReceipeModel {
     required this.difficulty,
     required this.userPhoto,
     required this.likes,
-    required this.rated,
+    this.avgRating = 0,
+    this.totalReviews = 0,
     required this.time,
-    required this.isFav,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,17 +37,16 @@ class ReceipeModel {
       'image': image,
       'userName': userName,
       'userPhoto': userPhoto,
-      'ingredients': ingredients, // List<String> — Firestore array ban jayega
-      'steps': steps, // List<String> — Firestore array ban jayega
+      'ingredients': ingredients,
+      'steps': steps,
       'time': time,
-      'rating': rated,
+      'avgRating': avgRating,
+      'totalReviews': totalReviews,
       'likes': likes,
-      'isFav': isFav,
       'difficulty': difficulty,
     };
   }
 
-  // Firestore se data padhne ke liye
   factory ReceipeModel.fromMap(Map<String, dynamic> map) {
     return ReceipeModel(
       name: map['name'] ?? '',
@@ -56,14 +55,13 @@ class ReceipeModel {
       image: map['image'] ?? '',
       userName: map['userName'],
       userPhoto: map['userPhoto'],
-      // Firestore se List safely parse karo
       ingredients: List<String>.from(map['ingredients'] ?? []),
       steps: List<String>.from(map['steps'] ?? []),
       difficulty: map['difficulty'] ?? 'easy',
       time: (map['time'] ?? 0).toDouble(),
-      rated: (map['rating'] ?? 0).toDouble(),
+      avgRating: (map['avgRating'] ?? 0).toDouble(),
+      totalReviews: map['totalReviews'] ?? 0,
       likes: map['likes'] ?? 0,
-      isFav: map['isFav'] ?? false,
     );
   }
 }

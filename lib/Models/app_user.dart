@@ -7,12 +7,12 @@ class AppUser {
   String imageUrl;
   int totalRecipes;
   int totalFavorites;
-  // New fields matching design
   String bio;
   int followers;
   int following;
-  String level; // 'Master', 'Pro', 'Beginner'
+  String level;
   int streakDays;
+  List<String> favoriteRecipeIds; // ✅ user-specific favorites
   final DateTime createdAt;
 
   AppUser({
@@ -28,6 +28,7 @@ class AppUser {
     this.following = 0,
     this.level = 'Beginner',
     this.streakDays = 0,
+    this.favoriteRecipeIds = const [],
   });
 
   Map<String, dynamic> toMap() {
@@ -36,13 +37,15 @@ class AppUser {
       'name': name,
       'gmail': gmail,
       'imageUrl': imageUrl,
-      'totalRecipes': totalRecipes, // ✅ typo fix (was totalReceipes)
+      'totalRecipes': totalRecipes,
       'totalFavorites': totalFavorites,
       'bio': bio,
       'followers': followers,
       'following': following,
       'level': level,
       'streakDays': streakDays,
+      'favoriteRecipeIds':
+          favoriteRecipeIds, // ✅ List<String> of recipe doc IDs
       'createdAt': createdAt,
     };
   }
@@ -54,12 +57,13 @@ class AppUser {
       gmail: map['gmail'],
       imageUrl: map['imageUrl'] ?? '',
       totalFavorites: map['totalFavorites'] ?? 0,
-      totalRecipes: map['totalRecipes'] ?? 0, // ✅ typo fix
+      totalRecipes: map['totalRecipes'] ?? 0,
       bio: map['bio'] ?? '',
       followers: map['followers'] ?? 0,
       following: map['following'] ?? 0,
       level: map['level'] ?? 'Beginner',
       streakDays: map['streakDays'] ?? 0,
+      favoriteRecipeIds: List<String>.from(map['favoriteRecipeIds'] ?? []), // ✅
       createdAt: (map['createdAt'] is Timestamp)
           ? (map['createdAt'] as Timestamp).toDate()
           : DateTime.now(),

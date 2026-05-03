@@ -3,7 +3,6 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/auth_model.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/auth_header.dart';
-import 'package:smart_chef/Widgets/auth_social.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
 class SignIn extends StatefulWidget {
@@ -93,12 +92,6 @@ class _SignInState extends State<SignIn> {
 
                       const SizedBox(height: 20),
 
-                      // ── Social buttons ──────────────
-                      //     const SocialLoginRow(),
-
-                      // const SizedBox(height: 24),
-
-                      // ── Email ───────────────────────
                       AuthTextField(
                         controller: _emailCont,
                         label: 'Email address',

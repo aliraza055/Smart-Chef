@@ -29,14 +29,12 @@ class UploadRecepie {
           category: category,
           image: imgUrl!,
           userName: user?.displayName ?? 'Anonymous',
-          userPhoto: user?.photoURL ?? '',
-          ingredients: ingredients, // ✅ List<String>
-          steps: steps, // ✅ List<String>
+          ingredients: ingredients,
+          steps: steps,
           difficulty: difficulty,
+          userPhoto: user?.photoURL ?? '',
           likes: 0,
-          rated: 0,
           time: time,
-          isFav: false,
         ),
       );
     } catch (e) {

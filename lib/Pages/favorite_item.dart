@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -12,20 +12,16 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  Stream<QuerySnapshot> _favStream() => FirebaseFirestore.instance
-      .collection('Receipes')
-      .where('isFav', isEqualTo: true)
-      .snapshots();
+  final _favoriteService = FavoriteService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Header ──────────────────────────────────
+          // ── Header (same as before) ──────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
@@ -68,7 +64,7 @@ class _FavoritePageState extends State<FavoritePage> {
             ),
           ),
 
-          // ── Title ───────────────────────────────────
+          // ── Title (same as before) ───────────────────
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 24, 20, 0),
@@ -95,10 +91,10 @@ class _FavoritePageState extends State<FavoritePage> {
           ),
 
           // ── Recipe Grid ─────────────────────────────
-          StreamBuilder<QuerySnapshot>(
-            stream: _favStream(),
+          StreamBuilder<List<Map<String, dynamic>>>(
+            stream: _favoriteService
+                .getFavoriteRecipesStream(), // ✅ user-specific stream
             builder: (context, snapshot) {
-              // Loading
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SliverFillRemaining(
                   child: Center(
@@ -107,21 +103,17 @@ class _FavoritePageState extends State<FavoritePage> {
                 );
               }
 
-              // Empty state
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              final recipes = snapshot.data ?? [];
+
+              if (recipes.isEmpty) {
                 return SliverFillRemaining(child: _EmptyFavourites());
               }
-
-              final recipes = snapshot.data!.docs;
 
               return SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    final data = recipes[index].data() as Map<String, dynamic>;
-                    final isFav = data['isFav'] is bool
-                        ? data['isFav'] as bool
-                        : data['isFav'] == 'true';
+                    final data = recipes[index];
 
                     return RecipeCard(
                       image: data['image'] ?? '',
@@ -129,18 +121,16 @@ class _FavoritePageState extends State<FavoritePage> {
                       description: data['description'] ?? '',
                       time: data['time']?.toString() ?? '',
                       likes: data['likes']?.toString() ?? '0',
-                      isFavorite: isFav,
+                      isFavorite: true, // ✅ yahan sab favorites hain
                       tag: data['tag'] ?? '',
                       onTap: () => Navigator.pushNamed(
                         context,
                         PageRouter.detailPage,
-                        arguments: {...data, 'docId': recipes[index].id},
+                        arguments: data, // docId already andar hai
                       ),
-                      onFavoriteToggle: () {
-                        FirebaseFirestore.instance
-                            .collection('Receipes')
-                            .doc(recipes[index].id)
-                            .update({'isFav': false});
+                      onFavoriteToggle: () async {
+                        // ✅ toggle se remove ho jayega
+                        await _favoriteService.toggleFavorite(data['docId']);
                       },
                     );
                   }, childCount: recipes.length),
@@ -160,7 +150,6 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 }
 
-// ── Empty State Widget ──────────────────────────────────
 class _EmptyFavourites extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
