@@ -39,7 +39,7 @@ class AuthModel {
             ).toMap(),
           );
       ToastError().showToast(
-        message: 'Create user successful!',
+        message: 'Create user successfully!',
         bgColor: Colors.green,
       );
     } on FirebaseAuthException catch (e) {
