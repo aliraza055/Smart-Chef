@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Services/Receipe_services.dart';
@@ -21,10 +22,12 @@ class UploadRecepie {
   }) async {
     try {
       final imgUrl = await _imageUpload.uploadImage(image);
+      final ref = FirebaseFirestore.instance.collection('Receipes');
 
       await ReceipeServices().addReceipe(
         ReceipeModel(
           name: name,
+          userUId: user?.uid ?? '',
           description: description,
           category: category,
           image: imgUrl!,

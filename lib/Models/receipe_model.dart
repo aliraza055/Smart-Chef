@@ -1,4 +1,5 @@
 class ReceipeModel {
+  String? docId;
   String name;
   String description;
   String image;
@@ -9,15 +10,19 @@ class ReceipeModel {
   String? userPhoto;
   String difficulty;
   double time;
+
+  String userUId;
   double avgRating;
   int totalReviews;
   int likes;
 
   ReceipeModel({
+    this.docId,
     required this.name,
     required this.description,
     required this.category,
     required this.image,
+    required this.userUId,
     required this.userName,
     required this.ingredients,
     required this.steps,
@@ -31,11 +36,13 @@ class ReceipeModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'docId': docId,
       'name': name,
       'description': description,
       'category': category,
       'image': image,
       'userName': userName,
+      'userUid': userUId,
       'userPhoto': userPhoto,
       'ingredients': ingredients,
       'steps': steps,
@@ -49,7 +56,9 @@ class ReceipeModel {
 
   factory ReceipeModel.fromMap(Map<String, dynamic> map) {
     return ReceipeModel(
+      docId: map['docId'],
       name: map['name'] ?? '',
+      userUId: map['userUid'] ?? '',
       description: map['description'] ?? '',
       category: map['category'] ?? '',
       image: map['image'] ?? '',

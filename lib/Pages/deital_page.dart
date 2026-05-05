@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Widgets/detail_chef.dart';
 import 'package:smart_chef/Widgets/detail_ingridients.dart';
 import 'package:smart_chef/Widgets/detail_steps.dart';
+import 'package:smart_chef/Widgets/review_sheet.dart';
 
 import 'package:smart_chef/widgets/detail_header.dart';
 
@@ -17,13 +18,12 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final User? _user = FirebaseAuth.instance.currentUser;
-  bool _isFav = false;
+  Map<String, dynamic>? _chefData;
 
   @override
   void initState() {
     super.initState();
-    _isFav = widget.recipe['isFav'] ?? false;
+    _loadChefData();
   }
 
   // ── Safely parse List<String> from Firestore ──
@@ -35,12 +35,25 @@ class _DetailPageState extends State<DetailPage> {
     return val.toString().split(',').map((e) => e.trim()).toList();
   }
 
-  Future<void> _toggleFav(String? docId) async {
-    if (docId == null) return;
-    setState(() => _isFav = !_isFav);
-    await FirebaseFirestore.instance.collection('Receipes').doc(docId).update({
-      'isFav': _isFav,
-    });
+  Future<void> _getReviews() async {
+    final data = await FirebaseFirestore.instance
+        .collection('Reviews')
+        .where('receipeId', isEqualTo: widget.recipe['docId'])
+        .get();
+  }
+
+  Future<void> _loadChefData() async {
+    final userId = widget.recipe['userId'] as String?;
+    if (userId == null || userId.isEmpty) return;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .get();
+
+    if (doc.exists && mounted) {
+      setState(() => _chefData = doc.data());
+    }
   }
 
   @override
@@ -83,14 +96,26 @@ class _DetailPageState extends State<DetailPage> {
             child: Container(
               decoration: const BoxDecoration(
                 color: AppTheme.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                // borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
               ),
               transform: Matrix4.translationValues(0, -28, 0),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    ChefCard(
+                      name:
+                          _chefData?['name'] ??
+                          widget.recipe['userName'] ??
+                          'Unknown Chef',
+                      photoUrl:
+                          _chefData?['imageUrl'] ??
+                          widget.recipe['userPhoto'] ??
+                          '',
+                      level: _chefData?['level'] ?? 'Chef',
+                    ),
+                    SizedBox(height: 20),
                     // ── Description (if any) ──────────
                     if (description.isNotEmpty) ...[
                       Text(
@@ -101,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 20),
                     ],
 
                     // ── Ingredients checklist ──────────
@@ -115,54 +140,9 @@ class _DetailPageState extends State<DetailPage> {
                       CookingSteps(steps: steps, difficulty: difficulty),
                       const SizedBox(height: 24),
                     ],
-
-                    // ── Add to Favourite button ────────
-                    GestureDetector(
-                      onTap: () => _toggleFav(docId),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        height: 54,
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(bottom: 36),
-                        decoration: BoxDecoration(
-                          color: _isFav ? AppTheme.primary : Colors.transparent,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: AppTheme.primary, width: 2),
-                          boxShadow: _isFav
-                              ? [
-                                  BoxShadow(
-                                    color: AppTheme.primary.withOpacity(0.35),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ]
-                              : [],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              _isFav
-                                  ? Icons.favorite_rounded
-                                  : Icons.favorite_border_rounded,
-                              color: _isFav ? Colors.white : AppTheme.primary,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              _isFav
-                                  ? 'SAVED TO FAVOURITES'
-                                  : 'ADD TO FAVOURITES',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: _isFav ? Colors.white : AppTheme.primary,
-                                letterSpacing: 0.6,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    ReviewSheet(
+                      recipeId: widget.recipe['docId'],
+                      recipeName: widget.recipe['name'] ?? '',
                     ),
                   ],
                 ),
