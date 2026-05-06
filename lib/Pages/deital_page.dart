@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/detail_chef.dart';
 import 'package:smart_chef/Widgets/detail_ingridients.dart';
 import 'package:smart_chef/Widgets/detail_steps.dart';
+import 'package:smart_chef/Widgets/review_list.dart';
 import 'package:smart_chef/Widgets/review_sheet.dart';
-
 import 'package:smart_chef/widgets/detail_header.dart';
 
 class DetailPage extends StatefulWidget {
@@ -18,6 +19,8 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final _favService = FavoriteService();
+  bool _isFav = false;
   Map<String, dynamic>? _chefData;
 
   @override
@@ -26,56 +29,71 @@ class _DetailPageState extends State<DetailPage> {
     _loadChefData();
   }
 
-  // ── Safely parse List<String> from Firestore ──
+  // ── Parse List<String> from Firestore ────────────
   List<String> _parseList(String key) {
     final val = widget.recipe[key];
     if (val == null) return [];
     if (val is List) return List<String>.from(val);
-    // Fallback: old string format — split by comma
     return val.toString().split(',').map((e) => e.trim()).toList();
   }
 
-  Future<void> _getReviews() async {
-    final data = await FirebaseFirestore.instance
-        .collection('Reviews')
-        .where('receipeId', isEqualTo: widget.recipe['docId'])
-        .get();
-  }
+  // ── Load fav status from FavoriteService ─────────
+  // Future<void> _loadFavStatus() async {
+  //   final docId = widget.recipe['docId'] as String?;
+  //   if (docId == null) return;
+  //   final isFav = await _favService.isFavorite(docId);
+  //   if (mounted) setState(() => _isFav = isFav);
+  // }
 
+  // ── Load chef data from Users collection ─────────
   Future<void> _loadChefData() async {
     final userId = widget.recipe['userId'] as String?;
     if (userId == null || userId.isEmpty) return;
-
     final doc = await FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
         .get();
-
     if (doc.exists && mounted) {
       setState(() => _chefData = doc.data());
     }
   }
 
+  // ── Toggle favourite ──────────────────────────────
+  Future<void> _toggleFav() async {
+    final docId = widget.recipe['docId'] as String?;
+    if (docId == null) return;
+    setState(() => _isFav = !_isFav);
+    await _favService.toggleFavorite(docId);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // ── Data from recipe map ──────────────────────
     final ingredients = _parseList('ingredients');
     final steps = _parseList('steps');
     final name = widget.recipe['name'] ?? '';
     final category = widget.recipe['category'] ?? '';
     final time = widget.recipe['time']?.toString() ?? '0';
-    final rating = (widget.recipe['rating'] ?? 0).toDouble();
+    final rating = (widget.recipe['avgRating'] ?? 0).toDouble(); // ✅ avgRating
     final likes = widget.recipe['likes'] ?? 0;
     final difficulty = widget.recipe['difficulty'] ?? 'Easy';
     final description = widget.recipe['description'] ?? '';
     final image = widget.recipe['image'] ?? '';
     final docId = widget.recipe['docId'] as String?;
 
+    // ── Chef info ─────────────────────────────────
+    final chefName =
+        _chefData?['name'] ?? widget.recipe['userName'] ?? 'Unknown Chef';
+    final chefPhoto =
+        _chefData?['imageUrl'] ?? widget.recipe['userPhoto'] ?? '';
+    final chefLevel = _chefData?['level'] ?? 'Chef';
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Hero Image Header ──────────────────────
+          // ── Hero Header ───────────────────────────
           SliverToBoxAdapter(
             child: DetailHeader(
               imageUrl: image,
@@ -91,33 +109,26 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
 
-          // ── White card body ────────────────────────
+          // ── Body ─────────────────────────────────
           SliverToBoxAdapter(
-            child: Container(
-              decoration: const BoxDecoration(
+            child: Transform.translate(
+              offset: const Offset(0, -28),
+              child: Container(
                 color: AppTheme.background,
-                // borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-              ),
-              transform: Matrix4.translationValues(0, -28, 0),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ── Chef Card ───────────────────
                     ChefCard(
-                      name:
-                          _chefData?['name'] ??
-                          widget.recipe['userName'] ??
-                          'Unknown Chef',
-                      photoUrl:
-                          _chefData?['imageUrl'] ??
-                          widget.recipe['userPhoto'] ??
-                          '',
-                      level: _chefData?['level'] ?? 'Chef',
+                      name: chefName,
+                      photoUrl: chefPhoto,
+                      level: chefLevel,
                     ),
-                    SizedBox(height: 20),
-                    // ── Description (if any) ──────────
+
+                    // ── Description ─────────────────
                     if (description.isNotEmpty) ...[
+                      const SizedBox(height: 20),
                       Text(
                         description,
                         style: const TextStyle(
@@ -126,23 +137,70 @@ class _DetailPageState extends State<DetailPage> {
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 20),
                     ],
 
-                    // ── Ingredients checklist ──────────
+                    // ── Ingredients ─────────────────
                     if (ingredients.isNotEmpty) ...[
+                      const SizedBox(height: 24),
                       IngredientsChecklist(ingredients: ingredients),
-                      const SizedBox(height: 28),
                     ],
 
-                    // ── Cooking Steps ──────────────────
+                    // ── Cooking Steps ────────────────
                     if (steps.isNotEmpty) ...[
+                      const SizedBox(height: 28),
                       CookingSteps(steps: steps, difficulty: difficulty),
-                      const SizedBox(height: 24),
                     ],
-                    ReviewSheet(
-                      recipeId: widget.recipe['docId'],
-                      recipeName: widget.recipe['name'] ?? '',
+
+                    // ── Reviews ─────────────────────
+                    if (docId != null) ...[
+                      const SizedBox(height: 28),
+                      ReviewsList(recipeId: docId), // ✅ recipeId filter
+                    ],
+
+                    const SizedBox(height: 28),
+
+                    // ── Action Buttons ───────────────
+
+                    // Rate Recipe button
+                    GestureDetector(
+                      onTap: () {
+                        if (docId == null) return;
+                        // ✅ Bottom sheet — inline nahi
+                        ReviewSheet.show(context, docId, name);
+                      },
+                      child: Container(
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primary,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.35),
+                              blurRadius: 14,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.star_rounded,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'Rate Recipe',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
