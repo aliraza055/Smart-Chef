@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Pages/search_page.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/home_container.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
-import 'package:smart_chef/Widgets/search_bar.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
 class Homepage extends StatefulWidget {
@@ -43,7 +41,8 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: Color(0xFFFFF3DC),
+      // AppTheme.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [

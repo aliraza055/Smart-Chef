@@ -3,7 +3,6 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
-import 'package:smart_chef/Widgets/receipe_container.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -120,7 +119,9 @@ class _FavoritePageState extends State<FavoritePage> {
                       image: data['image'] ?? '',
                       name: data['name'] ?? '',
                       description: data['description'] ?? '',
-                      time: data['time']?.toString() ?? '',
+
+                      //      tag: data['category'] ?? '',
+                      time: data['category'] ?? '',
                       likes: data['likes']?.toString() ?? '0',
                       isFavorite: true, // ✅ yahan sab favorites hain
                       tag: data['tag'] ?? '',
@@ -139,7 +140,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 0.76,
+                    childAspectRatio: 0.70,
                   ),
                 ),
               );

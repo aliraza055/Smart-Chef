@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 
@@ -35,12 +36,12 @@ class DetailHeader extends StatelessWidget {
       child: Stack(
         children: [
           // ── Full image ──────────────────────────────
-          Image.network(
-            imageUrl,
+          CachedNetworkImage(
+            imageUrl: imageUrl,
             height: 380,
             width: double.infinity,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
+            errorWidget: (_, __, ___) => Container(
               height: 380,
               color: const Color(0xFFE0E0E0),
               child: const Icon(

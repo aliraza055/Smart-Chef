@@ -4,7 +4,6 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
-import 'package:smart_chef/Widgets/receipe_container.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -39,7 +38,6 @@ class _SearchPageState extends State<SearchPage> {
   /// 🔍 Firestore Search Stream
   Stream<QuerySnapshot> _searchStream() {
     if (_query.isEmpty) {
-      // ❌ empty query → kuch bhi fetch mat karo
       return const Stream.empty();
     }
 
@@ -194,7 +192,7 @@ class _SearchPageState extends State<SearchPage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 0.72,
+                    childAspectRatio: 0.68,
                   ),
                   itemBuilder: (context, index) {
                     final doc = filtered[index];

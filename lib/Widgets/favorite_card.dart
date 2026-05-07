@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 
@@ -52,17 +53,28 @@ class FavoriteCard extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(20),
                   ),
-                  child: Image.network(
-                    image,
-                    height: 140,
-                    width: double.infinity,
+                  child: CachedNetworkImage(
+                    imageUrl: image,
+                    height: 180, // ✅ fixed height — collapse nahi hoga
+                    width: double.infinity, // ✅ full width
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      height: 140,
+                    placeholder: (context, url) => Container(
+                      height: 200, // ✅ placeholder bhi same height
+                      color: const Color(0xFFF0F0F0),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.primary,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 200, // ✅ error bhi same height
                       color: const Color(0xFFF0F0F0),
                       child: const Icon(
                         Icons.image_not_supported_outlined,
                         color: AppTheme.textLight,
+                        size: 40,
                       ),
                     ),
                   ),
@@ -106,27 +118,6 @@ class FavoriteCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Star + rating
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: AppTheme.starColor,
-                        size: 15,
-                      ),
-                      const SizedBox(width: 3),
-                      Text(
-                        likes,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-
                   // Recipe name
                   Text(
                     name,

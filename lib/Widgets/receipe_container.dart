@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 
@@ -64,8 +65,10 @@ class _RecipeCardState extends State<RecipeCard> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF8F5), // ✅ warm off-white — white nahi
+          color: Colors.white,
+          //const Color(0xFFFFF3DC), // ✅ warm off-white — white nahi
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Color(0xFFFAC775), width: 0.5),
           boxShadow: [
             BoxShadow(
               color: AppTheme.cardShadow,
@@ -81,31 +84,43 @@ class _RecipeCardState extends State<RecipeCard> {
             Stack(
               children: [
                 // Image
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.image,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      height: 200,
-                      color: const Color(0xFFF0F0F0),
-                      child: const Icon(
-                        Icons.image_not_supported_outlined,
-                        color: AppTheme.textLight,
-                        size: 40,
+                Padding(
+                  padding: EdgeInsetsGeometry.all(10),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.image,
+                      height: 200, // ✅ fixed height — collapse nahi hoga
+                      width: double.infinity, // ✅ full width
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        height: 200, // ✅ placeholder bhi same height
+                        color: const Color(0xFFF0F0F0),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppTheme.primary,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 200, // ✅ error bhi same height
+                        color: const Color(0xFFF0F0F0),
+                        child: const Icon(
+                          Icons.image_not_supported_outlined,
+                          color: AppTheme.textLight,
+                          size: 40,
+                        ),
                       ),
                     ),
                   ),
                 ),
-
                 // ✅ Rating + Reviews — top left overlay
                 Positioned(
-                  top: 12,
-                  left: 12,
+                  top: 18,
+                  left: 16,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -145,8 +160,8 @@ class _RecipeCardState extends State<RecipeCard> {
 
                 // ✅ Favourite — top right
                 Positioned(
-                  top: 12,
-                  right: 12,
+                  top: 18,
+                  right: 16,
                   child: GestureDetector(
                     onTap: _toggleFav,
                     child: Container(
