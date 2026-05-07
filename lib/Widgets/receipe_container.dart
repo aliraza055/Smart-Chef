@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 
-class RecipeCard extends StatelessWidget {
+class RecipeCard extends StatefulWidget {
   final String image;
   final String name;
   final String description;
   final String time;
   final String likes;
+  final String avgRating;
+  final String totalReviews;
+  final String userName;
   final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
   final VoidCallback? onTap;
-  final String? tag; // e.g. "VEGAN", "CLASSIC", "FAST"
+  final String? tag;
 
   const RecipeCard({
     super.key,
@@ -19,6 +22,9 @@ class RecipeCard extends StatelessWidget {
     required this.description,
     required this.time,
     required this.likes,
+    this.avgRating = '0',
+    this.totalReviews = '0',
+    this.userName = '',
     required this.isFavorite,
     this.onFavoriteToggle,
     this.onTap,
@@ -26,12 +32,39 @@ class RecipeCard extends StatelessWidget {
   });
 
   @override
+  State<RecipeCard> createState() => _RecipeCardState();
+}
+
+class _RecipeCardState extends State<RecipeCard> {
+  late bool _isFav;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFav = widget.isFavorite;
+  }
+
+  @override
+  void didUpdateWidget(RecipeCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFavorite != widget.isFavorite) {
+      _isFav = widget.isFavorite;
+    }
+  }
+
+  void _toggleFav() {
+    setState(() => _isFav = !_isFav);
+    widget.onFavoriteToggle?.call();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: AppTheme.surface,
+          color: const Color(0xFFFFF8F5), // ✅ warm off-white — white nahi
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -42,41 +75,85 @@ class RecipeCard extends StatelessWidget {
           ],
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image with favorite button overlay
+            // ── Image with overlays ──────────────────
             Stack(
               children: [
+                // Image
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(20),
                   ),
                   child: Image.network(
-                    image,
-                    height: 140,
+                    widget.image,
+                    height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => Container(
-                      height: 140,
+                      height: 200,
                       color: const Color(0xFFF0F0F0),
                       child: const Icon(
                         Icons.image_not_supported_outlined,
                         color: AppTheme.textLight,
+                        size: 40,
                       ),
                     ),
                   ),
                 ),
+
+                // ✅ Rating + Reviews — top left overlay
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 12,
+                  left: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          color: AppTheme.starColor,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${widget.avgRating} ( ${widget.totalReviews}+ Review )',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // ✅ Favourite — top right
+                Positioned(
+                  top: 12,
+                  right: 12,
                   child: GestureDetector(
-                    onTap: onFavoriteToggle,
+                    onTap: _toggleFav,
                     child: Container(
-                      width: 34,
-                      height: 34,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
-                        color: AppTheme.surface.withOpacity(0.92),
+                        color: Colors.white.withOpacity(0.95),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
@@ -85,14 +162,16 @@ class RecipeCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Icon(
-                        isFavorite
-                            ? Icons.favorite_rounded
-                            : Icons.favorite_border_rounded,
-                        color: isFavorite
-                            ? AppTheme.primary
-                            : AppTheme.textLight,
-                        size: 18,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Icon(
+                          _isFav
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
+                          key: ValueKey(_isFav),
+                          color: _isFav ? AppTheme.primary : AppTheme.textLight,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -100,88 +179,79 @@ class RecipeCard extends StatelessWidget {
               ],
             ),
 
-            // Content
+            // ── Content ──────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-              child: Column(
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Star + rating
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: AppTheme.starColor,
-                        size: 15,
-                      ),
-                      const SizedBox(width: 3),
-                      Text(
-                        likes,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textDark,
+                  // Left — name + chef
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Recipe name
+                        Text(
+                          widget.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textDark,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-
-                  // Recipe name
-                  Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.textDark,
-                      height: 1.3,
+                        const SizedBox(height: 4),
+                        // ✅ Chef name
+                        if (widget.userName.isNotEmpty)
+                          Text(
+                            'By ${widget.userName}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppTheme.textMedium,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
 
-                  // Tag or time
-                  if (tag != null && tag!.isNotEmpty)
-                    _TagChip(label: tag!)
-                  else if (time.isNotEmpty)
-                    Text(
-                      '$time MIN',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.primary,
+                  const SizedBox(width: 12),
+
+                  // ✅ Time — right side with clock icon
+                  if (widget.time.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.access_time_rounded,
+                            size: 13,
+                            color: AppTheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${widget.time} min',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TagChip extends StatelessWidget {
-  final String label;
-  const _TagChip({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          color: AppTheme.textMedium,
-          letterSpacing: 0.8,
         ),
       ),
     );

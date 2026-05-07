@@ -19,6 +19,8 @@ class HomeContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
+              //   colors: [Color(0xFF1B4332), Color(0xFF2D6A4F), Color(0xFF40916C)],
+
               // Background circle accents
               Positioned(
                 bottom: -60,

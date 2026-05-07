@@ -9,10 +9,12 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+    return Container(
+      padding: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+      color: Colors.amberAccent,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Logo
           Row(

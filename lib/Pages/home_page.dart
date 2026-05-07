@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Pages/search_page.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/home_container.dart';
-import 'package:smart_chef/Widgets/home_header.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/search_bar.dart';
+import 'package:smart_chef/Widgets/upper_contanier.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -47,14 +48,6 @@ class _HomepageState extends State<Homepage> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           const SliverToBoxAdapter(child: HomeHeader()),
-
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: SmartSearchBar(onChanged: (val) {}),
-            ),
-          ),
-
           const HomeContainer(),
 
           SliverToBoxAdapter(
@@ -101,6 +94,7 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
+          // Homepage mein sirf StreamBuilder wala part replace karo:
           StreamBuilder<QuerySnapshot>(
             stream: _getRecipesStream(),
             builder: (context, snapshot) {
@@ -124,9 +118,10 @@ class _HomepageState extends State<Homepage> {
 
               final recipes = snapshot.data!.docs;
 
+              // ✅ SliverList — single wide cards
               return SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-                sliver: SliverGrid(
+                sliver: SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final data = recipes[index].data() as Map<String, dynamic>;
                     final docId = recipes[index].id;
@@ -135,16 +130,21 @@ class _HomepageState extends State<Homepage> {
                       valueListenable: _favoriteIds,
                       builder: (context, favIds, _) {
                         return RecipeCard(
-                          isFavorite: favIds.contains(docId),
-                          onFavoriteToggle: () =>
-                              _favService.toggleFavorite(docId),
-                          // baki sab same
                           image: data['image'] ?? '',
                           name: data['name'] ?? '',
                           description: data['description'] ?? '',
                           time: data['time']?.toString() ?? '',
                           likes: data['likes']?.toString() ?? '0',
-                          tag: data['tag'] ?? '',
+                          // ✅ Naye fields
+                          avgRating: (data['avgRating'] ?? 0.0).toStringAsFixed(
+                            1,
+                          ),
+                          totalReviews: data['totalReviews']?.toString() ?? '0',
+                          userName: data['userName'] ?? '',
+                          tag: data['category'] ?? '',
+                          isFavorite: favIds.contains(docId),
+                          onFavoriteToggle: () =>
+                              _favService.toggleFavorite(docId),
                           onTap: () => Navigator.pushNamed(
                             context,
                             PageRouter.detailPage,
@@ -154,12 +154,6 @@ class _HomepageState extends State<Homepage> {
                       },
                     );
                   }, childCount: recipes.length),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.72,
-                  ),
                 ),
               );
             },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
+import 'package:smart_chef/Widgets/favorite_card.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -115,7 +116,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final data = recipes[index];
 
-                    return RecipeCard(
+                    return FavoriteCard(
                       image: data['image'] ?? '',
                       name: data['name'] ?? '',
                       description: data['description'] ?? '',

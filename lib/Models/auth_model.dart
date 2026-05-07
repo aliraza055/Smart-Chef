@@ -18,7 +18,6 @@ class AuthModel {
             email: email.trim(),
             password: password.trim(),
           );
-      Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
 
       User user = credential.user!;
 
