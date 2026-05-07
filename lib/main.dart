@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Services/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       //  home: BottomNavigation(),
-      initialRoute: PageRouter.initial,
+      home: const AuthWrapper(),
       onGenerateRoute: PageRouter.generateRoute,
     );
   }

@@ -125,8 +125,6 @@ class _DetailPageState extends State<DetailPage> {
                       photoUrl: chefPhoto,
                       level: chefLevel,
                     ),
-
-                    // ── Description ─────────────────
                     if (description.isNotEmpty) ...[
                       const SizedBox(height: 20),
                       Text(
@@ -138,8 +136,6 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ],
-
-                    // ── Ingredients ─────────────────
                     if (ingredients.isNotEmpty) ...[
                       const SizedBox(height: 24),
                       IngredientsChecklist(ingredients: ingredients),
@@ -165,7 +161,6 @@ class _DetailPageState extends State<DetailPage> {
                     GestureDetector(
                       onTap: () {
                         if (docId == null) return;
-                        // ✅ Bottom sheet — inline nahi
                         ReviewSheet.show(context, docId, name);
                       },
                       child: Container(
