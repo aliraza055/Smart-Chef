@@ -39,7 +39,6 @@ class _AddReceipeState extends State<AddReceipe> {
   ];
 
   final _imagePicker = ImagePickerService();
-  final _imageUpload = ImageUploadService();
   final User? _user = FirebaseAuth.instance.currentUser;
 
   static const List<String> _categories = [
@@ -99,8 +98,6 @@ class _AddReceipeState extends State<AddReceipe> {
     }
     return true;
   }
-
-  // add_recipe_page.dart mein _publish() function yeh hoga:
 
   Future<void> _publish() async {
     if (!_validate()) return;

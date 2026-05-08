@@ -40,38 +40,29 @@ class CategoryChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.only(right: 12),
-        child: Column(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.primary : Colors.white,
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(
+            color: isSelected ? AppTheme.primary : Colors.grey.shade200,
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primary : item.bgColor,
-                shape: BoxShape.circle,
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppTheme.primary.withOpacity(0.35),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ]
-                    : [],
-              ),
-              child: Center(
-                child: Text(item.emoji, style: const TextStyle(fontSize: 26)),
-              ),
-            ),
-            const SizedBox(height: 6),
+            Text(item.emoji, style: const TextStyle(fontSize: 16)),
+            const SizedBox(width: 6),
             Text(
               item.label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: isSelected ? AppTheme.primary : AppTheme.textMedium,
+                color: isSelected ? Colors.white : Colors.grey.shade600,
               ),
             ),
           ],
