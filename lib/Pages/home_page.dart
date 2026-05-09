@@ -4,7 +4,6 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
-import 'package:smart_chef/Widgets/home_container.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
@@ -35,7 +34,10 @@ class _HomepageState extends State<Homepage> {
   Stream<QuerySnapshot> _getRecipesStream() {
     final col = FirebaseFirestore.instance.collection('Receipes');
     if (_selectedCategory == 'All') return col.snapshots();
-    return col.where('category', isEqualTo: _selectedCategory).snapshots();
+    return col
+        .where('category', isEqualTo: _selectedCategory)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   @override
@@ -47,8 +49,8 @@ class _HomepageState extends State<Homepage> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           const SliverToBoxAdapter(child: HomeHeader()),
-          const HomeContainer(),
 
+          // const HomeContainer(),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 0, 0),

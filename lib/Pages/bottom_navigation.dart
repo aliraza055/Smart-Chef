@@ -53,7 +53,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
-        color: Colors.white,
+        color: AppTheme.divider,
         elevation: 10,
 
         child: Padding(

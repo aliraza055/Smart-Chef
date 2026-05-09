@@ -101,9 +101,7 @@ class FavoriteCard extends StatelessWidget {
                         isFavorite
                             ? Icons.favorite_rounded
                             : Icons.favorite_border_rounded,
-                        color: isFavorite
-                            ? AppTheme.primary
-                            : AppTheme.textLight,
+                        color: isFavorite ? Colors.red : AppTheme.textLight,
                         size: 18,
                       ),
                     ),

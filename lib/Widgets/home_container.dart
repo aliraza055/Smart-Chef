@@ -13,7 +13,7 @@ class HomeContainer extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Color(0xFFFFF3DC),
-          border: Border.all(color: Color(0xFFFAC775), width: 0.5),
+          border: Border.all(color: Color(0xFF1B4332), width: 0.3),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),

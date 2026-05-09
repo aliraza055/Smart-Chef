@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ReceipeModel {
   String? docId;
   String name;
@@ -10,11 +12,11 @@ class ReceipeModel {
   String? userPhoto;
   String difficulty;
   double time;
-
   String userUId;
   double avgRating;
   int totalReviews;
   int likes;
+  final Timestamp? createdAt;
 
   ReceipeModel({
     this.docId,
@@ -32,6 +34,7 @@ class ReceipeModel {
     this.avgRating = 0,
     this.totalReviews = 0,
     required this.time,
+    this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -51,6 +54,7 @@ class ReceipeModel {
       'totalReviews': totalReviews,
       'likes': likes,
       'difficulty': difficulty,
+      'createdAt': createdAt,
     };
   }
 
@@ -71,6 +75,7 @@ class ReceipeModel {
       avgRating: (map['avgRating'] ?? 0).toDouble(),
       totalReviews: map['totalReviews'] ?? 0,
       likes: map['likes'] ?? 0,
+      createdAt: map['createdAt'],
     );
   }
 }

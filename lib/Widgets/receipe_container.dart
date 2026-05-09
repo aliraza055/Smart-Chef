@@ -65,10 +65,10 @@ class _RecipeCardState extends State<RecipeCard> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.white70,
           //const Color(0xFFFFF3DC), // ✅ warm off-white — white nahi
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Color(0xFFFAC775), width: 0.5),
+          border: Border.all(color: Color(0xFF1B4332), width: 0.2),
           boxShadow: [
             BoxShadow(
               color: AppTheme.cardShadow,
@@ -85,7 +85,7 @@ class _RecipeCardState extends State<RecipeCard> {
               children: [
                 // Image
                 Padding(
-                  padding: EdgeInsetsGeometry.all(10),
+                  padding: EdgeInsetsGeometry.all(0),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(20),
@@ -184,7 +184,7 @@ class _RecipeCardState extends State<RecipeCard> {
                               ? Icons.favorite_rounded
                               : Icons.favorite_border_rounded,
                           key: ValueKey(_isFav),
-                          color: _isFav ? AppTheme.primary : AppTheme.textLight,
+                          color: _isFav ? Colors.red : AppTheme.textLight,
                           size: 18,
                         ),
                       ),

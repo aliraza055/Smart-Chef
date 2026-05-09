@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_chef/Models/receipe_model.dart';
 import 'package:smart_chef/Services/Receipe_services.dart';
@@ -16,6 +17,7 @@ class UploadRecepie {
     required List<String> ingredients, // ✅ String se List<String>
     required List<String> steps, // ✅ Naya field
     required File image,
+    final dynamic createdAt,
     double time = 20,
   }) async {
     try {

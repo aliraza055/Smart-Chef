@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Models/upload_recepies.dart';
+import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/image_picker.dart';
 import 'package:smart_chef/Services/image_upload.dart';
 import 'package:smart_chef/Widgets/image_container.dart';
@@ -24,6 +27,7 @@ class _AddReceipeState extends State<AddReceipe> {
   String? _selectedCategory;
   bool _isLoading = false;
 
+  final randomTime = (10 + Random().nextInt(51)).toDouble();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -118,13 +122,16 @@ class _AddReceipeState extends State<AddReceipe> {
       description: _descriptionController.text.trim(),
       category: _selectedCategory!,
       user: _user,
-      difficulty: 'easy',
+      difficulty: ['easy', 'medium', 'hard'][Random().nextInt(3)],
       ingredients: ingredients, // ✅ List<String>
       steps: steps, // ✅ List<String>
       image: _image!,
+      time: randomTime,
+      createdAt: FieldValue.serverTimestamp(),
     );
 
     setState(() => _isLoading = false);
+    Navigator.pushNamed(context, PageRouter.bottomNav);
     ToastError().showToast(
       message: 'Recipe Published Successfully! 🎉',
       bgColor: Colors.green,

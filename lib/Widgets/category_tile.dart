@@ -48,8 +48,8 @@ class CategoryChip extends StatelessWidget {
           color: isSelected ? AppTheme.primary : Colors.white,
           borderRadius: BorderRadius.circular(40),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : Colors.grey.shade200,
-            width: 1.5,
+            color: isSelected ? AppTheme.primary : Color(0xFF1B4332),
+            width: .5,
           ),
         ),
         child: Row(

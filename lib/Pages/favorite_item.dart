@@ -55,7 +55,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     ),
                     child: const Icon(
                       Icons.favorite_rounded,
-                      color: AppTheme.primary,
+                      color: Colors.red,
                       size: 20,
                     ),
                   ),
