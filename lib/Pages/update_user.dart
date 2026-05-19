@@ -165,7 +165,7 @@ class _UpdateUserState extends State<UpdateUser> {
                         boxShadow: [
                           BoxShadow(
                             color: AppTheme.primary.withOpacity(0.2),
-                            blurRadius: 20,
+                            blurRadius: 19,
                             offset: const Offset(0, 6),
                           ),
                         ],
