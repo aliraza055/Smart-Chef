@@ -56,16 +56,16 @@ class _UpdateUserState extends State<UpdateUser> {
       }
 
       // 2. Update Firebase Auth
-      await _user!.updateDisplayName(_nameController.text.trim());
-      if (imageUrl != null) await _user!.updatePhotoURL(imageUrl);
+      await _user.updateDisplayName(_nameController.text.trim());
+      if (imageUrl != null) await _user.updatePhotoURL(imageUrl);
 
       // 3. Update Firestore
       await FirebaseFirestore.instance
           .collection('Users')
-          .doc(_user!.uid)
+          .doc(_user.uid)
           .update({
             'name': _nameController.text.trim(),
-            'imageUrl': imageUrl ?? _user!.photoURL ?? '',
+            'imageUrl': imageUrl ?? _user.photoURL ?? '',
           });
 
       if (mounted) {
