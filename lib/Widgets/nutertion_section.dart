@@ -272,7 +272,7 @@ class _LoadingCard extends StatelessWidget {
           ),
           SizedBox(width: 16),
           Text(
-            'AI nutrition calculate kar raha hai...',
+            'AI nutrition is calculating...',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -356,27 +356,36 @@ class _ResultCard extends StatelessWidget {
                   size: 22,
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${result.calories} kcal',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
+
+                // ✅ YAHAN Expanded
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${result.calories} kcal',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      result.servingNote,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.75),
+                      Text(
+                        result.servingNote,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.75),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const Spacer(),
+
+                const SizedBox(width: 10),
+
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,

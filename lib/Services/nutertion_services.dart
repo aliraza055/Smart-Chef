@@ -78,7 +78,7 @@ JSON format (exact keys required):
               ],
               'generationConfig': {
                 'temperature': 0.3,
-                'maxOutputTokens': 2048,
+                'maxOutputTokens': 1500,
                 // responseMimeType intentionally removed
               },
             }),
