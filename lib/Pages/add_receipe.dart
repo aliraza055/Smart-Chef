@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Models/upload_recepies.dart';
+import 'package:smart_chef/Pages/ai_receipeGenrateor.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Services/ai_services.dart';
 import 'package:smart_chef/Services/image_picker.dart';
-import 'package:smart_chef/Services/image_upload.dart';
 import 'package:smart_chef/Widgets/image_container.dart';
 import 'package:smart_chef/Widgets/ingridients_container.dart';
 import 'package:smart_chef/Widgets/steps_contanier.dart';
@@ -143,6 +144,46 @@ class _AddReceipeState extends State<AddReceipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppTheme.primary,
+        icon: const Icon(Icons.auto_awesome, color: Colors.white, size: 16),
+        label: const Text(
+          'AI Chef',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 13,
+          ),
+        ),
+        onPressed: () async {
+          final result = await Navigator.push<AiRecipeResult>(
+            context,
+            MaterialPageRoute(builder: (_) => const AiRecipeGeneratorPage()),
+          );
+
+          if (result != null) {
+            setState(() {
+              _titleController.text = result.name;
+              _descriptionController.text = result.description;
+              _selectedCategory = result.category;
+
+              _ingredientControllers
+                ..forEach((c) => c.dispose())
+                ..clear();
+              for (var ing in result.ingredients) {
+                _ingredientControllers.add(TextEditingController(text: ing));
+              }
+
+              _stepControllers
+                ..forEach((c) => c.dispose())
+                ..clear();
+              for (var step in result.steps) {
+                _stepControllers.add(TextEditingController(text: step));
+              }
+            });
+          }
+        },
+      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [

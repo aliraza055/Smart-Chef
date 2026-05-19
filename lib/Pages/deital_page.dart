@@ -4,6 +4,7 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Widgets/detail_chef.dart';
 import 'package:smart_chef/Widgets/detail_ingridients.dart';
 import 'package:smart_chef/Widgets/detail_steps.dart';
+import 'package:smart_chef/Widgets/nutertion_section.dart';
 import 'package:smart_chef/Widgets/review_list.dart';
 import 'package:smart_chef/Widgets/review_sheet.dart';
 import 'package:smart_chef/widgets/detail_header.dart';
@@ -166,6 +167,12 @@ class _DetailPageState extends State<DetailPage> {
                     if (steps.isNotEmpty) ...[
                       const SizedBox(height: 28),
                       CookingSteps(steps: steps, difficulty: difficulty),
+                    ],
+
+                    // ── 🤖 AI Nutrition Section ────────────────────────────
+                    if (ingredients.isNotEmpty) ...[
+                      const SizedBox(height: 28),
+                      NutritionSection(ingredients: ingredients),
                     ],
 
                     if (docId != null) ...[
