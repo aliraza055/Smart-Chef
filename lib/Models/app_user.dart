@@ -44,8 +44,7 @@ class AppUser {
       'following': following,
       'level': level,
       'streakDays': streakDays,
-      'favoriteRecipeIds':
-          favoriteRecipeIds, // ✅ List<String> of recipe doc IDs
+      'favoriteRecipeIds': favoriteRecipeIds,
       'createdAt': createdAt,
     };
   }
@@ -63,7 +62,7 @@ class AppUser {
       following: map['following'] ?? 0,
       level: map['level'] ?? 'Beginner',
       streakDays: map['streakDays'] ?? 0,
-      favoriteRecipeIds: List<String>.from(map['favoriteRecipeIds'] ?? []), // ✅
+      favoriteRecipeIds: List<String>.from(map['favoriteRecipeIds'] ?? []),
       createdAt: (map['createdAt'] is Timestamp)
           ? (map['createdAt'] as Timestamp).toDate()
           : DateTime.now(),

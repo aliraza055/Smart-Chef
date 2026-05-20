@@ -34,10 +34,7 @@ class _HomepageState extends State<Homepage> {
   Stream<QuerySnapshot> _getRecipesStream() {
     final col = FirebaseFirestore.instance.collection('Receipes');
     if (_selectedCategory == 'All') return col.snapshots();
-    return col
-        .where('category', isEqualTo: _selectedCategory)
-        .orderBy('createdAt', descending: true)
-        .snapshots();
+    return col.where('category', isEqualTo: _selectedCategory).snapshots();
   }
 
   @override

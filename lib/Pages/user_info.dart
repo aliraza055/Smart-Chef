@@ -315,7 +315,12 @@ class UserInfo extends StatelessWidget {
                         _SettingsTile(
                           icon: Icons.bookmark_outline_rounded,
                           label: 'Saved Collections',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              PageRouter.favoritePage,
+                            );
+                          },
                         ),
                         const _TileDivider(),
                         _SettingsTile(

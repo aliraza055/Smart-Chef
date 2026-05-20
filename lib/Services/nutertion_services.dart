@@ -25,18 +25,33 @@ class NutritionResult {
     final total = json['total'] ?? {};
     final items = json['per_ingredient'] as List<dynamic>? ?? [];
 
+    // Helper — string ya num dono handle karta hai
+    int toInt(dynamic v) {
+      if (v == null) return 0;
+      if (v is int) return v;
+      if (v is double) return v.toInt();
+      return int.tryParse(v.toString()) ?? 0;
+    }
+
+    double toDouble(dynamic v) {
+      if (v == null) return 0.0;
+      if (v is double) return v;
+      if (v is int) return v.toDouble();
+      return double.tryParse(v.toString()) ?? 0.0;
+    }
+
     return NutritionResult(
-      calories: (total['calories'] ?? 0).toInt(),
-      protein: (total['protein_g'] ?? 0).toDouble(),
-      carbs: (total['carbs_g'] ?? 0).toDouble(),
-      fat: (total['fat_g'] ?? 0).toDouble(),
-      fiber: (total['fiber_g'] ?? 0).toDouble(),
-      servingNote: json['serving_note'] ?? 'Per full recipe',
+      calories: toInt(total['calories']),
+      protein: toDouble(total['protein_g']),
+      carbs: toDouble(total['carbs_g']),
+      fat: toDouble(total['fat_g']),
+      fiber: toDouble(total['fiber_g']),
+      servingNote: json['serving_note']?.toString() ?? 'Per full recipe',
       perIngredient: items
           .map(
             (e) => {
-              'name': e['name'] ?? '',
-              'calories': (e['calories'] ?? 0).toInt(),
+              'name': e['name']?.toString() ?? '',
+              'calories': toInt(e['calories']),
             },
           )
           .toList(),
@@ -45,9 +60,10 @@ class NutritionResult {
 }
 
 class NutritionService {
-  final apiKey = dotenv.env['GEMINI_API_KEY'];
+  final apiKey = dotenv.env['OPEN_API_KEY'];
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+      'https://openrouter.ai/api/v1/chat/completions';
+  static const String _model = 'meta-llama/llama-3-8b-instruct';
 
   Future<NutritionResult> estimate(List<String> ingredients) async {
     final ingredientList = ingredients.join('\n- ');
@@ -66,21 +82,21 @@ JSON format (exact keys required):
     try {
       response = await http
           .post(
-            Uri.parse('$_baseUrl?key=$apiKey'),
-            headers: {'Content-Type': 'application/json'},
+            Uri.parse(_baseUrl),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $apiKey',
+              'HTTP-Referer':
+                  'https://smartchef.app', // optional, apna app name
+              'X-Title': 'Smart Chef', // optional, apna app name
+            },
             body: jsonEncode({
-              'contents': [
-                {
-                  'parts': [
-                    {'text': prompt},
-                  ],
-                },
+              'model': _model,
+              'max_tokens': 2048,
+              'temperature': 0.1,
+              'messages': [
+                {'role': 'user', 'content': prompt},
               ],
-              'generationConfig': {
-                'temperature': 0.3,
-                'maxOutputTokens': 1500,
-                // responseMimeType intentionally removed
-              },
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -100,15 +116,16 @@ JSON format (exact keys required):
     }
 
     final data = jsonDecode(response.body);
-    final candidates = data['candidates'] as List?;
-    if (candidates == null || candidates.isEmpty) {
+
+    // OpenRouter response format: choices[0].message.content
+    final choices = data['choices'] as List?;
+    if (choices == null || choices.isEmpty) {
       throw Exception('Koi response nahi mila. Dobara try karo.');
     }
 
-    final rawText =
-        candidates[0]['content']['parts'][0]['text'] as String? ?? '';
+    final rawText = choices[0]['message']['content'] as String? ?? '';
 
-    print('🟡 RAW NUTRITION: $rawText'); // debug — baad mein hata dena
+    print('🟡 RAW NUTRITION: $rawText');
 
     if (rawText.isEmpty) {
       throw Exception('Response khali hai. Dobara try karo.');

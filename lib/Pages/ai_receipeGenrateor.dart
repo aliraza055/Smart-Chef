@@ -87,9 +87,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
   // ── Call AI ───────────────────────────────────────────────
   Future<void> _generate() async {
     if (_ingredients.isEmpty) {
-      setState(
-        () => _errorMessage = 'Kam az kam 1 ingredient zaroor add karo!',
-      );
+      setState(() => _errorMessage = 'Enter atleaset one gredient!');
       return;
     }
 
@@ -228,7 +226,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
           ),
           const SizedBox(height: 8),
           const Text(
-            'Apne ghar ke ingredients batao,\nAI poora recipe bana dega!',
+            'Tell the ingridients of your home,\nAI will create receipe!',
             style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
           ),
         ],
@@ -243,7 +241,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'APNE INGREDIENTS LIKHO',
+            'ENTER YOUR INGREDIENTS',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -320,7 +318,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
           ),
           const SizedBox(height: 8),
           const Text(
-            'Har ingredient likhne ke baad "+" ya Enter dabao',
+            'After enters ingridients "+" Press Enter',
             style: TextStyle(fontSize: 12, color: AppTheme.textLight),
           ),
         ],
@@ -399,7 +397,9 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                 const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
                 const SizedBox(width: 10),
                 Text(
-                  _isLoading ? 'AI Soch rahi hai...' : 'AI Se Recipe Banao',
+                  _isLoading
+                      ? 'AI Is Creating receipe...'
+                      : 'Create Receipe with AI ',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -656,7 +656,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                               ),
                               SizedBox(width: 8),
                               Text(
-                                'Is Recipe Ko Use Karo',
+                                'Use this Receipe',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
