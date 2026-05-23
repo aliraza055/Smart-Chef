@@ -12,7 +12,7 @@ class AppUser {
   int following;
   String level;
   int streakDays;
-  List<String> favoriteRecipeIds; // ✅ user-specific favorites
+  List<String> favoriteRecipeIds;
   final DateTime createdAt;
 
   AppUser({

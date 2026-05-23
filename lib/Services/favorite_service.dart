@@ -5,7 +5,6 @@ class FavoriteService {
   final _db = FirebaseFirestore.instance;
   final String? _uid = FirebaseAuth.instance.currentUser?.uid;
 
-  // ✅ Real-time Set<String> of favorite IDs
   Stream<Set<String>> favoritesStream() {
     if (_uid == null) return Stream.value({});
     return _db.collection('Users').doc(_uid).snapshots().map((doc) {

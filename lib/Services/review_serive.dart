@@ -6,7 +6,6 @@ class ReviewService {
   final _db = FirebaseFirestore.instance;
   final User? _user = FirebaseAuth.instance.currentUser;
 
-  // ── Add or update review ──────────────────────────
   Future<void> submitReview({
     required String recipeId,
     required double rating,
@@ -14,7 +13,6 @@ class ReviewService {
   }) async {
     if (_user == null) return;
 
-    // Check if user already reviewed
     final existing = await _db
         .collection('Reviews')
         .where('recipeId', isEqualTo: recipeId)
@@ -32,21 +30,17 @@ class ReviewService {
     );
 
     if (existing.docs.isNotEmpty) {
-      // Update existing review
       await _db
           .collection('Reviews')
           .doc(existing.docs.first.id)
           .update(review.toMap());
     } else {
-      // Add new review
       await _db.collection('Reviews').add(review.toMap());
     }
 
-    // Recalculate avgRating on the recipe
     await _updateRecipeRating(recipeId);
   }
 
-  // ── Recalculate and update avgRating on recipe ────
   Future<void> _updateRecipeRating(String recipeId) async {
     final reviews = await _db
         .collection('Reviews')
@@ -67,7 +61,6 @@ class ReviewService {
     });
   }
 
-  // ── Get all reviews for a recipe ──────────────────
   Stream<List<ReviewModel>> getReviews(String recipeId) {
     return _db
         .collection('Reviews')
@@ -81,7 +74,6 @@ class ReviewService {
         );
   }
 
-  // ── Check if current user already reviewed ────────
   Future<ReviewModel?> getUserReview(String recipeId) async {
     if (_user == null) return null;
     final snap = await _db

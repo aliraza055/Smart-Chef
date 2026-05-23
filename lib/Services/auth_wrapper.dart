@@ -9,22 +9,18 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      // ✅ Firebase auth state — login/logout automatically detect karta hai
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // Loading
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
-        // ✅ User logged in hai — direct home
         if (snapshot.hasData && snapshot.data != null) {
           return const BottomNavigation();
         }
 
-        // ✅ User logged out hai — sign in page
         return const SignIn();
       },
     );

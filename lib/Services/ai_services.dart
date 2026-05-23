@@ -42,7 +42,6 @@ class AiService {
   Future<AiRecipeResult> generateRecipe(List<String> ingredients) async {
     final ingredientList = ingredients.join(', ');
 
-    // Stricter prompt — tells Gemini explicitly what NOT to do
     final prompt =
         '''You are a professional chef API. 
 Return ONLY a raw JSON object. No markdown. No backticks. No explanation. No text before or after.
@@ -72,7 +71,6 @@ JSON format (exact keys required):
               'generationConfig': {
                 'temperature': 0.7,
                 'maxOutputTokens': 2048,
-                // This forces Gemini to output JSON only
                 'responseMimeType': 'application/json',
               },
             }),
@@ -111,13 +109,11 @@ JSON format (exact keys required):
   }
 
   AiRecipeResult _parseRecipeJson(String rawText) {
-    // Strategy 1: direct parse (works when responseMimeType is set)
     try {
       final jsonMap = jsonDecode(rawText.trim()) as Map<String, dynamic>;
       return AiRecipeResult.fromJson(jsonMap);
     } catch (_) {}
 
-    // Strategy 2: strip markdown fences then parse
     String cleaned = rawText
         .replaceAll(RegExp(r'```json\s*'), '')
         .replaceAll(RegExp(r'```\s*'), '')

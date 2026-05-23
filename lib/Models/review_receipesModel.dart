@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReviewModel {
-  String? id; // Firestore doc ID
-  String recipeId; // Receipes collection doc ID
-  String userId; // User's uid
-  String userName; // Display name
-  String? userPhoto; // Avatar URL
-  double rating; // 1.0 - 5.0
-  String comment; // Review text
+  String? id;
+  String recipeId;
+  String userId;
+  String userName;
+  String? userPhoto;
+  double rating;
+  String comment;
   DateTime createdAt;
 
   ReviewModel({
