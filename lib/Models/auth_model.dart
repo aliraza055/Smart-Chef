@@ -61,7 +61,7 @@ class AuthModel {
       }
     } catch (e) {
       ToastError().showToast(
-        message: 'An unexpected error',
+        message: 'An unexpected error!',
         bgColor: Colors.red,
       );
     }
