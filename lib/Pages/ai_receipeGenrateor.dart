@@ -44,7 +44,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
 
     _resultController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 510),
+      duration: const Duration(milliseconds: 500),
     );
     _resultAnimation = CurvedAnimation(
       parent: _resultController,
