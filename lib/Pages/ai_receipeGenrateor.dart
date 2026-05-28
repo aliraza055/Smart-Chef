@@ -461,7 +461,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
             ),
             const SizedBox(height: 20),
             const Text(
-              'AI Chef recipe bana raha hai...',
+              'AI Chef is making receipe...',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
@@ -693,7 +693,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                               ),
                               SizedBox(width: 8),
                               Text(
-                                'Dobara Generate Karo',
+                                'Regenrate Receipe',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
