@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Pages/analyzer_page.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -138,7 +139,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   _Tile(
                     icon: Icons.privacy_tip_outlined,
                     label: 'Privacy Policy',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => FoodAnalyzerScreen()),
+                      );
+                    },
                   ),
                   const _TileDivider(),
                   _Tile(

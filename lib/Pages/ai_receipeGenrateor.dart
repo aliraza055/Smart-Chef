@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Models/ai_receipe_result_model.dart';
 import 'package:smart_chef/Services/ai_services.dart';
 
 // ─────────────────────────────────────────────────────────────
