@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/toast_error.dart';
 import 'package:smart_chef/Models/upload_recepies.dart';
-import 'package:smart_chef/Pages/ai_receipeGenrateor.dart';
 import 'package:smart_chef/Routers/page_router.dart';
-import 'package:smart_chef/Services/ai_services.dart';
 import 'package:smart_chef/Services/image_picker.dart';
 import 'package:smart_chef/Widgets/image_container.dart';
-import 'package:smart_chef/Widgets/ingridients_container.dart';
-import 'package:smart_chef/Widgets/steps_contanier.dart';
+
 import 'package:smart_chef/widgets/category_selector.dart';
 
 class AddReceipe extends StatefulWidget {
@@ -23,7 +20,6 @@ class AddReceipe extends StatefulWidget {
 }
 
 class _AddReceipeState extends State<AddReceipe> {
-  // ── State ──────────────────────────────────────────────
   File? _image;
   String? _selectedCategory;
   bool _isLoading = false;
@@ -33,15 +29,10 @@ class _AddReceipeState extends State<AddReceipe> {
   final _descriptionController = TextEditingController();
 
   // Dynamic ingredients list
-  final List<TextEditingController> _ingredientControllers = [
-    TextEditingController(),
-    TextEditingController(),
-  ];
+  final List<TextEditingController> _ingredientControllers = [];
 
   // Dynamic steps list
-  final List<TextEditingController> _stepControllers = [
-    TextEditingController(),
-  ];
+  final List<TextEditingController> _stepControllers = [];
 
   final _imagePicker = ImagePickerService();
   final User? _user = FirebaseAuth.instance.currentUser;
@@ -54,29 +45,9 @@ class _AddReceipeState extends State<AddReceipe> {
     'Vegan',
   ];
 
-  // ── Helpers ────────────────────────────────────────────
-  void _addIngredient() {
-    setState(() => _ingredientControllers.add(TextEditingController()));
-  }
-
-  void _deleteIngredient(int index) {
-    if (_ingredientControllers.length <= 1) return;
-    setState(() {
-      _ingredientControllers[index].dispose();
-      _ingredientControllers.removeAt(index);
-    });
-  }
-
-  void _addStep() {
-    setState(() => _stepControllers.add(TextEditingController()));
-  }
-
-  void _deleteStep(int index) {
-    if (_stepControllers.length <= 1) return;
-    setState(() {
-      _stepControllers[index].dispose();
-      _stepControllers.removeAt(index);
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
   bool _validate() {
@@ -124,8 +95,8 @@ class _AddReceipeState extends State<AddReceipe> {
       category: _selectedCategory!,
       user: _user,
       difficulty: ['easy', 'medium', 'hard'][Random().nextInt(3)],
-      ingredients: ingredients, // ✅ List<String>
-      steps: steps, // ✅ List<String>
+      ingredients: ingredients,
+      steps: steps,
       image: _image!,
       time: randomTime,
       createdAt: FieldValue.serverTimestamp(),
@@ -144,46 +115,7 @@ class _AddReceipeState extends State<AddReceipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primary,
-        icon: const Icon(Icons.auto_awesome, color: Colors.white, size: 16),
-        label: const Text(
-          'AI Chef',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 13,
-          ),
-        ),
-        onPressed: () async {
-          final result = await Navigator.push<AiRecipeResult>(
-            context,
-            MaterialPageRoute(builder: (_) => const AiRecipeGeneratorPage()),
-          );
-
-          if (result != null) {
-            setState(() {
-              _titleController.text = result.name;
-              _descriptionController.text = result.description;
-              _selectedCategory = result.category;
-
-              _ingredientControllers
-                ..forEach((c) => c.dispose())
-                ..clear();
-              for (var ing in result.ingredients) {
-                _ingredientControllers.add(TextEditingController(text: ing));
-              }
-
-              _stepControllers
-                ..forEach((c) => c.dispose())
-                ..clear();
-              for (var step in result.steps) {
-                _stepControllers.add(TextEditingController(text: step));
-              }
-            });
-          }
-        },
-      ),
+      // ✅ AI Chef FAB yahan se REMOVE kar diya — ab HomePage mein hai
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -335,28 +267,8 @@ class _AddReceipeState extends State<AddReceipe> {
           ),
 
           // ── Ingredients ──────────────────────────────
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-              child: IngredientsEditor(
-                controllers: _ingredientControllers,
-                onAdd: _addIngredient,
-                onDelete: _deleteIngredient,
-              ),
-            ),
-          ),
 
           // ── Preparation Steps ─────────────────────────
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
-              child: PreparationStepsEditor(
-                controllers: _stepControllers,
-                onAdd: _addStep,
-                onDelete: _deleteStep,
-              ),
-            ),
-          ),
 
           // ── Action Buttons ───────────────────────────
           SliverToBoxAdapter(
