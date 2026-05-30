@@ -139,12 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   _Tile(
                     icon: Icons.privacy_tip_outlined,
                     label: 'Privacy Policy',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => FoodAnalyzerScreen()),
-                      );
-                    },
+                    onTap: () {},
                   ),
                   const _TileDivider(),
                   _Tile(

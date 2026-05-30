@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:smart_chef/Models/food_anlysis_model.dart';
 
 class AiServiceImage {
-  final _apiKey = dotenv.env['Food_Analyzer'];
   static const String _baseUrl =
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
@@ -15,8 +14,10 @@ class AiServiceImage {
 
     final bytes = await imageFile.readAsBytes();
     final base64Image = base64Encode(bytes);
-    final ext = imageFile.path.split('.').last.toLowerCase();
-    final mimeType = ext == 'png' ? 'image/png' : 'image/jpeg';
+
+    // ✅ FIX 1: Camera images ka path temp hota hai jisme extension nahi hoti
+    // Isliye pehle magic bytes se MIME detect karo
+    final mimeType = _detectMimeType(bytes);
 
     const prompt = '''You are a professional nutritionist API.
 Return ONLY a raw JSON object. No markdown. No backticks. No explanation. No text before or after.
@@ -48,9 +49,8 @@ Analyze the food image and return exactly this format:
               ],
               'generationConfig': {
                 'temperature': 0.1,
-                'maxOutputTokens': 1024,
-                'responseMimeType':
-                    'application/json', // ✅ camelCase — yahi fix hai
+                'maxOutputTokens': 2048,
+                'responseMimeType': 'application/json',
               },
             }),
           )
@@ -77,12 +77,51 @@ Analyze the food image and return exactly this format:
       throw Exception('No response received. Try again.');
     }
 
-    final rawText =
-        candidates[0]['content']['parts'][0]['text'] as String? ?? '';
+    // ✅ FIX 2: Camera response mein finishReason check karo
+    final finishReason = candidates[0]['finishReason'] as String? ?? '';
+    if (finishReason == 'SAFETY' || finishReason == 'RECITATION') {
+      throw Exception('Image blocked by API. Try another image.');
+    }
+
+    // ✅ FIX 3: Parts null bhi ho sakta hai camera images mein
+    final parts = candidates[0]['content']?['parts'] as List?;
+    if (parts == null || parts.isEmpty) {
+      throw Exception('Empty response parts. Try again.');
+    }
+
+    final rawText = parts[0]['text'] as String? ?? '';
 
     if (rawText.isEmpty) throw Exception('Empty response. Try again.');
 
     return _parseFoodJson(rawText);
+  }
+
+  // ✅ FIX 4: Extension ke bajaye actual bytes se MIME detect karo
+  // Camera JPEG files hamesha FF D8 FF se start hoti hain
+  static String _detectMimeType(List<int> bytes) {
+    if (bytes.length >= 3 &&
+        bytes[0] == 0xFF &&
+        bytes[1] == 0xD8 &&
+        bytes[2] == 0xFF) {
+      return 'image/jpeg';
+    }
+    if (bytes.length >= 8 &&
+        bytes[0] == 0x89 &&
+        bytes[1] == 0x50 &&
+        bytes[2] == 0x4E &&
+        bytes[3] == 0x47) {
+      return 'image/png';
+    }
+    // WebP check
+    if (bytes.length >= 12 &&
+        bytes[0] == 0x52 &&
+        bytes[1] == 0x49 &&
+        bytes[2] == 0x46 &&
+        bytes[3] == 0x46) {
+      return 'image/webp';
+    }
+    // Default fallback
+    return 'image/jpeg';
   }
 
   static FoodAnalysis _parseFoodJson(String rawText) {

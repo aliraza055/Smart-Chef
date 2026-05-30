@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/food_anlysis_model.dart';
 import 'package:smart_chef/Services/food_analyzer_services.dart';
 
@@ -98,7 +99,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFF0F2027),
+      backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,

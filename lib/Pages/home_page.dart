@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Pages/ai_receipeGenrateor.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/favorite_service.dart';
+import 'package:smart_chef/Widgets/analyzer_banner.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
@@ -40,7 +40,6 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: AppTheme.background,
 
-      // ── AI Chef FAB ──────────────────────────────────────────
       floatingActionButton: FloatingActionButton.extended(
         heroTag: "home_ai_chef",
         backgroundColor: AppTheme.primary,
@@ -54,7 +53,7 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         onPressed: () async {
-          MaterialPageRoute(builder: (_) => const AiRecipeGeneratorPage());
+          Navigator.pushNamed(context, PageRouter.receipeAi);
         },
       ),
 
@@ -63,11 +62,18 @@ class _HomepageState extends State<Homepage> {
         slivers: [
           // ── Header ──────────────────────────────────────────
           const SliverToBoxAdapter(child: HomeHeader()),
+          SliverToBoxAdapter(
+            child: AnalyzerBanner(
+              onTap: () {
+                Navigator.pushNamed(context, PageRouter.foodAnalyser);
+              },
+            ),
+          ),
 
           // ── Categories heading ───────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 12),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

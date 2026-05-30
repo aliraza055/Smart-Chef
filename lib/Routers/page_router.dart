@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Pages/ai_receipeGenrateor.dart';
+import 'package:smart_chef/Pages/analyzer_page.dart';
 import 'package:smart_chef/Pages/bottom_navigation.dart';
 import 'package:smart_chef/Pages/deital_page.dart';
 import 'package:smart_chef/Pages/favorite_item.dart';
@@ -19,6 +21,8 @@ class PageRouter {
   static const bottomNav = '/bottomNav';
   static const updateProfile = '/update profile';
   static const settingPage = '/settingPage';
+  static const receipeAi = '/receipeAi';
+  static const foodAnalyser = '/foodAnalyser';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -35,6 +39,10 @@ class PageRouter {
         return MaterialPageRoute(builder: (_) => DetailPage(recipe: recipe));
       case favoritePage:
         return MaterialPageRoute(builder: (_) => FavoritePage());
+      case foodAnalyser:
+        return MaterialPageRoute(builder: (_) => FoodAnalyzerScreen());
+      case receipeAi:
+        return MaterialPageRoute(builder: (_) => AiRecipeGeneratorPage());
       case bottomNav:
         return MaterialPageRoute(builder: (_) => BottomNavigation());
       case updateProfile:
