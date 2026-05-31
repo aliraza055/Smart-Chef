@@ -231,10 +231,11 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: const Color(0xFF7ecba1).withOpacity(0.3),
-            width: 4,
+            color: AppTheme.primary.withOpacity(0.5),
+            width: 1.5,
+            // Dashed effect via custom painter below
           ),
-          color: Color(0xFF7ecba1).withOpacity(0.1),
+          color: const Color(0xFFF2F2F2),
         ),
         child: _selectedImage != null
             ? _buildSelectedImage()
@@ -262,7 +263,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
           child: const Icon(
             Icons.camera_alt_outlined,
             size: 30,
-            color: Color(0xFF7ecba1),
+            color: AppTheme.primary,
           ),
         ),
         const SizedBox(height: 16),
@@ -270,7 +271,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
         const Text(
           'Tap to capture or upload',
           style: TextStyle(
-            color: Color(0xFF7ecba1),
+            color: AppTheme.primary,
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),
@@ -279,7 +280,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
 
         const Text(
           'JPG, PNG · Max 10MB',
-          style: TextStyle(color: Color(0xFF7ecba1), fontSize: 12),
+          style: TextStyle(color: AppTheme.primary, fontSize: 12),
         ),
         const SizedBox(height: 16),
 
@@ -719,19 +720,19 @@ class _SourcePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF2d6a4f).withOpacity(0.2),
+        color: AppTheme.primary,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF7ecba1).withOpacity(0.15)),
+        border: Border.all(color: AppTheme.primary.withOpacity(0.15)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: const Color(0xFF7ecba1).withOpacity(0.7)),
+          Icon(icon, size: 13, color: Colors.white),
           const SizedBox(width: 6),
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFF7ecba1),
+              color: Colors.white,
               fontSize: 11,
               fontWeight: FontWeight.w500,
             ),
