@@ -165,7 +165,11 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 56, 20, 28),
       decoration: const BoxDecoration(
-        color: AppTheme.headerBg,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF1B4332), Color(0xFF2D6A4F), Color(0xFF40916C)],
+        ),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
       child: Column(

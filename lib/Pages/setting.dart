@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Pages/analyzer_page.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -30,7 +29,8 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () =>
+                        Navigator.pushNamed(context, PageRouter.bottomNav),
                     child: Container(
                       width: 40,
                       height: 40,

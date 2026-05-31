@@ -70,7 +70,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
-          // ── Categories heading ───────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -95,7 +94,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
-          // ── Sticky Category Row ──────────────────────────────
           SliverPersistentHeader(
             pinned: true, // ← yahi sticky banata hai
             delegate: _StickyCategories(
@@ -105,7 +103,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
-          // ── Popular Today heading ────────────────────────────
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 28, 20, 16),
@@ -113,7 +110,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
-          // ── Recipes List ─────────────────────────────────────
           StreamBuilder<QuerySnapshot>(
             stream: _getRecipesStream(),
             builder: (context, snapshot) {

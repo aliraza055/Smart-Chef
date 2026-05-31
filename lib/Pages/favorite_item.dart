@@ -192,7 +192,7 @@ class _EmptyFavourites extends StatelessWidget {
         ),
         const SizedBox(height: 28),
         GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () => Navigator.pushNamed(context, PageRouter.bottomNav),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
             decoration: BoxDecoration(
