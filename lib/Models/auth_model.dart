@@ -100,7 +100,7 @@ class AuthModel {
         );
       }
     } catch (e) {
-      ToastError().showToast(message: 'Unexpected error', bgColor: Colors.red);
+      ToastError().showToast(message: 'Unexpected error!', bgColor: Colors.red);
     }
   }
 }
