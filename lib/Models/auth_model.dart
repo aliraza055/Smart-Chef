@@ -90,7 +90,7 @@ class AuthModel {
         ToastError().showToast(message: 'User not found!', bgColor: Colors.red);
       } else if (e.code == 'wrong-password') {
         ToastError().showToast(
-          message: 'incorrect password',
+          message: 'incorrect password!',
           bgColor: Colors.red,
         );
       } else {
