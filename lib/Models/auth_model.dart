@@ -87,7 +87,7 @@ class AuthModel {
           });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        ToastError().showToast(message: 'User not found!', bgColor: Colors.red);
+        ToastError().showToast(message: 'User not found', bgColor: Colors.red);
       } else if (e.code == 'wrong-password') {
         ToastError().showToast(
           message: 'incorrect password!',
