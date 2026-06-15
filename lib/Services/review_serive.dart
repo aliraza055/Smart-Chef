@@ -21,7 +21,7 @@ class ReviewService {
 
     final review = ReviewModel(
       recipeId: recipeId,
-      userId: _user!.uid,
+      userId: _user.uid,
       userName: _user!.displayName ?? 'Anonymous',
       userPhoto: _user!.photoURL,
       rating: rating,
