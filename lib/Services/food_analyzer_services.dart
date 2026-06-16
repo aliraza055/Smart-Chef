@@ -15,8 +15,6 @@ class AiServiceImage {
     final bytes = await imageFile.readAsBytes();
     final base64Image = base64Encode(bytes);
 
-    // ✅ FIX 1: Camera images ka path temp hota hai jisme extension nahi hoti
-    // Isliye pehle magic bytes se MIME detect karo
     final mimeType = _detectMimeType(bytes);
 
     const prompt = '''You are a professional nutritionist API.
@@ -77,13 +75,11 @@ Analyze the food image and return exactly this format:
       throw Exception('No response received. Try again.');
     }
 
-    // ✅ FIX 2: Camera response mein finishReason check karo
     final finishReason = candidates[0]['finishReason'] as String? ?? '';
     if (finishReason == 'SAFETY' || finishReason == 'RECITATION') {
       throw Exception('Image blocked by API. Try another image.');
     }
 
-    // ✅ FIX 3: Parts null bhi ho sakta hai camera images mein
     final parts = candidates[0]['content']?['parts'] as List?;
     if (parts == null || parts.isEmpty) {
       throw Exception('Empty response parts. Try again.');
@@ -96,8 +92,6 @@ Analyze the food image and return exactly this format:
     return _parseFoodJson(rawText);
   }
 
-  // ✅ FIX 4: Extension ke bajaye actual bytes se MIME detect karo
-  // Camera JPEG files hamesha FF D8 FF se start hoti hain
   static String _detectMimeType(List<int> bytes) {
     if (bytes.length >= 3 &&
         bytes[0] == 0xFF &&
