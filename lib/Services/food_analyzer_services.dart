@@ -106,7 +106,6 @@ Analyze the food image and return exactly this format:
         bytes[3] == 0x47) {
       return 'image/png';
     }
-    // WebP check
     if (bytes.length >= 12 &&
         bytes[0] == 0x52 &&
         bytes[1] == 0x49 &&
@@ -114,7 +113,6 @@ Analyze the food image and return exactly this format:
         bytes[3] == 0x46) {
       return 'image/webp';
     }
-    // Default fallback
     return 'image/jpeg';
   }
 
@@ -126,7 +124,6 @@ Analyze the food image and return exactly this format:
       );
     } catch (_) {}
 
-    // Strategy 2: strip markdown fences
     final cleaned = rawText
         .replaceAll(RegExp(r'```json\s*'), '')
         .replaceAll(RegExp(r'```\s*'), '')
@@ -135,7 +132,6 @@ Analyze the food image and return exactly this format:
       return FoodAnalysis.fromJson(jsonDecode(cleaned) as Map<String, dynamic>);
     } catch (_) {}
 
-    // Strategy 3: regex extract {...}
     final match = RegExp(r'\{[\s\S]*\}').firstMatch(cleaned);
     if (match != null) {
       try {
