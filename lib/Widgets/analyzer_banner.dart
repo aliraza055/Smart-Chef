@@ -72,7 +72,7 @@ class AnalyzerBanner extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        '✦  AI POWERED',
+                        '✦AI POWERED',
                         style: TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
