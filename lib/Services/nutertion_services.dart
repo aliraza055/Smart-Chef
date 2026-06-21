@@ -25,7 +25,6 @@ class NutritionResult {
     final total = json['total'] ?? {};
     final items = json['per_ingredient'] as List<dynamic>? ?? [];
 
-    // Helper — string ya num dono handle karta hai
     int toInt(dynamic v) {
       if (v == null) return 0;
       if (v is int) return v;
