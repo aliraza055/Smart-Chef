@@ -87,7 +87,7 @@ JSON format (exact keys required):
               'Authorization': 'Bearer $apiKey',
               'HTTP-Referer':
                   'https://smartchef.app', // optional, apna app name
-              'X-Title': 'Smart Chef', // optional, apna app name
+              'X-Title': 'Smart Chef',
             },
             body: jsonEncode({
               'model': _model,

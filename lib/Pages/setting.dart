@@ -110,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     trailing: Switch(
                       value: _notifications,
                       onChanged: (v) => setState(() => _notifications = v),
-                      activeColor: AppTheme.primary,
+                      activeThumbColor: AppTheme.primary,
                     ),
                   ),
                   const _TileDivider(),
@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     trailing: Switch(
                       value: _darkMode,
                       onChanged: (v) => setState(() => _darkMode = v),
-                      activeColor: AppTheme.primary,
+                      activeThumbColor: AppTheme.primary,
                     ),
                   ),
                 ],

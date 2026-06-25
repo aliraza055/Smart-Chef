@@ -16,14 +16,14 @@ class ReviewService {
     final existing = await _db
         .collection('Reviews')
         .where('recipeId', isEqualTo: recipeId)
-        .where('userId', isEqualTo: _user!.uid)
+        .where('userId', isEqualTo: _user.uid)
         .get();
 
     final review = ReviewModel(
       recipeId: recipeId,
       userId: _user.uid,
-      userName: _user!.displayName ?? 'Anonymous',
-      userPhoto: _user!.photoURL,
+      userName: _user.displayName ?? 'Anonymous',
+      userPhoto: _user.photoURL,
       rating: rating,
       comment: comment,
       createdAt: DateTime.now(),
@@ -79,7 +79,7 @@ class ReviewService {
     final snap = await _db
         .collection('Reviews')
         .where('recipeId', isEqualTo: recipeId)
-        .where('userId', isEqualTo: _user!.uid)
+        .where('userId', isEqualTo: _user.uid)
         .get();
     if (snap.docs.isEmpty) return null;
     return ReviewModel.fromMap(snap.docs.first.data(), snap.docs.first.id);

@@ -20,7 +20,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       Homepage(),
 
       FavoritePage(),
@@ -32,7 +32,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     ];
 
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[_currentIndex],
 
       // Floating Add Button
       floatingActionButton: FloatingActionButton(

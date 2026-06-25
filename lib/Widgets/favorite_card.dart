@@ -55,11 +55,11 @@ class FavoriteCard extends StatelessWidget {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: image,
-                    height: 180, // ✅ fixed height — collapse nahi hoga
-                    width: double.infinity, // ✅ full width
+                    height: 180,
+                    width: double.infinity,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      height: 200, // ✅ placeholder bhi same height
+                      height: 200,
                       color: const Color(0xFFF0F0F0),
                       child: const Center(
                         child: CircularProgressIndicator(
@@ -69,7 +69,7 @@ class FavoriteCard extends StatelessWidget {
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      height: 200, // ✅ error bhi same height
+                      height: 200,
                       color: const Color(0xFFF0F0F0),
                       child: const Icon(
                         Icons.image_not_supported_outlined,

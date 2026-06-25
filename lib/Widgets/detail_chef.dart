@@ -8,6 +8,7 @@ class ChefCard extends StatelessWidget {
   final String level;
 
   const ChefCard({
+    super.key,
     required this.name,
     required this.photoUrl,
     required this.level,
