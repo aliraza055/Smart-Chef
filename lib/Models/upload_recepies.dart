@@ -13,8 +13,8 @@ class UploadRecepie {
     required String category,
     required User? user,
     required String difficulty,
-    required List<String> ingredients, // ✅ String se List<String>
-    required List<String> steps, // ✅ Naya field
+    required List<String> ingredients,
+    required List<String> steps,
     required File image,
     final dynamic createdAt,
     double time = 20,

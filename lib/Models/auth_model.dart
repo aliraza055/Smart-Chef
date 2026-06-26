@@ -37,6 +37,7 @@ class AuthModel {
               createdAt: DateTime.now(),
             ).toMap(),
           );
+      Navigator.pushReplacementNamed(context, PageRouter.bottomNav);
       ToastError().showToast(
         message: 'Create user successfully!',
         bgColor: Colors.green,
@@ -53,7 +54,6 @@ class AuthModel {
           bgColor: Colors.red,
         );
       } else {
-        print(e.message);
         ToastError().showToast(
           message: 'Error:${e.message}',
           bgColor: Colors.red,
