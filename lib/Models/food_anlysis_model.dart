@@ -54,5 +54,3 @@ class FoodAnalysis {
     healthTips: List<String>.from(j['healthTips'] ?? []),
   );
 }
-
-// ── lib/widgets/nutrient_card.dart ──────────────────────────────
