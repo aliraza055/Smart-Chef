@@ -140,7 +140,6 @@ class _DetailPageState extends State<DetailPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Chef Card ──────────────────────────────────────────
                     ChefCard(
                       name: chefName,
                       photoUrl: chefPhoto,
@@ -169,7 +168,6 @@ class _DetailPageState extends State<DetailPage> {
                       CookingSteps(steps: steps, difficulty: difficulty),
                     ],
 
-                    // ── 🤖 AI Nutrition Section ────────────────────────────
                     if (ingredients.isNotEmpty) ...[
                       const SizedBox(height: 28),
                       NutritionSection(ingredients: ingredients),
@@ -180,8 +178,6 @@ class _DetailPageState extends State<DetailPage> {
                       ReviewsList(recipeId: docId),
                     ],
 
-                    // ✅ Extra bottom padding so last content isn't hidden
-                    // behind the sticky button
                     const SizedBox(height: 20),
                   ],
                 ),
