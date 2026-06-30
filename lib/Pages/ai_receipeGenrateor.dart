@@ -3,15 +3,6 @@ import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Models/ai_receipe_result_model.dart';
 import 'package:smart_chef/Services/ai_services.dart';
 
-// ─────────────────────────────────────────────────────────────
-//  AI Recipe Generator Page
-//  Flow:
-//    1. User chips mein ingredients add karta hai
-//    2. "Generate" tap karta hai → Claude API call
-//    3. Result card show hota hai
-//    4. "Use This Recipe" → AddReceipe page pre-filled data ke saath
-// ─────────────────────────────────────────────────────────────
-
 class AiRecipeGeneratorPage extends StatefulWidget {
   const AiRecipeGeneratorPage({super.key});
 
@@ -61,7 +52,6 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
     super.dispose();
   }
 
-  // ── Add ingredient chip ───────────────────────────────────
   void _addIngredient() {
     final text = _ingredientController.text.trim();
     if (text.isEmpty) return;
@@ -113,15 +103,11 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
     }
   }
 
-  // ── Navigate to AddReceipe with pre-filled data ───────────
   void _useThisRecipe() {
     if (_result == null) return;
-    Navigator.pop(context, _result); // AddReceipe page handle karega
+    Navigator.pop(context, _result);
   }
 
-  // ─────────────────────────────────────────────────────────
-  //  BUILD
-  // ─────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,25 +115,18 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Header ───────────────────────────────────────
           SliverToBoxAdapter(child: _buildHeader()),
 
-          // ── Ingredient Input ─────────────────────────────
           SliverToBoxAdapter(child: _buildIngredientInput()),
 
-          // ── Chips ────────────────────────────────────────
           if (_ingredients.isNotEmpty) SliverToBoxAdapter(child: _buildChips()),
 
-          // ── Generate Button ──────────────────────────────
           SliverToBoxAdapter(child: _buildGenerateButton()),
 
-          // ── Error ────────────────────────────────────────
           if (_errorMessage != null) SliverToBoxAdapter(child: _buildError()),
 
-          // ── Loading Animation ─────────────────────────────
           if (_isLoading) SliverToBoxAdapter(child: _buildLoadingCard()),
 
-          // ── Result Card ───────────────────────────────────
           if (_result != null && !_isLoading)
             SliverToBoxAdapter(child: _buildResultCard()),
 
@@ -156,10 +135,6 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
       ),
     );
   }
-
-  // ─────────────────────────────────────────────────────────
-  //  WIDGETS
-  // ─────────────────────────────────────────────────────────
 
   Widget _buildHeader() {
     return Container(

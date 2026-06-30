@@ -16,7 +16,6 @@ class HomeHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
-        // ✅ Deep forest green gradient — professional food app
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -29,7 +28,6 @@ class HomeHeader extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Decorative circles for depth
           Positioned(
             top: -30,
             right: -30,
@@ -55,7 +53,6 @@ class HomeHeader extends StatelessWidget {
             ),
           ),
 
-          // Main content
           Padding(
             padding: EdgeInsets.only(
               top: top + 16,
@@ -66,7 +63,6 @@ class HomeHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Greeting row ───────────────────────
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,7 +109,6 @@ class HomeHeader extends StatelessWidget {
 
                     const SizedBox(width: 12),
 
-                    // ✅ Avatar
                     Container(
                       width: 50,
                       height: 50,
@@ -149,7 +144,6 @@ class HomeHeader extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ✅ Search bar — inside header
                 GestureDetector(
                   onTap: () => Navigator.push(
                     context,

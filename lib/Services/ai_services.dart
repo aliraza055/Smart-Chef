@@ -6,7 +6,7 @@ import 'package:smart_chef/Models/ai_receipe_result_model.dart';
 class AiService {
   final _apiKey = dotenv.env['GEMINI_API_KEY'];
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 
   Future<AiRecipeResult> generateRecipe(List<String> ingredients) async {
     final ingredientList = ingredients.join(', ');
@@ -39,7 +39,7 @@ JSON format (exact keys required):
               ],
               'generationConfig': {
                 'temperature': 0.7,
-                'maxOutputTokens': 2048,
+                'maxOutputTokens': 1000,
                 'responseMimeType': 'application/json',
               },
             }),

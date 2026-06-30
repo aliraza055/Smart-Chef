@@ -71,7 +71,6 @@ class CookingSteps extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // ── Numbered Steps ───────────────────────────
           ...List.generate(steps.length, (i) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 14),

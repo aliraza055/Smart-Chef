@@ -36,7 +36,6 @@ class SocialLoginRow extends StatelessWidget {
 
         const SizedBox(height: 24),
 
-        // OR EMAIL divider
         Row(
           children: [
             Expanded(child: Divider(color: AppTheme.primary.withOpacity(0.3))),

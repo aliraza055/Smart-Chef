@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 
-/// Safely loads a network image.
-/// Shows a placeholder if URL is empty, null, or invalid (e.g. "file:///...")
 class SafeNetworkImage extends StatelessWidget {
   final String? url;
   final double? width;

@@ -177,7 +177,6 @@ class _HomepageState extends State<Homepage> {
   }
 }
 
-// ── Sticky Category Delegate ─────────────────────────────────────────────────
 class _StickyCategories extends SliverPersistentHeaderDelegate {
   final String selectedCategory;
   final ValueChanged<String> onCategorySelected;
@@ -187,7 +186,6 @@ class _StickyCategories extends SliverPersistentHeaderDelegate {
     required this.onCategorySelected,
   });
 
-  // Category row ki height — apni CategoryRow ki actual height ke hisaab se adjust karo
   static const double _height = 56.0;
 
   @override
@@ -204,13 +202,9 @@ class _StickyCategories extends SliverPersistentHeaderDelegate {
   ) {
     return Container(
       height: _height,
-      color: AppTheme.background, // scroll ke peeche white background
+      color: AppTheme.background,
       padding: const EdgeInsets.only(left: 20),
-      child: CategoryRow(
-        onCategorySelected: onCategorySelected,
-        // agar CategoryRow mein selected pass hoti ho to yeh bhi add karo:
-        // selectedCategory: selectedCategory,
-      ),
+      child: CategoryRow(onCategorySelected: onCategorySelected),
     );
   }
 

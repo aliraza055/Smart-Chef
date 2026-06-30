@@ -107,7 +107,6 @@ class DetailHeader extends StatelessWidget {
             ),
           ),
 
-          // ── Bottom overlay: tags + name + rating ────
           Positioned(
             left: 20,
             right: 20,
@@ -132,7 +131,6 @@ class DetailHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                // Recipe name
                 Text(
                   name,
                   style: const TextStyle(
@@ -144,8 +142,6 @@ class DetailHeader extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                // Rating + calories
                 Row(
                   children: [
                     const Icon(

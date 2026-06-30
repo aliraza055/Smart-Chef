@@ -25,7 +25,6 @@ class RecipeImagePicker extends StatelessWidget {
           border: Border.all(
             color: AppTheme.primary.withOpacity(0.5),
             width: 1.5,
-            // Dashed effect via custom painter below
           ),
         ),
         child: image != null

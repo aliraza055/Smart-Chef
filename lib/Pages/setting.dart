@@ -13,16 +13,13 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _darkMode = false;
   bool _notifications = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Header ──────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
@@ -63,7 +60,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          // ── Account Section ──────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
@@ -95,8 +91,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-
-          // ── Preferences Section ──────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -120,8 +114,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     subtitle: 'Switch app appearance',
                     trailing: Switch(
                       value: _darkMode,
-                      onChanged: (v) => setState(() => _darkMode = v),
                       activeThumbColor: AppTheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          _darkMode = value;
+                        });
+                      },
                     ),
                   ),
                 ],
@@ -129,7 +127,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          // ── Support Section ──────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -152,8 +149,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-
-          // ── Logout ───────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
@@ -183,7 +178,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-// ── Section card ────────────────────────────────────────
 class _Section extends StatelessWidget {
   final String? title;
   final List<Widget> children;
@@ -226,7 +220,6 @@ class _Section extends StatelessWidget {
   }
 }
 
-// ── Tile ────────────────────────────────────────────────
 class _Tile extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -254,7 +247,6 @@ class _Tile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         child: Row(
           children: [
-            // Icon circle
             Container(
               width: 40,
               height: 40,
@@ -268,7 +260,6 @@ class _Tile extends StatelessWidget {
             ),
             const SizedBox(width: 14),
 
-            // Label + subtitle
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,8 +285,6 @@ class _Tile extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Trailing
             trailing ??
                 Icon(
                   Icons.chevron_right_rounded,
@@ -309,7 +298,6 @@ class _Tile extends StatelessWidget {
   }
 }
 
-// ── Divider ─────────────────────────────────────────────
 class _TileDivider extends StatelessWidget {
   const _TileDivider();
 

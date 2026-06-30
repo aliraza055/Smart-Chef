@@ -12,7 +12,6 @@ class ReviewSheet extends StatefulWidget {
     required this.recipeName,
   });
 
-  // ── Static helper to show the sheet ──────────────
   static Future<void> show(
     BuildContext context,
     String recipeId,
@@ -113,8 +112,6 @@ class _ReviewSheetState extends State<ReviewSheet> {
             ),
 
             const SizedBox(height: 20),
-
-            // Star rating
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (i) {
@@ -135,8 +132,6 @@ class _ReviewSheetState extends State<ReviewSheet> {
             ),
 
             const SizedBox(height: 20),
-
-            // Comment
             TextField(
               controller: _commentController,
               maxLines: 3,

@@ -66,7 +66,6 @@ class _RecipeCardState extends State<RecipeCard> {
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white70,
-          //const Color(0xFFFFF3DC), // ✅ warm off-white — white nahi
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Color(0xFF1B4332), width: 0.2),
           boxShadow: [
@@ -92,11 +91,11 @@ class _RecipeCardState extends State<RecipeCard> {
                     ),
                     child: CachedNetworkImage(
                       imageUrl: widget.image,
-                      height: 200, // ✅ fixed height — collapse nahi hoga
-                      width: double.infinity, // ✅ full width
+                      height: 200,
+                      width: double.infinity,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
-                        height: 200, // ✅ placeholder bhi same height
+                        height: 200,
                         color: const Color(0xFFF0F0F0),
                         child: const Center(
                           child: CircularProgressIndicator(
@@ -106,7 +105,7 @@ class _RecipeCardState extends State<RecipeCard> {
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        height: 200, // ✅ error bhi same height
+                        height: 200,
                         color: const Color(0xFFF0F0F0),
                         child: const Icon(
                           Icons.image_not_supported_outlined,
@@ -117,7 +116,6 @@ class _RecipeCardState extends State<RecipeCard> {
                     ),
                   ),
                 ),
-                // ✅ Rating + Reviews — top left overlay
                 Positioned(
                   top: 18,
                   left: 16,
@@ -158,7 +156,6 @@ class _RecipeCardState extends State<RecipeCard> {
                   ),
                 ),
 
-                // ✅ Favourite — top right
                 Positioned(
                   top: 18,
                   right: 16,
@@ -193,8 +190,6 @@ class _RecipeCardState extends State<RecipeCard> {
                 ),
               ],
             ),
-
-            // ── Content ──────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
               child: Row(
@@ -217,7 +212,6 @@ class _RecipeCardState extends State<RecipeCard> {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // ✅ Chef name
                         if (widget.userName.isNotEmpty)
                           Text(
                             'By ${widget.userName}',
@@ -233,7 +227,6 @@ class _RecipeCardState extends State<RecipeCard> {
 
                   const SizedBox(width: 12),
 
-                  // ✅ Time — right side with clock icon
                   if (widget.time.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.symmetric(

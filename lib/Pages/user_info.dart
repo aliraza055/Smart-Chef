@@ -9,19 +9,15 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ── Sirf yeh 3 Firebase se — baaki sab static ──
     final User? user = FirebaseAuth.instance.currentUser;
     final String name = user?.displayName ?? 'Chef';
     final String email = user?.email ?? '';
     final String? photoUrl = user?.photoURL;
-
     return Scaffold(
       backgroundColor: AppTheme.background,
-
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Top Bar ────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
@@ -67,14 +63,11 @@ class UserInfo extends StatelessWidget {
               ),
             ),
           ),
-
-          // ── Profile ────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
               child: Column(
                 children: [
-                  // Avatar + edit badge
                   Stack(
                     children: [
                       Container(
@@ -132,10 +125,7 @@ class UserInfo extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 14),
-
-                  // ✅ Firebase se — Name
                   Text(
                     name,
                     style: const TextStyle(
@@ -145,10 +135,7 @@ class UserInfo extends StatelessWidget {
                       letterSpacing: -0.3,
                     ),
                   ),
-
                   const SizedBox(height: 6),
-
-                  // ✅ Firebase se — Email
                   Text(
                     email,
                     style: const TextStyle(
@@ -156,9 +143,7 @@ class UserInfo extends StatelessWidget {
                       color: AppTheme.textMedium,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   // Static stats
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -174,8 +159,6 @@ class UserInfo extends StatelessWidget {
               ),
             ),
           ),
-
-          // ── Level + Streak — Static ─────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
@@ -281,8 +264,6 @@ class UserInfo extends StatelessWidget {
               ),
             ),
           ),
-
-          // ── Settings — Static ───────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
@@ -364,8 +345,6 @@ class UserInfo extends StatelessWidget {
     );
   }
 }
-
-// ── Helper Widgets ──────────────────────────────────────
 
 class _StatItem extends StatelessWidget {
   final String value;

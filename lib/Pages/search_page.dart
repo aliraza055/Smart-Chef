@@ -35,7 +35,6 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  /// 🔍 Firestore Search Stream
   Stream<QuerySnapshot> _searchStream() {
     if (_query.isEmpty) {
       return const Stream.empty();

@@ -66,8 +66,6 @@ class ChefCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 14),
-
-              // Name + level
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

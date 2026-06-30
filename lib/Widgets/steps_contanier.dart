@@ -28,7 +28,6 @@ class PreparationStepsEditor extends StatelessWidget {
         ),
         const SizedBox(height: 14),
 
-        // Steps list
         ...List.generate(controllers.length, (i) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),

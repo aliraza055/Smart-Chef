@@ -13,7 +13,6 @@ class CategoryItem {
   });
 }
 
-// Default category list — customize as needed
 const List<CategoryItem> defaultCategories = [
   CategoryItem(label: 'All', emoji: '🍽️', bgColor: Color(0xFFFFE5D9)),
   CategoryItem(label: 'Breakfast', emoji: '🍞', bgColor: Color(0xFFFFE5D9)),

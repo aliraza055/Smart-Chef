@@ -9,19 +9,19 @@ void main() async {
   await Firebase.initializeApp();
   await dotenv.load();
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  bool _darkMode = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Smart Chef',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _darkMode ? ThemeMode.dark : ThemeMode.light,
       //  home: BottomNavigation(),
       home: const AuthWrapper(),
       onGenerateRoute: PageRouter.generateRoute,

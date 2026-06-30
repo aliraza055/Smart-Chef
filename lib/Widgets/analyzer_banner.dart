@@ -1,5 +1,3 @@
-// lib/Widgets/analyzer_banner.dart
-
 import 'package:flutter/material.dart';
 
 class AnalyzerBanner extends StatelessWidget {
@@ -22,7 +20,6 @@ class AnalyzerBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
-              // Decorative circles
               Positioned(
                 top: -25,
                 right: 45,
@@ -82,8 +79,6 @@ class AnalyzerBanner extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-
-                    // Title
                     RichText(
                       text: const TextSpan(
                         style: TextStyle(
@@ -109,8 +104,6 @@ class AnalyzerBanner extends StatelessWidget {
                       style: TextStyle(fontSize: 10, color: Colors.white54),
                     ),
                     const SizedBox(height: 8),
-
-                    // Mini stat chips
                     Row(
                       children: [
                         _StatChip(label: 'Calories'),
@@ -124,7 +117,6 @@ class AnalyzerBanner extends StatelessWidget {
                 ),
               ),
 
-              // Right scan button
               Positioned(
                 right: 16,
                 top: 0,

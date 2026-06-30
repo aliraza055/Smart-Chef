@@ -71,8 +71,6 @@ class _IngredientsChecklistState extends State<IngredientsChecklist> {
             ],
           ),
           const SizedBox(height: 14),
-
-          // Ingredient rows
           ...List.generate(widget.ingredients.length, (i) {
             return GestureDetector(
               onTap: () => setState(() => _checked[i] = !_checked[i]),

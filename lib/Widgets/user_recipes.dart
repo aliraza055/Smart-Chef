@@ -13,7 +13,6 @@ class MyRecipesGrid extends StatelessWidget {
     required this.onSeeAll,
     required this.onRecipeTap,
   });
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,8 +44,6 @@ class MyRecipesGrid extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
-
-        // 2x2 grid
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

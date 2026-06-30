@@ -413,8 +413,6 @@ class _ResultCard extends StatelessWidget {
               ],
             ),
           ),
-
-          // ── Macro grid ───────────────────────────────────
           Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
@@ -454,8 +452,6 @@ class _ResultCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                // ── Macro progress bars ───────────────────
                 const SizedBox(height: 18),
                 _MacroBar(
                   label: 'Protein',
@@ -477,8 +473,6 @@ class _ResultCard extends StatelessWidget {
                   maxGrams: 70,
                   color: const Color(0xFFD62828),
                 ),
-
-                // ── Per ingredient breakdown ──────────────
                 if (result.perIngredient.isNotEmpty) ...[
                   const SizedBox(height: 18),
                   const Divider(color: AppTheme.divider),
@@ -504,8 +498,6 @@ class _ResultCard extends StatelessWidget {
                     ),
                   ),
                 ],
-
-                // ── Disclaimer ────────────────────────────
                 const SizedBox(height: 14),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -534,8 +526,6 @@ class _ResultCard extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // ── Re-analyze button ─────────────────────
                 const SizedBox(height: 14),
                 GestureDetector(
                   onTap: onReAnalyze,
@@ -578,10 +568,6 @@ class _ResultCard extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────
-//  Sub-widgets
-// ─────────────────────────────────────────────────────────────
 
 class _MacroCard extends StatelessWidget {
   final String label;
