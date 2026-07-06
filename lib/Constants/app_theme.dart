@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Brand color stays constant across themes
   static const Color primary = Color(0xFF2D6A4F);
 
   static const Color lightBackground = Color(0xFFF7F7F7);
@@ -69,7 +68,6 @@ class AppTheme {
       elevation: 0,
     ),
   );
-
   static ThemeData get darkTheme => ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: darkBackground,
