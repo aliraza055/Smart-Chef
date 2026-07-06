@@ -1,55 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/search_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
-import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
-  final _searchController = TextEditingController();
-  final _favService = FavoriteService();
-  Set<String> _favoriteIds = {};
-  String _query = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    _favService.favoritesStream().listen((ids) {
-      if (mounted) {
-        setState(() => _favoriteIds = ids);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  Stream<QuerySnapshot> _searchStream() {
-    if (_query.isEmpty) {
-      return const Stream.empty();
-    }
-
-    return FirebaseFirestore.instance
-        .collection('Receipes')
-        .orderBy('name')
-        .startAt([_query])
-        .endAt(['$_query\uf8ff'])
-        .snapshots();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final SearchPageController controller = Get.put(SearchPageController());
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: Column(
@@ -66,11 +28,11 @@ class _SearchPageState extends State<SearchPage> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Get.back(),
                   child: Container(
                     width: 40,
                     height: 40,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: AppTheme.background,
                       shape: BoxShape.circle,
                     ),
@@ -83,7 +45,8 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 const SizedBox(width: 12),
 
-                // 🔍 Search Field
+                // 🔍 Search Field — TextEditingController controller
+                // ke andar rehta hai (dispose bhi wahin hota hai)
                 Expanded(
                   child: Container(
                     height: 48,
@@ -92,7 +55,7 @@ class _SearchPageState extends State<SearchPage> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: TextField(
-                      controller: _searchController,
+                      controller: controller.searchController,
                       autofocus: true,
                       style: const TextStyle(
                         fontSize: 14,
@@ -111,116 +74,100 @@ class _SearchPageState extends State<SearchPage> {
                           vertical: 14,
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          _query = value.trim().toLowerCase();
-                        });
-                      },
+                      onChanged: controller.updateQuery,
                     ),
                   ),
                 ),
 
-                if (_query.isNotEmpty) ...[
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      _searchController.clear();
-                      setState(() => _query = '');
-                    },
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppTheme.background,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        size: 18,
-                        color: AppTheme.textMedium,
-                      ),
-                    ),
-                  ),
-                ],
+                Obx(
+                  () => controller.query.value.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: GestureDetector(
+                            onTap: controller.clearQuery,
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                color: AppTheme.background,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.close_rounded,
+                                size: 18,
+                                color: AppTheme.textMedium,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
               ],
             ),
           ),
 
           // ── Results ─────────────────────────────
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _searchStream(),
-              builder: (context, snapshot) {
-                // ✅ search empty → initial empty UI
-                if (_query.isEmpty) {
-                  return const _EmptySearch(query: '');
-                }
+            child: Obx(() {
+              // `query.value` aur `allRecipes.isEmpty` dono seedhe
+              // is Obx ke andar read ho rahe hain (synchronous),
+              // isliye dono sources (search text change + naya
+              // recipe Firestore mein add hona) par ye rebuild hoga.
+              final q = controller.query.value;
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: AppTheme.primary),
-                  );
-                }
+              if (q.isEmpty) {
+                return const _EmptySearch(query: '');
+              }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return _EmptySearch(query: _query);
-                }
+              final all = controller.allRecipes;
+              if (all.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppTheme.primary),
+                );
+              }
 
-                final docs = snapshot.data!.docs;
+              final filtered = SearchPageController.filterRecipes(q, all);
 
-                // client side accuracy filter
-                final filtered = docs.where((doc) {
-                  final data = doc.data() as Map<String, dynamic>;
-                  final name = (data['name'] ?? '').toString().toLowerCase();
-                  final category = (data['category'] ?? '')
-                      .toString()
-                      .toLowerCase();
+              if (filtered.isEmpty) {
+                return _EmptySearch(query: q);
+              }
 
-                  return name.contains(_query) || category.contains(_query);
-                }).toList();
+              return GridView.builder(
+                padding: const EdgeInsets.all(20),
+                physics: const BouncingScrollPhysics(),
+                itemCount: filtered.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.68,
+                ),
+                itemBuilder: (context, index) {
+                  final data = filtered[index];
+                  final docId = data['docId'] as String;
 
-                if (filtered.isEmpty) {
-                  return _EmptySearch(query: _query);
-                }
-
-                return GridView.builder(
-                  padding: const EdgeInsets.all(20),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: filtered.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.68,
-                  ),
-                  itemBuilder: (context, index) {
-                    final doc = filtered[index];
-                    final data = doc.data() as Map<String, dynamic>;
-                    final docId = doc.id;
-
-                    return FavoriteCard(
+                  // Chhota nested Obx sirf favorite-heart ke liye:
+                  // jab toggle ho, sirf yehi card rebuild hota hai,
+                  // poora grid nahi.
+                  return Obx(
+                    () => FavoriteCard(
                       image: data['image'] ?? '',
                       name: data['name'] ?? '',
                       description: data['description'] ?? '',
                       time: data['time']?.toString() ?? '',
                       likes: data['avgRating']?.toString() ?? '0',
                       tag: data['category'] ?? '',
-                      isFavorite: _favoriteIds.contains(docId),
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          PageRouter.detailPage,
-                          arguments: {...data, 'docId': docId},
-                        );
-                      },
-                      onFavoriteToggle: () {
-                        _favService.toggleFavorite(docId);
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+                      isFavorite: controller.favoriteIds.contains(docId),
+                      onTap: () => Get.toNamed(
+                        PageRouter.detailPage,
+                        arguments: {...data, 'docId': docId},
+                      ),
+                      onFavoriteToggle: () => controller.toggleFavorite(docId),
+                    ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),

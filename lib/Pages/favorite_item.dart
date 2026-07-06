@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/favorite_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
-import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
 
-class FavoritePage extends StatefulWidget {
+class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
   @override
-  State<FavoritePage> createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
-  final _favoriteService = FavoriteService();
-
-  @override
   Widget build(BuildContext context) {
+    final FavoriteController controller = Get.put(FavoriteController());
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── Header (same as before) ──────────────────
+          // ── Header (unchanged) ──────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
@@ -64,7 +60,7 @@ class _FavoritePageState extends State<FavoritePage> {
             ),
           ),
 
-          // ── Title (same as before) ───────────────────
+          // ── Title (unchanged) ───────────────────
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 24, 20, 0),
@@ -91,61 +87,57 @@ class _FavoritePageState extends State<FavoritePage> {
           ),
 
           // ── Recipe Grid ─────────────────────────────
-          StreamBuilder<List<Map<String, dynamic>>>(
-            stream: _favoriteService
-                .getFavoriteRecipesStream(), // ✅ user-specific stream
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(color: AppTheme.primary),
-                  ),
-                );
-              }
-
-              final recipes = snapshot.data ?? [];
-
-              if (recipes.isEmpty) {
-                return SliverFillRemaining(child: _EmptyFavourites());
-              }
-
-              return SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
-                sliver: SliverGrid(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final data = recipes[index];
-
-                    return FavoriteCard(
-                      image: data['image'] ?? '',
-                      name: data['name'] ?? '',
-                      description: data['description'] ?? '',
-
-                      //      tag: data['category'] ?? '',
-                      time: data['category'] ?? '',
-                      likes: data['likes']?.toString() ?? '0',
-                      isFavorite: true, // ✅ yahan sab favorites hain
-                      tag: data['tag'] ?? '',
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        PageRouter.detailPage,
-                        arguments: data, // docId already andar hai
-                      ),
-                      onFavoriteToggle: () async {
-                        // ✅ toggle se remove ho jayega
-                        await _favoriteService.toggleFavorite(data['docId']);
-                      },
-                    );
-                  }, childCount: recipes.length),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.70,
-                  ),
+          // IMPORTANT: `controller.isLoading.value` aur
+          // `controller.recipes.isEmpty` / `.length` seedhe is Obx()
+          // callback ke andar read ho rahe hain (koi child widget ke
+          // build() tak deferred nahi) — isi wajah se pichli file
+          // wala "improper use of GetX" error yahan nahi aayega.
+          Obx(() {
+            if (controller.isLoading.value) {
+              return const SliverFillRemaining(
+                child: Center(
+                  child: CircularProgressIndicator(color: AppTheme.primary),
                 ),
               );
-            },
-          ),
+            }
+
+            final recipes = controller.recipes;
+
+            if (recipes.isEmpty) {
+              return SliverFillRemaining(child: _EmptyFavourites());
+            }
+
+            return SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final data = recipes[index];
+
+                  return FavoriteCard(
+                    image: data['image'] ?? '',
+                    name: data['name'] ?? '',
+                    description: data['description'] ?? '',
+                    time: data['category'] ?? '',
+                    likes: data['likes']?.toString() ?? '0',
+                    isFavorite: true, // yahan sab favorites hain
+                    tag: data['tag'] ?? '',
+                    onTap: () => Get.toNamed(
+                      PageRouter.detailPage,
+                      arguments: data, // docId already andar hai
+                    ),
+                    onFavoriteToggle: () =>
+                        controller.toggleFavorite(data['docId']),
+                  );
+                }, childCount: recipes.length),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.70,
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -192,7 +184,7 @@ class _EmptyFavourites extends StatelessWidget {
         ),
         const SizedBox(height: 28),
         GestureDetector(
-          onTap: () => Navigator.pushNamed(context, PageRouter.bottomNav),
+          onTap: () => Get.toNamed(PageRouter.bottomNav),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
             decoration: BoxDecoration(

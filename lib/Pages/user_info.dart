@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/auth_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 
@@ -9,10 +10,11 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String name = user?.displayName ?? 'Chef';
-    final String email = user?.email ?? '';
-    final String? photoUrl = user?.photoURL;
+    final AuthController controller = Get.put(
+      AuthController(),
+      permanent: true,
+    );
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: CustomScrollView(
@@ -50,11 +52,13 @@ class UserInfo extends StatelessWidget {
                       border: Border.all(color: AppTheme.primary, width: 2),
                     ),
                     child: ClipOval(
-                      child: SafeNetworkImage(
-                        url: photoUrl,
-                        placeholder: const Icon(
-                          Icons.person_rounded,
-                          color: AppTheme.primary,
+                      child: Obx(
+                        () => SafeNetworkImage(
+                          url: controller.photoUrl,
+                          placeholder: const Icon(
+                            Icons.person_rounded,
+                            color: AppTheme.primary,
+                          ),
                         ),
                       ),
                     ),
@@ -85,15 +89,17 @@ class UserInfo extends StatelessWidget {
                           ],
                         ),
                         child: ClipOval(
-                          child: SafeNetworkImage(
-                            url: photoUrl,
-                            fit: BoxFit.cover,
-                            placeholder: Container(
-                              color: const Color(0xFFEEEEEE),
-                              child: const Icon(
-                                Icons.person_rounded,
-                                size: 50,
-                                color: AppTheme.textLight,
+                          child: Obx(
+                            () => SafeNetworkImage(
+                              url: controller.photoUrl,
+                              fit: BoxFit.cover,
+                              placeholder: Container(
+                                color: const Color(0xFFEEEEEE),
+                                child: const Icon(
+                                  Icons.person_rounded,
+                                  size: 50,
+                                  color: AppTheme.textLight,
+                                ),
                               ),
                             ),
                           ),
@@ -103,10 +109,7 @@ class UserInfo extends StatelessWidget {
                         bottom: 2,
                         right: 2,
                         child: GestureDetector(
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            PageRouter.updateProfile,
-                          ),
+                          onTap: () => Get.toNamed(PageRouter.updateProfile),
                           child: Container(
                             width: 28,
                             height: 28,
@@ -126,25 +129,35 @@ class UserInfo extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.textDark,
-                      letterSpacing: -0.3,
+                  Obx(
+                    () => Text(
+                      controller.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.textDark,
+                        letterSpacing: -0.3,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    email,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppTheme.textMedium,
+                  Obx(
+                    () => Text(
+                      controller.email,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.textMedium,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Static stats
+                  // NOTE: ye stats abhi bhi hardcoded/static hain
+                  // (48, 1.2k, 342, "Master", "12 Days"). Ye GetX se
+                  // related issue nahi hai — jab RecipeController /
+                  // UserStatsController banega (real Firestore data
+                  // ke liye) tab inko wire karenge. Abhi ke liye
+                  // as-is chhoड़ diya, sirf navigation/state pattern
+                  // migrate kiya hai.
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -296,12 +309,7 @@ class UserInfo extends StatelessWidget {
                         _SettingsTile(
                           icon: Icons.bookmark_outline_rounded,
                           label: 'Saved Collections',
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              PageRouter.favoritePage,
-                            );
-                          },
+                          onTap: () => Get.toNamed(PageRouter.favoritePage),
                         ),
                         const _TileDivider(),
                         _SettingsTile(
@@ -313,10 +321,7 @@ class UserInfo extends StatelessWidget {
                         _SettingsTile(
                           icon: Icons.settings_outlined,
                           label: 'Account Settings',
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            PageRouter.updateProfile,
-                          ),
+                          onTap: () => Get.toNamed(PageRouter.updateProfile),
                         ),
                         const _TileDivider(),
                         _SettingsTile(
@@ -324,13 +329,8 @@ class UserInfo extends StatelessWidget {
                           label: 'Sign Out',
                           isDestructive: true,
                           onTap: () async {
-                            await FirebaseAuth.instance.signOut();
-                            if (context.mounted) {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                PageRouter.singUp,
-                              );
-                            }
+                            await controller.signOut();
+                            Get.offAllNamed(PageRouter.singUp);
                           },
                         ),
                       ],

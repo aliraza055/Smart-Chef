@@ -1,109 +1,17 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Pages/bottom_navigation.dart';
-import 'package:smart_chef/Services/image_picker.dart';
-import 'package:smart_chef/Services/image_upload.dart';
+import 'package:smart_chef/Controller/update_user_controller.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
-class UpdateUser extends StatefulWidget {
+class UpdateUser extends StatelessWidget {
   const UpdateUser({super.key});
 
   @override
-  State<UpdateUser> createState() => _UpdateUserState();
-}
-
-class _UpdateUserState extends State<UpdateUser> {
-  final User? _user = FirebaseAuth.instance.currentUser;
-  late final TextEditingController _nameController;
-  late final TextEditingController _emailController;
-  File? _image;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: _user?.displayName ?? '');
-    _emailController = TextEditingController(text: _user?.email ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickImage() async {
-    final picked = await ImagePickerService().pickFromGallery();
-    if (picked != null) setState(() => _image = picked);
-  }
-
-  Future<void> _saveChanges() async {
-    if (_user == null) return;
-    setState(() => _isLoading = true);
-
-    try {
-      String? imageUrl;
-
-      // 1. Upload new image if selected
-      if (_image != null) {
-        imageUrl = await ImageUploadService().uploadImage(_image!);
-      }
-
-      // 2. Update Firebase Auth
-      await _user.updateDisplayName(_nameController.text.trim());
-      if (imageUrl != null) await _user.updatePhotoURL(imageUrl);
-
-      // 3. Update Firestore
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(_user.uid)
-          .update({
-            'name': _nameController.text.trim(),
-            'imageUrl': imageUrl ?? _user.photoURL ?? '',
-          });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Profile updated successfully!'),
-            backgroundColor: AppTheme.primary,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const BottomNavigation()),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final UpdateUserController controller = Get.put(UpdateUserController());
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: CustomScrollView(
@@ -116,7 +24,7 @@ class _UpdateUserState extends State<UpdateUser> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => Get.back(),
                     child: Container(
                       width: 40,
                       height: 40,
@@ -156,35 +64,40 @@ class _UpdateUserState extends State<UpdateUser> {
               child: Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppTheme.primary, width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.2),
-                            blurRadius: 19,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: _image != null
-                            ? Image.file(_image!, fit: BoxFit.cover)
-                            : SafeNetworkImage(
-                                url: _user?.photoURL,
-                                fit: BoxFit.cover,
-                                placeholder: Container(
-                                  color: const Color(0xFFEEEEEE),
-                                  child: const Icon(
-                                    Icons.person_rounded,
-                                    size: 54,
-                                    color: AppTheme.textLight,
+                    Obx(
+                      () => Container(
+                        width: 110,
+                        height: 110,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppTheme.primary, width: 3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.2),
+                              blurRadius: 19,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: controller.image.value != null
+                              ? Image.file(
+                                  controller.image.value!,
+                                  fit: BoxFit.cover,
+                                )
+                              : SafeNetworkImage(
+                                  url: controller.currentPhotoUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: Container(
+                                    color: const Color(0xFFEEEEEE),
+                                    child: const Icon(
+                                      Icons.person_rounded,
+                                      size: 54,
+                                      color: AppTheme.textLight,
+                                    ),
                                   ),
                                 ),
-                              ),
+                        ),
                       ),
                     ),
                     // Edit badge
@@ -192,7 +105,7 @@ class _UpdateUserState extends State<UpdateUser> {
                       bottom: 4,
                       right: 4,
                       child: GestureDetector(
-                        onTap: _pickImage,
+                        onTap: controller.pickImage,
                         child: Container(
                           width: 32,
                           height: 32,
@@ -222,24 +135,30 @@ class _UpdateUserState extends State<UpdateUser> {
           ),
 
           // ── Name display below avatar ──────────────
+          // NOTE: pehle ye Text sirf _isLoading/_image jaisi setState
+          // calls ke waqt hi refresh hoti thi (typing pe khud rebuild
+          // nahi hoti thi). ValueListenableBuilder se ab ye live
+          // update hogi jaise-jaise user type karega — ek chhota
+          // bonus fix, GetX se related nahi, seedha Flutter feature.
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 14),
               child: Column(
                 children: [
-                  Text(
-                    _nameController.text.isEmpty
-                        ? 'Your Name'
-                        : _nameController.text,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.textDark,
+                  ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: controller.nameController,
+                    builder: (context, value, _) => Text(
+                      value.text.isEmpty ? 'Your Name' : value.text,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textDark,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _emailController.text,
+                    controller.emailController.text,
                     style: const TextStyle(
                       fontSize: 13,
                       color: AppTheme.textMedium,
@@ -282,7 +201,7 @@ class _UpdateUserState extends State<UpdateUser> {
 
                     // Full Name
                     AuthTextField(
-                      controller: _nameController,
+                      controller: controller.nameController,
                       label: 'Full Name',
                       hint: 'Enter your name',
                       prefixIcon: Icons.person_outline_rounded,
@@ -294,7 +213,7 @@ class _UpdateUserState extends State<UpdateUser> {
 
                     // Email — read only
                     AuthTextField(
-                      controller: _emailController,
+                      controller: controller.emailController,
                       label: 'Email address',
                       hint: 'chef@example.com',
                       prefixIcon: Icons.email_outlined,
@@ -316,41 +235,45 @@ class _UpdateUserState extends State<UpdateUser> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
-              child: GestureDetector(
-                onTap: _isLoading ? null : _saveChanges,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 56,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppTheme.primary,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primary.withOpacity(0.4),
-                        blurRadius: 18,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
+              child: Obx(
+                () => GestureDetector(
+                  onTap: controller.isLoading.value
+                      ? null
+                      : controller.saveChanges,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 56,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primary,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primary.withOpacity(0.4),
+                          blurRadius: 18,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Text(
+                              'Save Changes',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                             ),
-                          )
-                        : const Text(
-                            'Save Changes',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
+                    ),
                   ),
                 ),
               ),
