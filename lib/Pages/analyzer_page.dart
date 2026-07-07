@@ -1,101 +1,22 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/food_analyzer_controller.dart';
 import 'package:smart_chef/Models/food_anlysis_model.dart';
-import 'package:smart_chef/Services/food_analyzer_services.dart';
 import 'package:smart_chef/Widgets/neutrition_card.dart';
 
-class FoodAnalyzerScreen extends StatefulWidget {
+/// GetView<FoodAnalyzerController> ka fayda: `controller` getter is
+/// class ke KISI BHI method mein available hai (sirf build() mein
+/// nahi) — is wajah se helper methods (_buildHeader waghera) purane
+/// jaisa structure rakh sakte hain, bas `controller.xxx` access karo.
+class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
   const FoodAnalyzerScreen({super.key});
 
   @override
-  State<FoodAnalyzerScreen> createState() => _FoodAnalyzerScreenState();
-}
-
-class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
-    with TickerProviderStateMixin {
-  File? _selectedImage;
-  FoodAnalysis? _analysis;
-  bool _isAnalyzing = false;
-  String _loadingMessage = '';
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
-
-  final List<String> _loadingMessages = [
-    'Identifying food item...',
-    'Calculating nutrients...',
-    'Checking allergens...',
-    'Generating health tips...',
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    )..repeat(reverse: true);
-    _pulseAnimation = Tween(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(
-      source: source,
-      imageQuality: 85,
-      maxWidth: 1024,
-    );
-    if (picked != null) {
-      setState(() {
-        _selectedImage = File(picked.path);
-        _analysis = null;
-      });
-    }
-  }
-
-  Future<void> _analyzeImage() async {
-    if (_selectedImage == null) return;
-    setState(() {
-      _isAnalyzing = true;
-      _loadingMessage = _loadingMessages[0];
-    });
-
-    // Cycle through loading messages
-    for (int i = 1; i < _loadingMessages.length; i++) {
-      await Future.delayed(const Duration(milliseconds: 800));
-      if (mounted) setState(() => _loadingMessage = _loadingMessages[i]);
-    }
-
-    try {
-      final result = await AiServiceImage.analyzeFoodImage(_selectedImage!);
-      setState(() {
-        _analysis = result;
-        _isAnalyzing = false;
-      });
-    } catch (e) {
-      setState(() => _isAnalyzing = false);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Analysis failed: ${e.toString()}'),
-            backgroundColor: Colors.red.shade400,
-          ),
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(FoodAnalyzerController());
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: CustomScrollView(
@@ -120,11 +41,26 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
                     ),
                   ),
                   const SizedBox(height: 10),
-                  _buildImageSection(),
+                  _buildImageSection(context),
                   const SizedBox(height: 16),
-                  if (_analysis == null && !_isAnalyzing) _buildAnalyzeButton(),
-                  if (_isAnalyzing) _buildLoadingState(),
-                  if (_analysis != null) _buildResults(),
+
+                  // ── Reactive body: button / loading / results /
+                  // manual-search-fallback — sab yahan ek Obx ke
+                  // andar decide hote hain, kyunki teeno relevant
+                  // reads (analysis, isAnalyzing, geminiFailed)
+                  // synchronously yahin ho rahe hain.
+                  Obx(() {
+                    if (controller.isAnalyzing.value) {
+                      return _buildLoadingState();
+                    }
+                    if (controller.geminiFailed.value) {
+                      return _buildManualSearchFallback();
+                    }
+                    if (controller.analysis.value != null) {
+                      return _buildResults(controller.analysis.value!);
+                    }
+                    return _buildAnalyzeButton();
+                  }),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -145,33 +81,31 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
           end: Alignment.bottomRight,
           colors: [Color(0xFF1B4332), Color(0xFF2D6A4F), Color(0xFF40916C)],
         ),
-        //  color: AppTheme.headerBg,
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Back / Refresh button
-          GestureDetector(
-            onTap: _analysis != null
-                ? () => setState(() {
-                    _selectedImage = null;
-                    _analysis = null;
-                  })
-                : () => Navigator.pop(context),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                _analysis != null
-                    ? Icons.refresh
-                    : Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: Colors.white,
+          Obx(
+            () => GestureDetector(
+              onTap: controller.analysis.value != null
+                  ? controller.reset
+                  : () => Get.back(),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  controller.analysis.value != null
+                      ? Icons.refresh
+                      : Icons.arrow_back_ios_new_rounded,
+                  size: 16,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -222,24 +156,25 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
     );
   }
 
-  Widget _buildImageSection() {
-    return GestureDetector(
-      onTap: _showPickerDialog,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: 220,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppTheme.primary.withOpacity(0.5),
-            width: 1.5,
-            // Dashed effect via custom painter below
+  Widget _buildImageSection(BuildContext context) {
+    return Obx(
+      () => GestureDetector(
+        onTap: () => _showPickerDialog(context),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: 220,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppTheme.primary.withOpacity(0.5),
+              width: 1.5,
+            ),
+            color: const Color(0xFFF2F2F2),
           ),
-          color: const Color(0xFFF2F2F2),
+          child: controller.selectedImage.value != null
+              ? _buildSelectedImage()
+              : _buildEmptyState(),
         ),
-        child: _selectedImage != null
-            ? _buildSelectedImage()
-            : _buildEmptyState(),
       ),
     );
   }
@@ -248,7 +183,6 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Icon circle with subtle border
         Container(
           width: 72,
           height: 72,
@@ -267,7 +201,6 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
           ),
         ),
         const SizedBox(height: 16),
-
         const Text(
           'Tap to capture or upload',
           style: TextStyle(
@@ -277,14 +210,11 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
           ),
         ),
         const SizedBox(height: 6),
-
         const Text(
           'JPG, PNG · Max 10MB',
           style: TextStyle(color: AppTheme.primary, fontSize: 12),
         ),
         const SizedBox(height: 16),
-
-        // Camera / Gallery pills
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -303,8 +233,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.file(_selectedImage!, fit: BoxFit.cover),
-          // Dark gradient at bottom
+          Image.file(controller.selectedImage.value!, fit: BoxFit.cover),
           Positioned(
             bottom: 0,
             left: 0,
@@ -352,7 +281,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
     );
   }
 
-  void _showPickerDialog() {
+  void _showPickerDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1a2f22),
@@ -371,8 +300,8 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
+                Get.back();
+                controller.pickImage(ImageSource.camera);
               },
             ),
             ListTile(
@@ -385,8 +314,8 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
+                Get.back();
+                controller.pickImage(ImageSource.gallery);
               },
             ),
           ],
@@ -396,26 +325,30 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
   }
 
   Widget _buildAnalyzeButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton.icon(
-        onPressed: _selectedImage != null ? _analyzeImage : null,
-        icon: const Icon(Icons.auto_awesome, color: Colors.white),
-        label: const Text(
-          'Analyze with AI',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        height: 52,
+        child: ElevatedButton.icon(
+          onPressed: controller.selectedImage.value != null
+              ? controller.analyzeImage
+              : null,
+          icon: const Icon(Icons.auto_awesome, color: Colors.white),
+          label: const Text(
+            'Analyze with AI',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
           ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF2d6a4f),
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.black38,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2d6a4f),
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.black38,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
           ),
         ),
       ),
@@ -424,7 +357,7 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
 
   Widget _buildLoadingState() {
     return ScaleTransition(
-      scale: _pulseAnimation,
+      scale: controller.pulseAnimation,
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
@@ -438,10 +371,12 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
               strokeWidth: 3,
             ),
             const SizedBox(height: 16),
-            Text(
-              _loadingMessage,
-              style: const TextStyle(color: Color(0xFF7ecba1), fontSize: 14),
-              textAlign: TextAlign.center,
+            Obx(
+              () => Text(
+                controller.loadingMessage.value,
+                style: const TextStyle(color: Color(0xFF7ecba1), fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
@@ -449,11 +384,134 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
     );
   }
 
-  Widget _buildResults() {
-    final a = _analysis!;
+  // ── NAYA: Gemini fail hone par manual search fallback ──────────
+  Widget _buildManualSearchFallback() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1a2f22),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.cloud_off_rounded, color: Color(0xFFF5A623), size: 20),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "AI is busy right now",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Type the food name below and we'll look up approximate "
+            "nutrition data instead (works best for packaged/branded "
+            "items).",
+            style: TextStyle(
+              color: Colors.white54,
+              fontSize: 12.5,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: controller.manualSearchController,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'e.g. Lay\'s Classic Chips',
+              hintStyle: const TextStyle(color: Colors.white38),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.06),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Obx(
+            () => SizedBox(
+              width: double.infinity,
+              height: 46,
+              child: ElevatedButton(
+                onPressed: controller.isSearchingManually.value
+                    ? null
+                    : controller.searchManually,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2d6a4f),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: controller.isSearchingManually.value
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text('Search'),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Center(
+            child: TextButton(
+              onPressed: controller.analyzeImage,
+              child: const Text(
+                'Try AI again',
+                style: TextStyle(color: Color(0xFF7ecba1), fontSize: 13),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResults(FoodAnalysis a) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Estimated-data badge (Open Food Facts se aayi hai to)
+        if (a.isEstimated)
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.orange.withOpacity(0.4)),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.info_outline, size: 13, color: Colors.orange),
+                SizedBox(width: 6),
+                Text(
+                  'Estimated data (Open Food Facts)',
+                  style: TextStyle(color: Colors.orange, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+
         // Food name card
         Container(
           padding: const EdgeInsets.all(16),
@@ -499,7 +557,6 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
         ),
         const SizedBox(height: 12),
 
-        // Macro grid
         GridView.count(
           crossAxisCount: 4,
           shrinkWrap: true,
@@ -532,15 +589,12 @@ class _FoodAnalyzerScreenState extends State<FoodAnalyzerScreen>
         ),
         const SizedBox(height: 12),
 
-        // Detailed nutrients
         _buildDetailedNutrients(a),
         const SizedBox(height: 12),
 
-        // Tags (allergens + diet)
         _buildTags(a),
         const SizedBox(height: 12),
 
-        // Tips
         _buildTips(a),
       ],
     );

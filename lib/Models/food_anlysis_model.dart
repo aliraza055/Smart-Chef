@@ -16,6 +16,11 @@ class FoodAnalysis {
   final List<String> dietTags;
   final List<String> healthTips;
 
+  // NAYA FIELD: true hota hai jab data Open Food Facts (fallback)
+  // se aaya ho, false jab Gemini se aaya ho (detailed/accurate).
+  // UI isko dekh kar "Estimated" badge dikha sakta hai.
+  final bool isEstimated;
+
   const FoodAnalysis({
     required this.foodName,
     required this.cuisineType,
@@ -33,6 +38,7 @@ class FoodAnalysis {
     required this.allergens,
     required this.dietTags,
     required this.healthTips,
+    this.isEstimated = false,
   });
 
   factory FoodAnalysis.fromJson(Map<String, dynamic> j) => FoodAnalysis(
@@ -52,5 +58,28 @@ class FoodAnalysis {
     allergens: List<String>.from(j['allergens'] ?? []),
     dietTags: List<String>.from(j['dietTags'] ?? []),
     healthTips: List<String>.from(j['healthTips'] ?? []),
+    isEstimated: j['isEstimated'] as bool? ?? false,
   );
+
+  // NAYA METHOD: caching ke liye zaroori hai — FoodAnalysis ko wapas
+  // JSON string bana kar SharedPreferences mein store karna hai.
+  Map<String, dynamic> toJson() => {
+    'foodName': foodName,
+    'cuisineType': cuisineType,
+    'servingSize': servingSize,
+    'calories': calories,
+    'protein': protein,
+    'carbs': carbs,
+    'fat': fat,
+    'fiber': fiber,
+    'sugar': sugar,
+    'sodium': sodium,
+    'vitaminC': vitaminC,
+    'iron': iron,
+    'healthScore': healthScore,
+    'allergens': allergens,
+    'dietTags': dietTags,
+    'healthTips': healthTips,
+    'isEstimated': isEstimated,
+  };
 }
