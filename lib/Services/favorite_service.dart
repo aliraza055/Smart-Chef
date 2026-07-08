@@ -13,7 +13,6 @@ class FavoriteService {
     });
   }
 
-  // ✅ Toggle — add/remove from user's favoriteRecipeIds
   Future<void> toggleFavorite(String recipeId) async {
     if (_uid == null) return;
     final userRef = _db.collection('Users').doc(_uid);
@@ -32,7 +31,6 @@ class FavoriteService {
     });
   }
 
-  // ✅ Favorites page ke liye full recipe data stream
   Stream<List<Map<String, dynamic>>> getFavoriteRecipesStream() async* {
     if (_uid == null) {
       yield [];
