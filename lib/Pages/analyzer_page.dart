@@ -44,17 +44,9 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
                   _buildImageSection(context),
                   const SizedBox(height: 16),
 
-                  // ── Reactive body: button / loading / results /
-                  // manual-search-fallback — sab yahan ek Obx ke
-                  // andar decide hote hain, kyunki teeno relevant
-                  // reads (analysis, isAnalyzing, geminiFailed)
-                  // synchronously yahin ho rahe hain.
                   Obx(() {
                     if (controller.isAnalyzing.value) {
                       return _buildLoadingState();
-                    }
-                    if (controller.geminiFailed.value) {
-                      return _buildManualSearchFallback();
                     }
                     if (controller.analysis.value != null) {
                       return _buildResults(controller.analysis.value!);
@@ -384,134 +376,10 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
     );
   }
 
-  // ── NAYA: Gemini fail hone par manual search fallback ──────────
-  Widget _buildManualSearchFallback() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1a2f22),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(Icons.cloud_off_rounded, color: Color(0xFFF5A623), size: 20),
-              SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  "AI is busy right now",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "Type the food name below and we'll look up approximate "
-            "nutrition data instead (works best for packaged/branded "
-            "items).",
-            style: TextStyle(
-              color: Colors.white54,
-              fontSize: 12.5,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: controller.manualSearchController,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: 'e.g. Lay\'s Classic Chips',
-              hintStyle: const TextStyle(color: Colors.white38),
-              filled: true,
-              fillColor: Colors.white.withOpacity(0.06),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 12,
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-          Obx(
-            () => SizedBox(
-              width: double.infinity,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: controller.isSearchingManually.value
-                    ? null
-                    : controller.searchManually,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2d6a4f),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: controller.isSearchingManually.value
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text('Search'),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: TextButton(
-              onPressed: controller.analyzeImage,
-              child: const Text(
-                'Try AI again',
-                style: TextStyle(color: Color(0xFF7ecba1), fontSize: 13),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildResults(FoodAnalysis a) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Estimated-data badge (Open Food Facts se aayi hai to)
-        if (a.isEstimated)
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.orange.withOpacity(0.4)),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.info_outline, size: 13, color: Colors.orange),
-                SizedBox(width: 6),
-                Text(
-                  'Estimated data (Open Food Facts)',
-                  style: TextStyle(color: Colors.orange, fontSize: 11),
-                ),
-              ],
-            ),
-          ),
-
         // Food name card
         Container(
           padding: const EdgeInsets.all(16),

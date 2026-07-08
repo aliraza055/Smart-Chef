@@ -22,7 +22,7 @@ class GeminiUnavailableException implements Exception {
 
 class AiServiceImage {
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-3.5:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
   static const String _cachePrefix = 'food_analysis_cache_';
 
@@ -39,7 +39,11 @@ class AiServiceImage {
     if (cached != null) return cached;
 
     final apiKey = dotenv.env['Food_Analyzer'] ?? '';
-    if (apiKey.isEmpty) throw Exception('Missing API Key');
+    if (apiKey.isEmpty) {
+      throw Exception(
+        'Food analyzer API key is missing. Check your .env file.',
+      );
+    }
 
     final base64Image = base64Encode(bytes);
     final mimeType = _detectMimeType(bytes);

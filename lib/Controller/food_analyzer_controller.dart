@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chef/Models/food_anlysis_model.dart';
 import 'package:smart_chef/Services/food_analyzer_services.dart';
-import 'package:smart_chef/Services/open_food_services.dart';
 
 /// SingleGetTickerProviderMixin controller ko khud "vsync" bana deta
 /// hai — is wajah se pulse animation ke liye ab StatefulWidget +
@@ -17,12 +16,6 @@ class FoodAnalyzerController extends GetxController
   final Rx<FoodAnalysis?> analysis = Rx<FoodAnalysis?>(null);
   final RxBool isAnalyzing = false.obs;
   final RxString loadingMessage = ''.obs;
-
-  // Gemini teen retries ke baad bhi fail ho jaye to ye true ho jata
-  // hai — View tab manual-search box dikhata hai.
-  final RxBool geminiFailed = false.obs;
-  final RxBool isSearchingManually = false.obs;
-  final TextEditingController manualSearchController = TextEditingController();
 
   late final AnimationController pulseController;
   late final Animation<double> pulseAnimation;
@@ -56,22 +49,18 @@ class FoodAnalyzerController extends GetxController
     if (picked != null) {
       selectedImage.value = File(picked.path);
       analysis.value = null;
-      geminiFailed.value = false;
     }
   }
 
   void reset() {
     selectedImage.value = null;
     analysis.value = null;
-    geminiFailed.value = false;
-    manualSearchController.clear();
   }
 
   Future<void> analyzeImage() async {
     if (selectedImage.value == null) return;
 
     isAnalyzing.value = true;
-    geminiFailed.value = false;
     loadingMessage.value = _loadingMessages[0];
 
     for (int i = 1; i < _loadingMessages.length; i++) {
@@ -85,9 +74,14 @@ class FoodAnalyzerController extends GetxController
       );
       analysis.value = result;
     } on GeminiUnavailableException {
-      // Retries khatam ho chuke — user ko manual search ka option
-      // do, taake app "stuck" na lage.
-      geminiFailed.value = true;
+      Get.snackbar(
+        'Analysis unavailable',
+        'Gemini is not available right now. Please try again shortly.',
+        backgroundColor: Colors.orange.shade700,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
     } catch (e) {
       Get.snackbar(
         'Analysis failed',
@@ -102,33 +96,9 @@ class FoodAnalyzerController extends GetxController
     }
   }
 
-  Future<void> searchManually() async {
-    final query = manualSearchController.text.trim();
-    if (query.isEmpty) return;
-
-    isSearchingManually.value = true;
-    try {
-      final result = await OpenFoodFactsService.searchByName(query);
-      analysis.value = result;
-      geminiFailed.value = false;
-    } catch (e) {
-      Get.snackbar(
-        'Search failed',
-        e.toString(),
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-      );
-    } finally {
-      isSearchingManually.value = false;
-    }
-  }
-
   @override
   void onClose() {
     pulseController.dispose();
-    manualSearchController.dispose();
     super.onClose();
   }
 }

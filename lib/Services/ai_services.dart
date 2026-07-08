@@ -4,12 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:smart_chef/Models/ai_receipe_result_model.dart';
 
 class AiService {
-  final _apiKey = dotenv.env['GEMINI_API_KEY'];
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
   Future<AiRecipeResult> generateRecipe(List<String> ingredients) async {
     final ingredientList = ingredients.join(', ');
+    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
+    if (apiKey.isEmpty) {
+      throw Exception('Gemini API key is missing. Check your .env file.');
+    }
 
     final prompt =
         '''You are a professional chef API. 
@@ -21,7 +24,7 @@ Basic pantry (salt, oil, water, spices) are allowed.
 JSON format (exact keys required):
 {"name":"string","description":"string","category":"Breakfast|Lunch|Dinner|Snack","difficulty":"easy|medium|hard","time":30,"ingredients":["item 1","item 2"],"steps":["Step 1","Step 2"]}''';
 
-    final uri = Uri.parse('$_baseUrl?key=$_apiKey');
+    final uri = Uri.parse('$_baseUrl?key=$apiKey');
 
     late http.Response response;
     try {
@@ -39,7 +42,7 @@ JSON format (exact keys required):
               ],
               'generationConfig': {
                 'temperature': 0.7,
-                'maxOutputTokens': 1000,
+                'maxOutputTokens': 2000,
                 'responseMimeType': 'application/json',
               },
             }),
