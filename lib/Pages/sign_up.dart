@@ -1,44 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Models/auth_model.dart';
+import 'package:smart_chef/Controller/sign_up_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/auth_header.dart';
 import 'package:smart_chef/Widgets/auth_social.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class SignUp extends StatelessWidget {
+  SignUp({super.key});
 
-  @override
-  State<SignUp> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUp> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameCont = TextEditingController();
-  final _emailCont = TextEditingController();
-  final _passwordCont = TextEditingController();
-  bool _isLoading = false;
-
-  Future<void> _signUp() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _isLoading = true);
-    await AuthModel().signup(
-      context,
-      _nameCont.text.trim(),
-      _emailCont.text.trim(),
-      _passwordCont.text,
-    );
-    if (mounted) setState(() => _isLoading = false);
-  }
-
-  @override
-  void dispose() {
-    _nameCont.dispose();
-    _emailCont.dispose();
-    _passwordCont.dispose();
-    super.dispose();
-  }
+  final controller = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +46,7 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
                 child: Form(
-                  key: _formKey,
+                  key: controller.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -106,7 +78,7 @@ class _SignUpState extends State<SignUp> {
 
                       // ── Name ────────────────────────
                       AuthTextField(
-                        controller: _nameCont,
+                        controller: controller.nameController,
                         label: 'Full name',
                         hint: 'Gordon Ramsay',
                         prefixIcon: Icons.person_outline_rounded,
@@ -120,7 +92,7 @@ class _SignUpState extends State<SignUp> {
 
                       // ── Email ───────────────────────
                       AuthTextField(
-                        controller: _emailCont,
+                        controller: controller.emailController,
                         label: 'Email address',
                         hint: 'chef@example.com',
                         prefixIcon: Icons.email_outlined,
@@ -136,7 +108,7 @@ class _SignUpState extends State<SignUp> {
 
                       // ── Password ────────────────────
                       AuthTextField(
-                        controller: _passwordCont,
+                        controller: controller.passwordController,
                         label: 'Password',
                         hint: '••••••••',
                         prefixIcon: Icons.lock_outline_rounded,
@@ -152,40 +124,44 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(height: 28),
 
                       // ── Sign Up Button ──────────────
-                      GestureDetector(
-                        onTap: _isLoading ? null : _signUp,
-                        child: Container(
-                          height: 56,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: AppTheme.primary,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withOpacity(0.4),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: _isLoading
-                                ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2.5,
+                      Obx(
+                        () => GestureDetector(
+                          onTap: controller.isLoading.value
+                              ? null
+                              : controller.signUp,
+                          child: Container(
+                            height: 56,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: AppTheme.primary,
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppTheme.primary.withOpacity(0.4),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: controller.isLoading.value
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Create Account',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  )
-                                : const Text(
-                                    'Create Account',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            ),
                           ),
                         ),
                       ),

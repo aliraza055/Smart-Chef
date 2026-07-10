@@ -1,112 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Models/ai_receipe_result_model.dart';
-import 'package:smart_chef/Services/ai_services.dart';
+import 'package:smart_chef/Controller/ai_recipe_generator_controller.dart';
 
-class AiRecipeGeneratorPage extends StatefulWidget {
-  const AiRecipeGeneratorPage({super.key});
+class AiRecipeGeneratorPage extends StatelessWidget {
+  AiRecipeGeneratorPage({super.key});
 
-  @override
-  State<AiRecipeGeneratorPage> createState() => _AiRecipeGeneratorPageState();
-}
-
-class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
-    with TickerProviderStateMixin {
-  final _ingredientController = TextEditingController();
-  final List<String> _ingredients = [];
-  bool _isLoading = false;
-  AiRecipeResult? _result;
-  String? _errorMessage;
-
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
-  late AnimationController _resultController;
-  late Animation<double> _resultAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..repeat(reverse: true);
-    _pulseAnimation = Tween<double>(begin: 0.97, end: 1.03).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
-    _resultController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _resultAnimation = CurvedAnimation(
-      parent: _resultController,
-      curve: Curves.easeOut,
-    );
-  }
-
-  @override
-  void dispose() {
-    _ingredientController.dispose();
-    _pulseController.dispose();
-    _resultController.dispose();
-    super.dispose();
-  }
-
-  void _addIngredient() {
-    final text = _ingredientController.text.trim();
-    if (text.isEmpty) return;
-    if (_ingredients.contains(text)) {
-      _ingredientController.clear();
-      return;
-    }
-    setState(() {
-      _ingredients.add(text);
-      _ingredientController.clear();
-      _result = null;
-      _errorMessage = null;
-    });
-  }
-
-  // ── Remove ingredient chip ────────────────────────────────
-  void _removeIngredient(String item) {
-    setState(() {
-      _ingredients.remove(item);
-      _result = null;
-    });
-  }
-
-  // ── Call AI ───────────────────────────────────────────────
-  Future<void> _generate() async {
-    if (_ingredients.isEmpty) {
-      setState(() => _errorMessage = 'Enter atleaset one gredient!');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-      _result = null;
-    });
-
-    try {
-      final result = await AiService().generateRecipe(_ingredients);
-      setState(() {
-        _result = result;
-        _isLoading = false;
-      });
-      _resultController.forward(from: 0);
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _useThisRecipe() {
-    if (_result == null) return;
-    Navigator.pop(context, _result);
-  }
+  final controller = Get.put(AiRecipeGeneratorController());
 
   @override
   Widget build(BuildContext context) {
@@ -115,20 +15,36 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(child: _buildHeader()),
+          SliverToBoxAdapter(child: _buildHeader(context)),
 
           SliverToBoxAdapter(child: _buildIngredientInput()),
 
-          if (_ingredients.isNotEmpty) SliverToBoxAdapter(child: _buildChips()),
+          Obx(
+            () => controller.ingredients.isNotEmpty
+                ? SliverToBoxAdapter(child: _buildChips())
+                : const SliverToBoxAdapter(child: SizedBox.shrink()),
+          ),
 
           SliverToBoxAdapter(child: _buildGenerateButton()),
 
-          if (_errorMessage != null) SliverToBoxAdapter(child: _buildError()),
+          Obx(() {
+            if (controller.errorMessage.value.isEmpty) {
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+            return SliverToBoxAdapter(child: _buildError());
+          }),
 
-          if (_isLoading) SliverToBoxAdapter(child: _buildLoadingCard()),
+          Obx(
+            () => controller.isLoading.value
+                ? SliverToBoxAdapter(child: _buildLoadingCard())
+                : const SliverToBoxAdapter(child: SizedBox.shrink()),
+          ),
 
-          if (_result != null && !_isLoading)
-            SliverToBoxAdapter(child: _buildResultCard()),
+          Obx(
+            () => controller.result.value != null && !controller.isLoading.value
+                ? SliverToBoxAdapter(child: _buildResultCard())
+                : const SliverToBoxAdapter(child: SizedBox.shrink()),
+          ),
 
           const SliverToBoxAdapter(child: SizedBox(height: 40)),
         ],
@@ -136,7 +52,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 56, 20, 28),
       decoration: const BoxDecoration(
@@ -251,8 +167,8 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                     ],
                   ),
                   child: TextField(
-                    controller: _ingredientController,
-                    onSubmitted: (_) => _addIngredient(),
+                    controller: controller.ingredientController,
+                    onSubmitted: (_) => controller.addIngredient(),
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppTheme.textDark,
@@ -276,7 +192,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
               ),
               const SizedBox(width: 10),
               GestureDetector(
-                onTap: _addIngredient,
+                onTap: controller.addIngredient,
                 child: Container(
                   width: 52,
                   height: 52,
@@ -313,7 +229,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${_ingredients.length} ingredient${_ingredients.length > 1 ? 's' : ''} added',
+            '${controller.ingredients.length} ingredient${controller.ingredients.length > 1 ? 's' : ''} added',
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -321,17 +237,19 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
             ),
           ),
           const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _ingredients
-                .map(
-                  (item) => _IngredientChip(
-                    label: item,
-                    onDelete: () => _removeIngredient(item),
-                  ),
-                )
-                .toList(),
+          Obx(
+            () => Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: controller.ingredients
+                  .map(
+                    (item) => _IngredientChip(
+                      label: item,
+                      onDelete: () => controller.removeIngredient(item),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ],
       ),
@@ -342,16 +260,16 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
       child: ScaleTransition(
-        scale: _ingredients.isEmpty
+        scale: controller.ingredients.isEmpty
             ? const AlwaysStoppedAnimation(1.0)
-            : _pulseAnimation,
+            : const AlwaysStoppedAnimation(1.0),
         child: GestureDetector(
-          onTap: _isLoading ? null : _generate,
+          onTap: controller.isLoading.value ? null : controller.generate,
           child: Container(
             width: double.infinity,
             height: 56,
             decoration: BoxDecoration(
-              gradient: _ingredients.isEmpty
+              gradient: controller.ingredients.isEmpty
                   ? const LinearGradient(
                       colors: [Color(0xFFCCCCCC), Color(0xFFBBBBBB)],
                     )
@@ -361,7 +279,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                       end: Alignment.centerRight,
                     ),
               borderRadius: BorderRadius.circular(30),
-              boxShadow: _ingredients.isEmpty
+              boxShadow: controller.ingredients.isEmpty
                   ? []
                   : [
                       BoxShadow(
@@ -377,7 +295,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
                 const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
                 const SizedBox(width: 10),
                 Text(
-                  _isLoading
+                  controller.isLoading.value
                       ? 'AI Is Creating receipe...'
                       : 'Create Receipe with AI ',
                   style: const TextStyle(
@@ -411,7 +329,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                _errorMessage!,
+                controller.errorMessage.value,
                 style: const TextStyle(fontSize: 13, color: AppTheme.error),
               ),
             ),
@@ -450,7 +368,7 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
             ),
             const SizedBox(height: 6),
             Text(
-              _ingredients.join(' • '),
+              controller.ingredients.join(' • '),
               style: const TextStyle(fontSize: 12, color: AppTheme.textLight),
               textAlign: TextAlign.center,
             ),
@@ -461,194 +379,168 @@ class _AiRecipeGeneratorPageState extends State<AiRecipeGeneratorPage>
   }
 
   Widget _buildResultCard() {
-    final r = _result!;
-    return FadeTransition(
-      opacity: _resultAnimation,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.08),
-          end: Offset.zero,
-        ).animate(_resultAnimation),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppTheme.surface,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppTheme.cardShadow,
-                  blurRadius: 20,
-                  offset: Offset(0, 4),
-                ),
-              ],
+    final r = controller.result.value!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              color: AppTheme.cardShadow,
+              blurRadius: 20,
+              offset: Offset(0, 4),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ── Top banner ──────────────────────────
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.headerBg,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: AppTheme.headerBg,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.auto_awesome,
+                        color: Color(0xFFF5A623),
+                        size: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      const Text(
+                        'AI GENERATED RECIPE',
+                        style: TextStyle(
+                          color: Color(0xFFF5A623),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const Spacer(),
+                      _DifficultyBadge(difficulty: r.difficulty),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    r.name,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: -0.3,
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                  const SizedBox(height: 8),
+                  Text(
+                    r.description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.white60,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Row(
+                children: [
+                  _MetaChip(
+                    icon: Icons.access_time_rounded,
+                    label: '${r.time.toInt()} min',
+                  ),
+                  const SizedBox(width: 10),
+                  _MetaChip(icon: Icons.restaurant_menu, label: r.category),
+                  const SizedBox(width: 10),
+                  _MetaChip(
+                    icon: Icons.kitchen_outlined,
+                    label: '${r.ingredients.length} items',
+                  ),
+                ],
+              ),
+            ),
+            _SectionTitle(title: 'Ingredients', count: r.ingredients.length),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                children: r.ingredients
+                    .asMap()
+                    .entries
+                    .map(
+                      (e) => _ListItem(
+                        index: e.key + 1,
+                        text: e.value,
+                        isStep: false,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            _SectionTitle(title: 'Steps', count: r.steps.length),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                children: r.steps
+                    .asMap()
+                    .entries
+                    .map(
+                      (e) => _ListItem(
+                        index: e.key + 1,
+                        text: e.value,
+                        isStep: true,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: controller.generate,
+                    child: Container(
+                      width: double.infinity,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: AppTheme.primary, width: 1.8),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.auto_awesome,
-                            color: Color(0xFFF5A623),
-                            size: 16,
+                          Icon(
+                            Icons.refresh_rounded,
+                            color: AppTheme.primary,
+                            size: 18,
                           ),
-                          const SizedBox(width: 6),
-                          const Text(
-                            'AI GENERATED RECIPE',
+                          SizedBox(width: 8),
+                          Text(
+                            'Regenrate Receipe',
                             style: TextStyle(
-                              color: Color(0xFFF5A623),
-                              fontSize: 11,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 1.2,
+                              color: AppTheme.primary,
                             ),
                           ),
-                          const Spacer(),
-                          _DifficultyBadge(difficulty: r.difficulty),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        r.name,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        r.description,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white60,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-
-                // ── Meta row ─────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: Row(
-                    children: [
-                      _MetaChip(
-                        icon: Icons.access_time_rounded,
-                        label: '${r.time.toInt()} min',
-                      ),
-                      const SizedBox(width: 10),
-                      _MetaChip(icon: Icons.restaurant_menu, label: r.category),
-                      const SizedBox(width: 10),
-                      _MetaChip(
-                        icon: Icons.kitchen_outlined,
-                        label: '${r.ingredients.length} items',
-                      ),
-                    ],
-                  ),
-                ),
-
-                // ── Ingredients ─────────────────────────
-                _SectionTitle(
-                  title: 'Ingredients',
-                  count: r.ingredients.length,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Column(
-                    children: r.ingredients
-                        .asMap()
-                        .entries
-                        .map(
-                          (e) => _ListItem(
-                            index: e.key + 1,
-                            text: e.value,
-                            isStep: false,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-
-                // ── Steps ────────────────────────────────
-                _SectionTitle(title: 'Steps', count: r.steps.length),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Column(
-                    children: r.steps
-                        .asMap()
-                        .entries
-                        .map(
-                          (e) => _ListItem(
-                            index: e.key + 1,
-                            text: e.value,
-                            isStep: true,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-
-                // ── Action buttons ────────────────────────
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: _generate,
-                        child: Container(
-                          width: double.infinity,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                              color: AppTheme.primary,
-                              width: 1.8,
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.refresh_rounded,
-                                color: AppTheme.primary,
-                                size: 18,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Regenrate Receipe',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppTheme.primary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

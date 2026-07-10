@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/ingredients_checklist_controller.dart';
 
-class IngredientsChecklist extends StatefulWidget {
+class IngredientsChecklist extends StatelessWidget {
   final List<String> ingredients;
+  final String _controllerTag;
 
-  const IngredientsChecklist({super.key, required this.ingredients});
-
-  @override
-  State<IngredientsChecklist> createState() => _IngredientsChecklistState();
-}
-
-class _IngredientsChecklistState extends State<IngredientsChecklist> {
-  late List<bool> _checked;
-
-  @override
-  void initState() {
-    super.initState();
-    _checked = List.filled(widget.ingredients.length, false);
+  IngredientsChecklist({super.key, required this.ingredients})
+    : _controllerTag =
+          'ingredients_${ingredients.length}_${Object.hashAll(ingredients)}' {
+    Get.put(
+      IngredientsChecklistController(ingredients.length),
+      tag: _controllerTag,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<IngredientsChecklistController>(
+      tag: _controllerTag,
+    );
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -59,7 +60,7 @@ class _IngredientsChecklistState extends State<IngredientsChecklist> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '${widget.ingredients.length} ITEMS',
+                  '${ingredients.length} ITEMS',
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -71,51 +72,53 @@ class _IngredientsChecklistState extends State<IngredientsChecklist> {
             ],
           ),
           const SizedBox(height: 14),
-          ...List.generate(widget.ingredients.length, (i) {
-            return GestureDetector(
-              onTap: () => setState(() => _checked[i] = !_checked[i]),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 7),
-                child: Row(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      width: 22,
-                      height: 22,
-                      decoration: BoxDecoration(
-                        color: _checked[i]
-                            ? AppTheme.primary
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: _checked[i]
+          ...List.generate(ingredients.length, (i) {
+            return Obx(
+              () => GestureDetector(
+                onTap: () => controller.toggle(i),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          color: controller.checked[i]
                               ? AppTheme.primary
-                              : const Color(0xFFCCCCCC),
-                          width: 1.5,
+                              : Colors.transparent,
+                          border: Border.all(
+                            color: controller.checked[i]
+                                ? AppTheme.primary
+                                : const Color(0xFFCCCCCC),
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        borderRadius: BorderRadius.circular(6),
+                        child: controller.checked[i]
+                            ? const Icon(
+                                Icons.check_rounded,
+                                color: Colors.white,
+                                size: 14,
+                              )
+                            : null,
                       ),
-                      child: _checked[i]
-                          ? const Icon(
-                              Icons.check_rounded,
-                              color: Colors.white,
-                              size: 14,
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 14),
-                    Text(
-                      widget.ingredients[i],
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: _checked[i]
-                            ? AppTheme.textLight
-                            : AppTheme.textDark,
-                        decoration: _checked[i]
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
+                      const SizedBox(width: 14),
+                      Text(
+                        ingredients[i],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: controller.checked[i]
+                              ? AppTheme.textLight
+                              : AppTheme.textDark,
+                          decoration: controller.checked[i]
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );

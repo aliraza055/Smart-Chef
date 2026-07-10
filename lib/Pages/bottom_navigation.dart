@@ -1,38 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/bottom_navigation_controller.dart';
 import 'package:smart_chef/Pages/add_receipe.dart';
 import 'package:smart_chef/Pages/favorite_item.dart';
 import 'package:smart_chef/Pages/home_page.dart';
 import 'package:smart_chef/Pages/setting.dart';
 import 'package:smart_chef/Pages/user_info.dart';
 
-class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({super.key});
+class BottomNavigation extends StatelessWidget {
+  BottomNavigation({super.key});
 
-  @override
-  State<BottomNavigation> createState() => _BottomNavigationState();
-}
-
-class _BottomNavigationState extends State<BottomNavigation> {
-  int _currentIndex = 0;
-
-  List<Map<String, dynamic>> favoriteRecipes = [];
+  final controller = Get.put(BottomNavigationController());
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       Homepage(),
-
       FavoritePage(),
-
       const SizedBox(),
-
       const UserInfo(),
-      const SettingsPage(),
+      SettingsPage(),
     ];
 
     return Scaffold(
-      body: pages[_currentIndex],
+      body: Obx(() => pages[controller.currentIndex.value]),
 
       // Floating Add Button
       floatingActionButton: FloatingActionButton(
@@ -86,14 +78,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 
   Widget _buildNavItem(IconData icon, int index, String label) {
-    final bool isSelected = _currentIndex == index;
+    final bool isSelected = controller.currentIndex.value == index;
 
     return InkWell(
-      onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
+      onTap: () => controller.changeIndex(index),
 
       child: Column(
         mainAxisSize: MainAxisSize.min,

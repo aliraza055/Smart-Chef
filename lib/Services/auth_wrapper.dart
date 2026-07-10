@@ -18,10 +18,10 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData && snapshot.data != null) {
-          return const BottomNavigation();
+          return BottomNavigation();
         }
 
-        return const SignIn();
+        return SignIn();
       },
     );
   }

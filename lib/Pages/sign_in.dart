@@ -1,36 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
-import 'package:smart_chef/Models/auth_model.dart';
+import 'package:smart_chef/Controller/sign_in_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/auth_header.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class SignIn extends StatelessWidget {
+  SignIn({super.key});
 
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailCont = TextEditingController();
-  final _passwordCont = TextEditingController();
-  bool _isLoading = false;
-
-  Future<void> _signIn() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _isLoading = true);
-    await AuthModel().signIn(context, _emailCont.text, _passwordCont.text);
-    if (mounted) setState(() => _isLoading = false);
-  }
-
-  @override
-  void dispose() {
-    _emailCont.dispose();
-    _passwordCont.dispose();
-    super.dispose();
-  }
+  final controller = Get.put(SignInController());
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +45,7 @@ class _SignInState extends State<SignIn> {
                   ],
                 ),
                 child: Form(
-                  key: _formKey,
+                  key: controller.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -93,7 +72,7 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(height: 20),
 
                       AuthTextField(
-                        controller: _emailCont,
+                        controller: controller.emailController,
                         label: 'Email address',
                         hint: 'chef@example.com',
                         prefixIcon: Icons.email_outlined,
@@ -110,7 +89,7 @@ class _SignInState extends State<SignIn> {
                       // ── Password label with Forgot ──
                       //   const SizedBox(height: 8),
                       AuthTextField(
-                        controller: _passwordCont,
+                        controller: controller.passwordController,
                         label: '',
                         hint: '••••••••',
                         prefixIcon: Icons.lock_outline_rounded,
@@ -151,40 +130,44 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(height: 28),
 
                       // ── Sign In Button ──────────────
-                      GestureDetector(
-                        onTap: _isLoading ? null : _signIn,
-                        child: Container(
-                          height: 56,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: AppTheme.primary,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withOpacity(0.4),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: _isLoading
-                                ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2.5,
+                      Obx(
+                        () => GestureDetector(
+                          onTap: controller.isLoading.value
+                              ? null
+                              : controller.signIn,
+                          child: Container(
+                            height: 56,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: AppTheme.primary,
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppTheme.primary.withOpacity(0.4),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: controller.isLoading.value
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Sign In',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  )
-                                : const Text(
-                                    'Sign In',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            ),
                           ),
                         ),
                       ),

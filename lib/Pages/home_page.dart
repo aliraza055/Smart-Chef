@@ -1,39 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/home_page_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
-import 'package:smart_chef/Services/favorite_service.dart';
 import 'package:smart_chef/Widgets/analyzer_banner.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class Homepage extends StatelessWidget {
+  Homepage({super.key});
 
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
-  String _selectedCategory = 'All';
-
-  final _favService = FavoriteService();
-  final _favoriteIds = ValueNotifier<Set<String>>(<String>{});
-
-  @override
-  void initState() {
-    super.initState();
-    _favService.favoritesStream().listen((ids) {
-      if (mounted) _favoriteIds.value = ids;
-    });
-  }
-
-  Stream<QuerySnapshot> _getRecipesStream() {
-    final col = FirebaseFirestore.instance.collection('Receipes');
-    if (_selectedCategory == 'All') return col.snapshots();
-    return col.where('category', isEqualTo: _selectedCategory).snapshots();
-  }
+  final controller = Get.put(HomePageController());
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +74,10 @@ class _HomepageState extends State<Homepage> {
           ),
 
           SliverPersistentHeader(
-            pinned: true, // ← yahi sticky banata hai
+            pinned: true,
             delegate: _StickyCategories(
-              selectedCategory: _selectedCategory,
-              onCategorySelected: (val) =>
-                  setState(() => _selectedCategory = val),
+              selectedCategory: controller.selectedCategory.value,
+              onCategorySelected: controller.selectCategory,
             ),
           ),
 
@@ -111,7 +89,7 @@ class _HomepageState extends State<Homepage> {
           ),
 
           StreamBuilder<QuerySnapshot>(
-            stream: _getRecipesStream(),
+            stream: controller.getRecipesStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SliverFillRemaining(
@@ -140,32 +118,30 @@ class _HomepageState extends State<Homepage> {
                     final data = recipes[index].data() as Map<String, dynamic>;
                     final docId = recipes[index].id;
 
-                    return ValueListenableBuilder<Set<String>>(
-                      valueListenable: _favoriteIds,
-                      builder: (context, favIds, _) {
-                        return RecipeCard(
-                          image: data['image'] ?? '',
-                          name: data['name'] ?? '',
-                          description: data['description'] ?? '',
-                          time: data['time']?.toString() ?? '',
-                          likes: data['likes']?.toString() ?? '0',
-                          avgRating: (data['avgRating'] ?? 0.0).toStringAsFixed(
-                            1,
-                          ),
-                          totalReviews: data['totalReviews']?.toString() ?? '0',
-                          userName: data['userName'] ?? '',
-                          tag: data['category'] ?? '',
-                          isFavorite: favIds.contains(docId),
-                          onFavoriteToggle: () =>
-                              _favService.toggleFavorite(docId),
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            PageRouter.detailPage,
-                            arguments: {...data, 'docId': docId},
-                          ),
-                        );
-                      },
-                    );
+                    return Obx(() {
+                      final favIds = controller.favoriteIds.toSet();
+                      return RecipeCard(
+                        image: data['image'] ?? '',
+                        name: data['name'] ?? '',
+                        description: data['description'] ?? '',
+                        time: data['time']?.toString() ?? '',
+                        likes: data['likes']?.toString() ?? '0',
+                        avgRating: (data['avgRating'] ?? 0.0).toStringAsFixed(
+                          1,
+                        ),
+                        totalReviews: data['totalReviews']?.toString() ?? '0',
+                        userName: data['userName'] ?? '',
+                        tag: data['category'] ?? '',
+                        isFavorite: favIds.contains(docId),
+                        onFavoriteToggle: () =>
+                            controller.toggleFavorite(docId),
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          PageRouter.detailPage,
+                          arguments: {...data, 'docId': docId},
+                        ),
+                      );
+                    });
                   }, childCount: recipes.length),
                 ),
               );

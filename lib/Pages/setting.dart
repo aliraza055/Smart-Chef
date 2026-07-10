@@ -1,18 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Controller/settings_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class SettingsPage extends StatelessWidget {
+  SettingsPage({super.key});
 
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
+  final controller = Get.put(SettingsController());
 
-class _SettingsPageState extends State<SettingsPage> {
-  bool _darkMode = false;
-  bool _notifications = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,10 +97,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     icon: Icons.notifications_outlined,
                     label: 'Notifications',
                     subtitle: 'Manage notification settings',
-                    trailing: Switch(
-                      value: _notifications,
-                      onChanged: (v) => setState(() => _notifications = v),
-                      activeThumbColor: AppTheme.primary,
+                    trailing: Obx(
+                      () => Switch(
+                        value: controller.notifications.value,
+                        onChanged: controller.toggleNotifications,
+                        activeThumbColor: AppTheme.primary,
+                      ),
                     ),
                   ),
                   const _TileDivider(),
@@ -112,14 +110,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     icon: Icons.dark_mode_outlined,
                     label: 'Dark Mode',
                     subtitle: 'Switch app appearance',
-                    trailing: Switch(
-                      value: _darkMode,
-                      activeThumbColor: AppTheme.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          _darkMode = value;
-                        });
-                      },
+                    trailing: Obx(
+                      () => Switch(
+                        value: controller.darkMode.value,
+                        activeThumbColor: AppTheme.primary,
+                        onChanged: controller.toggleDarkMode,
+                      ),
                     ),
                   ),
                 ],
@@ -158,15 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     icon: Icons.logout_rounded,
                     label: 'Sign Out',
                     isDestructive: true,
-                    onTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      if (context.mounted) {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          PageRouter.singIn,
-                        );
-                      }
-                    },
+                    onTap: controller.signOut,
                   ),
                 ],
               ),
