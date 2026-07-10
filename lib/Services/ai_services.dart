@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_chef/Models/ai_receipe_result_model.dart';
 
 class AiService {
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
   Future<AiRecipeResult> generateRecipe(List<String> ingredients) async {
     final ingredientList = ingredients.join(', ');
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
@@ -41,14 +43,24 @@ JSON format (exact keys required):
               ],
               'generationConfig': {
                 'temperature': 0.7,
-                'maxOutputTokens': 2000,
+                'maxOutputTokens': 1000,
                 'responseMimeType': 'application/json',
               },
             }),
           )
           .timeout(const Duration(seconds: 30));
+    } on TimeoutException {
+      throw Exception(
+        'The request timed out. Please check your internet connection and try again.',
+      );
+    } on SocketException {
+      throw Exception(
+        'Unable to connect to the internet. Please check your connection and try again.',
+      );
     } catch (e) {
-      throw Exception('Internet connection error: $e');
+      throw Exception(
+        'Unable to reach the AI service right now. Please try again.',
+      );
     }
 
     if (response.statusCode != 200) {
@@ -66,14 +78,14 @@ JSON format (exact keys required):
 
     final candidates = data['candidates'] as List?;
     if (candidates == null || candidates.isEmpty) {
-      throw Exception('Koi response nahi mila. Dobara try karo.');
+      throw Exception('The AI did not return a response. Please try again.');
     }
 
     final rawText =
         candidates[0]['content']['parts'][0]['text'] as String? ?? '';
 
     if (rawText.isEmpty) {
-      throw Exception('Response khali hai. Dobara try karo.');
+      throw Exception('The AI returned an empty response. Please try again.');
     }
 
     return _parseRecipeJson(rawText);
@@ -104,9 +116,6 @@ JSON format (exact keys required):
       } catch (_) {}
     }
 
-    throw Exception(
-      'AI ka response parse nahi ho saka. Dobara try karo.\n'
-      'Raw: ${rawText.length > 200 ? rawText.substring(0, 200) : rawText}',
-    );
+    throw Exception('We could not parse the AI response. Please try again.');
   }
 }

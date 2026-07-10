@@ -122,7 +122,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Tell the ingridients of your home,\nAI will create receipe!',
+            'Tell us the ingredients you have,\nand AI will create a recipe for you!',
             style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
           ),
         ],
@@ -214,7 +214,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'After enters ingridients "+" Press Enter',
+            'After entering an ingredient, press + or Enter.',
             style: TextStyle(fontSize: 12, color: AppTheme.textLight),
           ),
         ],
@@ -296,8 +296,8 @@ class AiRecipeGeneratorPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   controller.isLoading.value
-                      ? 'AI Is Creating receipe...'
-                      : 'Create Receipe with AI ',
+                      ? 'AI is creating a recipe...'
+                      : 'Create a recipe with AI',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -359,7 +359,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'AI Chef is making receipe...',
+              'AI chef is creating your recipe...',
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
@@ -526,7 +526,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
                           ),
                           SizedBox(width: 8),
                           Text(
-                            'Regenrate Receipe',
+                            'Regenerate Recipe',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,

@@ -32,7 +32,7 @@ class AiRecipeGeneratorController extends GetxController {
 
   Future<void> generate() async {
     if (ingredients.isEmpty) {
-      errorMessage.value = 'Enter atleaset one gredient!';
+      errorMessage.value = 'Please enter at least one ingredient.';
       return;
     }
 
