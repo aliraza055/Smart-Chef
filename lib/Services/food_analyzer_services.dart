@@ -8,11 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chef/Models/food_anlysis_model.dart';
 
-/// Jab Gemini teeno retries ke baad bhi fail ho jaye (rate limit,
-/// server overload, ya network down), ye specific exception throw
-/// hoti hai. Controller isko catch karke user ko manual-search
-/// (Open Food Facts) option dikhata hai — generic Exception se is
-/// case ko alag rakhna zaroori hai taake UI sahi decide kar sake.
 class GeminiUnavailableException implements Exception {
   final String message;
   GeminiUnavailableException(this.message);
