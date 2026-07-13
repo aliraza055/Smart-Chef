@@ -29,7 +29,7 @@ class AiServiceImage {
   static Future<FoodAnalysis> analyzeFoodImage(File imageFile) async {
     final bytes = await imageFile.readAsBytes();
 
-    // ── STEP 1: Cache check ──────────────────────────────────────
+    //  STEP 1: Cache check
     // Same image dobara scan ho (user galti se ya jaan-boojh kar)
     // to Gemini ko dobara call hi na karo — cached result turant do.
     // Isse quota bachta hai aur "2-3 requests ke baad fail" wala
