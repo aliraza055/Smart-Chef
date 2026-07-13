@@ -22,7 +22,7 @@ class AiRecipeGeneratorController extends GetxController {
     ingredients.add(text);
     ingredientController.clear();
     result.value = null;
-    errorMessage.value = '';
+    errorMessage.value = 'Enter ingredients to generate a recipe.';
   }
 
   void removeIngredient(String item) {
