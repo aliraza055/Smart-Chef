@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/favorite_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -20,7 +21,12 @@ class FavoritePage extends StatelessWidget {
           // ── Header (unchanged) ──────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 56),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -43,8 +49,8 @@ class FavoritePage extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    width: 38,
-                    height: 38,
+                    width: AppResponsive.width(context, 38),
+                    height: AppResponsive.height(context, 38),
                     decoration: BoxDecoration(
                       color: AppTheme.primary.withOpacity(0.1),
                       shape: BoxShape.circle,
@@ -61,9 +67,14 @@ class FavoritePage extends StatelessWidget {
           ),
 
           // ── Title (unchanged) ───────────────────
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 24, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 24),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -108,7 +119,12 @@ class FavoritePage extends StatelessWidget {
             }
 
             return SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 20),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 30),
+              ),
               sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   final data = recipes[index];

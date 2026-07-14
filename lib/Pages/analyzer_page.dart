@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/food_analyzer_controller.dart';
 import 'package:smart_chef/Models/food_anlysis_model.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/neutrition_card.dart';
 
 /// GetView<FoodAnalyzerController> ka fayda: `controller` getter is
@@ -22,10 +23,15 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(child: _buildHeader()),
+          SliverToBoxAdapter(child: _buildHeader(context)),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Column(
                 children: [
                   const Align(
@@ -64,9 +70,14 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
   }
 
   // ── HEADER ─────────────────────────────────────────────────────
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 56, 20, 28),
+      padding: EdgeInsets.fromLTRB(
+        AppResponsive.horizontalPadding(context, size: 20),
+        AppResponsive.height(context, 56),
+        AppResponsive.horizontalPadding(context, size: 20),
+        AppResponsive.height(context, 28),
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -85,8 +96,8 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
                   ? controller.reset
                   : () => Get.back(),
               child: Container(
-                width: 40,
-                height: 40,
+                width: AppResponsive.width(context, 40),
+                height: AppResponsive.height(context, 40),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   shape: BoxShape.circle,
@@ -101,7 +112,7 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppResponsive.height(context, 20)),
 
           // AI badge
           Container(
@@ -129,19 +140,23 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
           ),
           const SizedBox(height: 12),
 
-          const Text(
+          Text(
             'Food Analyzer',
             style: TextStyle(
-              fontSize: 30,
+              fontSize: AppResponsive.text(context, 30),
               fontWeight: FontWeight.w800,
               color: Colors.white,
               letterSpacing: -0.5,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Snap your meal and get full\nnutritional breakdown instantly',
-            style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
+            style: TextStyle(
+              fontSize: AppResponsive.text(context, 14),
+              color: Colors.white60,
+              height: 1.5,
+            ),
           ),
         ],
       ),
@@ -154,7 +169,7 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
         onTap: () => _showPickerDialog(context),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          height: 220,
+          height: AppResponsive.height(context, 220),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -165,19 +180,19 @@ class FoodAnalyzerScreen extends GetView<FoodAnalyzerController> {
           ),
           child: controller.selectedImage.value != null
               ? _buildSelectedImage()
-              : _buildEmptyState(),
+              : _buildEmptyState(context),
         ),
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 72,
-          height: 72,
+          width: AppResponsive.width(context, 72),
+          height: AppResponsive.height(context, 72),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: const Color(0xFF2d6a4f).withOpacity(0.25),

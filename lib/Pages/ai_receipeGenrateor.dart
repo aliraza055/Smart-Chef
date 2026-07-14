@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/ai_recipe_generator_controller.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 
 class AiRecipeGeneratorPage extends StatelessWidget {
   AiRecipeGeneratorPage({super.key});
@@ -54,7 +55,12 @@ class AiRecipeGeneratorPage extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 56, 20, 28),
+      padding: EdgeInsets.fromLTRB(
+        AppResponsive.horizontalPadding(context, size: 20),
+        AppResponsive.height(context, 56),
+        AppResponsive.horizontalPadding(context, size: 20),
+        AppResponsive.height(context, 28),
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -70,8 +76,8 @@ class AiRecipeGeneratorPage extends StatelessWidget {
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 40,
-              height: 40,
+              width: AppResponsive.width(context, 40),
+              height: AppResponsive.height(context, 40),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.1),
                 shape: BoxShape.circle,
@@ -111,19 +117,23 @@ class AiRecipeGeneratorPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          const Text(
+          Text(
             'Recipe Generator',
             style: TextStyle(
-              fontSize: 30,
+              fontSize: AppResponsive.text(context, 30),
               fontWeight: FontWeight.w800,
               color: Colors.white,
               letterSpacing: -0.5,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Tell us the ingredients you have,\nand AI will create a recipe for you!',
-            style: TextStyle(fontSize: 14, color: Colors.white60, height: 1.5),
+            style: TextStyle(
+              fontSize: AppResponsive.text(context, 14),
+              color: Colors.white60,
+              height: 1.5,
+            ),
           ),
         ],
       ),

@@ -6,6 +6,7 @@ import 'package:smart_chef/Widgets/detail_ingridients.dart';
 import 'package:smart_chef/Widgets/detail_steps.dart';
 import 'package:smart_chef/Widgets/nutertion_section.dart';
 import 'package:smart_chef/Widgets/review_list.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/review_sheet.dart';
 import 'package:smart_chef/widgets/detail_header.dart';
 
@@ -71,14 +72,17 @@ class _DetailPageState extends State<DetailPage> {
       bottomNavigationBar: docId != null
           ? SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppResponsive.horizontalPadding(
+                    context,
+                    size: 20,
+                  ),
+                  vertical: AppResponsive.height(context, 12),
                 ),
                 child: GestureDetector(
                   onTap: () => ReviewSheet.show(context, docId, name),
                   child: Container(
-                    height: 54,
+                    height: AppResponsive.height(context, 54),
                     decoration: BoxDecoration(
                       color: AppTheme.primary,
                       borderRadius: BorderRadius.circular(30),
@@ -136,7 +140,12 @@ class _DetailPageState extends State<DetailPage> {
               offset: const Offset(0, -28),
               child: Container(
                 color: AppTheme.background,
-                padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+                padding: EdgeInsets.fromLTRB(
+                  AppResponsive.horizontalPadding(context, size: 20),
+                  AppResponsive.height(context, 40),
+                  AppResponsive.horizontalPadding(context, size: 20),
+                  AppResponsive.height(context, 20),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

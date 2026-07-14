@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/sign_in_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/auth_header.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
@@ -19,20 +20,22 @@ class SignIn extends StatelessWidget {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppResponsive.horizontalPadding(context, size: 24),
+          ),
           child: Column(
             children: [
-              const SizedBox(height: 70),
+              SizedBox(height: AppResponsive.height(context, 70)),
 
               // ── Brand ──────────────────────────────
               const AuthBrandHeader(),
 
-              const SizedBox(height: 36),
+              SizedBox(height: AppResponsive.height(context, 36)),
 
               // ── White Card ─────────────────────────
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(28),
+                padding: EdgeInsets.all(AppResponsive.width(context, 28)),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(28),
@@ -50,16 +53,16 @@ class SignIn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Title
-                      const Text(
+                      Text(
                         'Welcome back',
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: AppResponsive.text(context, 26),
                           fontWeight: FontWeight.w800,
                           color: AppTheme.textDark,
                           letterSpacing: -0.3,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: AppResponsive.height(context, 6)),
                       const Text(
                         'Please enter your details to continue cooking.',
                         style: TextStyle(
@@ -69,7 +72,7 @@ class SignIn extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: AppResponsive.height(context, 20)),
 
                       AuthTextField(
                         controller: controller.emailController,
@@ -101,7 +104,7 @@ class SignIn extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: AppResponsive.height(context, 20)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -127,7 +130,7 @@ class SignIn extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 28),
+                      SizedBox(height: AppResponsive.height(context, 28)),
 
                       // ── Sign In Button ──────────────
                       Obx(
@@ -136,7 +139,7 @@ class SignIn extends StatelessWidget {
                               ? null
                               : controller.signIn,
                           child: Container(
-                            height: 56,
+                            height: AppResponsive.height(context, 56),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: AppTheme.primary,
@@ -172,7 +175,7 @@ class SignIn extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: AppResponsive.height(context, 24)),
 
                       // ── Sign Up link ────────────────
                       Center(
@@ -208,7 +211,7 @@ class SignIn extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: AppResponsive.height(context, 32)),
 
               // ── Footer ─────────────────────────────
               Row(

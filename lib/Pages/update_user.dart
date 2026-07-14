@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/update_user_controller.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 import 'package:smart_chef/Widgets/textfield_widget.dart';
 
@@ -20,14 +21,19 @@ class UpdateUser extends StatelessWidget {
           // ── Header ────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 56),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () => Get.back(),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: AppResponsive.width(context, 40),
+                      height: AppResponsive.height(context, 40),
                       decoration: BoxDecoration(
                         color: AppTheme.surface,
                         shape: BoxShape.circle,
@@ -42,7 +48,7 @@ class UpdateUser extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  SizedBox(width: AppResponsive.width(context, 14)),
                   const Text(
                     'Edit Profile',
                     style: TextStyle(
@@ -60,14 +66,19 @@ class UpdateUser extends StatelessWidget {
           // ── Avatar ────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 36, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 36),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Center(
                 child: Stack(
                   children: [
                     Obx(
                       () => Container(
-                        width: 110,
-                        height: 110,
+                        width: AppResponsive.width(context, 110),
+                        height: AppResponsive.height(context, 110),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(color: AppTheme.primary, width: 3),
@@ -172,7 +183,12 @@ class UpdateUser extends StatelessWidget {
           // ── Form Card ─────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 32),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -234,7 +250,12 @@ class UpdateUser extends StatelessWidget {
           // ── Save Button ───────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 40),
+              ),
               child: Obx(
                 () => GestureDetector(
                   onTap: controller.isLoading.value

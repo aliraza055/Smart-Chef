@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/auth_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 
 class UserInfo extends StatelessWidget {
@@ -22,7 +23,12 @@ class UserInfo extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 56),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -45,8 +51,8 @@ class UserInfo extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: AppResponsive.width(context, 42),
+                    height: AppResponsive.height(context, 42),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: AppTheme.primary, width: 2),
@@ -69,14 +75,19 @@ class UserInfo extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Column(
                 children: [
                   Stack(
                     children: [
                       Container(
-                        width: 100,
-                        height: 100,
+                        width: AppResponsive.width(context, 100),
+                        height: AppResponsive.height(context, 100),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(color: AppTheme.primary, width: 3),
@@ -111,8 +122,8 @@ class UserInfo extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () => Get.toNamed(PageRouter.updateProfile),
                           child: Container(
-                            width: 28,
-                            height: 28,
+                            width: AppResponsive.width(context, 28),
+                            height: AppResponsive.height(context, 28),
                             decoration: BoxDecoration(
                               color: AppTheme.primary,
                               shape: BoxShape.circle,
@@ -174,7 +185,12 @@ class UserInfo extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 24),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -279,7 +295,12 @@ class UserInfo extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 40),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

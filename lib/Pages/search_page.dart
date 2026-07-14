@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/search_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/favorite_card.dart';
 
 class SearchPage extends StatelessWidget {
@@ -20,18 +21,20 @@ class SearchPage extends StatelessWidget {
           Container(
             color: AppTheme.surface,
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 12,
-              left: 20,
-              right: 20,
-              bottom: 16,
+              top:
+                  MediaQuery.of(context).padding.top +
+                  AppResponsive.height(context, 12),
+              left: AppResponsive.horizontalPadding(context, size: 20),
+              right: AppResponsive.horizontalPadding(context, size: 20),
+              bottom: AppResponsive.height(context, 16),
             ),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () => Get.back(),
                   child: Container(
-                    width: 40,
-                    height: 40,
+                    width: AppResponsive.width(context, 40),
+                    height: AppResponsive.height(context, 40),
                     decoration: const BoxDecoration(
                       color: AppTheme.background,
                       shape: BoxShape.circle,
@@ -49,7 +52,7 @@ class SearchPage extends StatelessWidget {
                 // ke andar rehta hai (dispose bhi wahin hota hai)
                 Expanded(
                   child: Container(
-                    height: 48,
+                    height: AppResponsive.height(context, 48),
                     decoration: BoxDecoration(
                       color: AppTheme.background,
                       borderRadius: BorderRadius.circular(14),
@@ -86,8 +89,8 @@ class SearchPage extends StatelessWidget {
                           child: GestureDetector(
                             onTap: controller.clearQuery,
                             child: Container(
-                              width: 36,
-                              height: 36,
+                              width: AppResponsive.width(context, 36),
+                              height: AppResponsive.height(context, 36),
                               decoration: const BoxDecoration(
                                 color: AppTheme.background,
                                 shape: BoxShape.circle,
@@ -133,7 +136,9 @@ class SearchPage extends StatelessWidget {
               }
 
               return GridView.builder(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(
+                  AppResponsive.horizontalPadding(context, size: 20),
+                ),
                 physics: const BouncingScrollPhysics(),
                 itemCount: filtered.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

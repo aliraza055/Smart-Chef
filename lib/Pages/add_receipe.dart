@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Controller/add_receipe_controller.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/image_container.dart';
 import 'package:smart_chef/Widgets/ingridients_container.dart';
 import 'package:smart_chef/Widgets/steps_contanier.dart';
@@ -22,14 +23,19 @@ class AddReceipe extends StatelessWidget {
           // ── App Bar
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 56, 20, 0),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 56),
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+              ),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () => Get.back(),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: AppResponsive.width(context, 40),
+                      height: AppResponsive.height(context, 40),
                       decoration: BoxDecoration(
                         color: AppTheme.surface,
                         shape: BoxShape.circle,
@@ -44,11 +50,11 @@ class AddReceipe extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 14),
-                  const Text(
+                  SizedBox(width: AppResponsive.width(context, 14)),
+                  Text(
                     'Smart Chef',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: AppResponsive.text(context, 20),
                       fontWeight: FontWeight.w800,
                       color: AppTheme.primary,
                     ),
@@ -59,13 +65,18 @@ class AddReceipe extends StatelessWidget {
           ),
 
           // ── Title
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 28, 20, 4),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 4),
+              ),
               child: Text(
                 'Create Recipe',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: AppResponsive.text(context, 28),
                   fontWeight: FontWeight.w800,
                   color: AppTheme.textDark,
                 ),
@@ -172,7 +183,12 @@ class AddReceipe extends StatelessWidget {
           // ── Buttons
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 32, 20, 40),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 32),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 40),
+              ),
               child: Row(
                 children: [
                   Expanded(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chef/Constants/app_colors.dart';
 import 'package:smart_chef/Routers/page_router.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 
 class SmartChefSplashScreen extends StatefulWidget {
   const SmartChefSplashScreen({super.key});
@@ -21,14 +22,19 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
               Expanded(
                 flex: 52,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppResponsive.horizontalPadding(
+                      context,
+                      size: 32,
+                    ),
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 60),
+                      SizedBox(height: AppResponsive.height(context, 60)),
                       Container(
-                        width: 110,
-                        height: 110,
+                        width: AppResponsive.width(context, 110),
+                        height: AppResponsive.height(context, 110),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(28),
@@ -48,33 +54,33 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 36),
+                      SizedBox(height: AppResponsive.height(context, 36)),
 
                       // Title
-                      const Text(
+                      Text(
                         'Smart Chef',
                         style: TextStyle(
-                          fontSize: 38,
+                          fontSize: AppResponsive.text(context, 38),
                           fontWeight: FontWeight.w800,
                           color: AppTheme.primary,
                           letterSpacing: -0.5,
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: AppResponsive.height(context, 12)),
 
                       // Subtitle
                       Text(
                         'Your culinary journey starts here.',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppResponsive.text(context, 16),
                           color: Colors.grey[500],
                           fontWeight: FontWeight.w400,
                           letterSpacing: 0.1,
                         ),
                       ),
 
-                      const SizedBox(height: 40),
+                      SizedBox(height: AppResponsive.height(context, 40)),
                     ],
                   ),
                 ),
@@ -87,16 +93,16 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
 
           // Floating bottom action bar
           Positioned(
-            bottom: 40,
-            left: 20,
-            right: 20,
+            bottom: AppResponsive.height(context, 40),
+            left: AppResponsive.horizontalPadding(context, size: 20),
+            right: AppResponsive.horizontalPadding(context, size: 20),
             child: GestureDetector(
               onTap: () =>
                   Navigator.pushReplacementNamed(context, PageRouter.singIn),
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 28,
-                  vertical: 18,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppResponsive.width(context, 28),
+                  vertical: AppResponsive.height(context, 18),
                 ),
                 decoration: BoxDecoration(
                   color: AppTheme.primary,

@@ -6,6 +6,7 @@ import 'package:smart_chef/Controller/home_page_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/analyzer_banner.dart';
 import 'package:smart_chef/Widgets/category_tile.dart';
+import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/receipe_container.dart';
 import 'package:smart_chef/Widgets/upper_contanier.dart';
 
@@ -35,7 +36,6 @@ class Homepage extends StatelessWidget {
           Navigator.pushNamed(context, PageRouter.receipeAi);
         },
       ),
-
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -51,7 +51,12 @@ class Homepage extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                0,
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 12),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -81,9 +86,14 @@ class Homepage extends StatelessWidget {
             ),
           ),
 
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 28, 20, 16),
+              padding: EdgeInsets.fromLTRB(
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 28),
+                AppResponsive.horizontalPadding(context, size: 20),
+                AppResponsive.height(context, 16),
+              ),
               child: Text('Popular Today', style: AppTheme.headingMedium),
             ),
           ),
@@ -112,7 +122,12 @@ class Homepage extends StatelessWidget {
               final recipes = snapshot.data!.docs;
 
               return SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                padding: EdgeInsets.fromLTRB(
+                  AppResponsive.horizontalPadding(context, size: 20),
+                  0,
+                  AppResponsive.horizontalPadding(context, size: 20),
+                  AppResponsive.height(context, 30),
+                ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final data = recipes[index].data() as Map<String, dynamic>;
