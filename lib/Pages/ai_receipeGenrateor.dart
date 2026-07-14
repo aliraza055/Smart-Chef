@@ -90,7 +90,6 @@ class AiRecipeGeneratorPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-
           // AI sparkle badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

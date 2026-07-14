@@ -98,69 +98,72 @@ class Homepage extends StatelessWidget {
             ),
           ),
 
-          StreamBuilder<QuerySnapshot>(
-            stream: controller.getRecipesStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(color: AppTheme.primary),
-                  ),
-                );
-              }
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: Text(
-                      'No recipes found!',
-                      style: AppTheme.bodyMedium,
+          Obx(
+            () => StreamBuilder<QuerySnapshot>(
+              stream: controller.getRecipesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator(color: AppTheme.primary),
                     ),
+                  );
+                }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'No recipes found!',
+                        style: AppTheme.bodyMedium,
+                      ),
+                    ),
+                  );
+                }
+
+                final recipes = snapshot.data!.docs;
+
+                return SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    AppResponsive.horizontalPadding(context, size: 20),
+                    0,
+                    AppResponsive.horizontalPadding(context, size: 20),
+                    AppResponsive.height(context, 30),
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final data =
+                          recipes[index].data() as Map<String, dynamic>;
+                      final docId = recipes[index].id;
+
+                      return Obx(() {
+                        final favIds = controller.favoriteIds.toSet();
+                        return RecipeCard(
+                          image: data['image'] ?? '',
+                          name: data['name'] ?? '',
+                          description: data['description'] ?? '',
+                          time: data['time']?.toString() ?? '',
+                          likes: data['likes']?.toString() ?? '0',
+                          avgRating: (data['avgRating'] ?? 0.0).toStringAsFixed(
+                            1,
+                          ),
+                          totalReviews: data['totalReviews']?.toString() ?? '0',
+                          userName: data['userName'] ?? '',
+                          tag: data['category'] ?? '',
+                          isFavorite: favIds.contains(docId),
+                          onFavoriteToggle: () =>
+                              controller.toggleFavorite(docId),
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            PageRouter.detailPage,
+                            arguments: {...data, 'docId': docId},
+                          ),
+                        );
+                      });
+                    }, childCount: recipes.length),
                   ),
                 );
-              }
-
-              final recipes = snapshot.data!.docs;
-
-              return SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  AppResponsive.horizontalPadding(context, size: 20),
-                  0,
-                  AppResponsive.horizontalPadding(context, size: 20),
-                  AppResponsive.height(context, 30),
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final data = recipes[index].data() as Map<String, dynamic>;
-                    final docId = recipes[index].id;
-
-                    return Obx(() {
-                      final favIds = controller.favoriteIds.toSet();
-                      return RecipeCard(
-                        image: data['image'] ?? '',
-                        name: data['name'] ?? '',
-                        description: data['description'] ?? '',
-                        time: data['time']?.toString() ?? '',
-                        likes: data['likes']?.toString() ?? '0',
-                        avgRating: (data['avgRating'] ?? 0.0).toStringAsFixed(
-                          1,
-                        ),
-                        totalReviews: data['totalReviews']?.toString() ?? '0',
-                        userName: data['userName'] ?? '',
-                        tag: data['category'] ?? '',
-                        isFavorite: favIds.contains(docId),
-                        onFavoriteToggle: () =>
-                            controller.toggleFavorite(docId),
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          PageRouter.detailPage,
-                          arguments: {...data, 'docId': docId},
-                        ),
-                      );
-                    });
-                  }, childCount: recipes.length),
-                ),
-              );
-            },
+              },
+            ),
           ),
         ],
       ),

@@ -65,7 +65,6 @@ class FavoritePage extends StatelessWidget {
               ),
             ),
           ),
-
           // ── Title (unchanged) ───────────────────
           SliverToBoxAdapter(
             child: Padding(

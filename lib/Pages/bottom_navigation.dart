@@ -24,6 +24,7 @@ class BottomNavigation extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: AppTheme.surface,
       body: Obx(() => pages[controller.currentIndex.value]),
 
       // Floating Add Button
@@ -78,29 +79,29 @@ class BottomNavigation extends StatelessWidget {
   }
 
   Widget _buildNavItem(IconData icon, int index, String label) {
-    final bool isSelected = controller.currentIndex.value == index;
+    return Obx(() {
+      final bool isSelected = controller.currentIndex.value == index;
 
-    return InkWell(
-      onTap: () => controller.changeIndex(index),
-
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? AppTheme.primary : Colors.grey,
-            size: isSelected ? 28 : 24,
-          ),
-
-          Text(
-            label,
-            style: TextStyle(
+      return InkWell(
+        onTap: () => controller.changeIndex(index),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
               color: isSelected ? AppTheme.primary : Colors.grey,
-              fontSize: 12,
+              size: isSelected ? 28 : 24,
             ),
-          ),
-        ],
-      ),
-    );
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppTheme.primary : Colors.grey,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
