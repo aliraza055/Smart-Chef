@@ -17,7 +17,7 @@ class GeminiUnavailableException implements Exception {
 
 class AiServiceImage {
   static const String _baseUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 
   static const String _cachePrefix = 'food_analysis_cache_';
 

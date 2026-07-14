@@ -29,9 +29,12 @@ class HomePageController extends GetxController {
   Stream<QuerySnapshot> getRecipesStream() {
     final col = FirebaseFirestore.instance.collection('Receipes');
     if (selectedCategory.value == 'All') {
-      return col.snapshots();
+      return col.orderBy('createdAt', descending: true).snapshots();
     }
-    return col.where('category', isEqualTo: selectedCategory.value).snapshots();
+    return col
+        .where('category', isEqualTo: selectedCategory.value)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   @override
