@@ -43,7 +43,7 @@ JSON format (exact keys required):
               ],
               'generationConfig': {
                 'temperature': 0.7,
-                'maxOutputTokens': 1000,
+                'maxOutputTokens': 2000,
                 'responseMimeType': 'application/json',
               },
             }),

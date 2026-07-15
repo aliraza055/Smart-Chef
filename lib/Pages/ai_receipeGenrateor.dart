@@ -266,55 +266,57 @@ class AiRecipeGeneratorPage extends StatelessWidget {
   }
 
   Widget _buildGenerateButton() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-      child: ScaleTransition(
-        scale: controller.ingredients.isEmpty
-            ? const AlwaysStoppedAnimation(1.0)
-            : const AlwaysStoppedAnimation(1.0),
-        child: GestureDetector(
-          onTap: controller.isLoading.value ? null : controller.generate,
-          child: Container(
-            width: double.infinity,
-            height: 56,
-            decoration: BoxDecoration(
-              gradient: controller.ingredients.isEmpty
-                  ? const LinearGradient(
-                      colors: [Color(0xFFCCCCCC), Color(0xFFBBBBBB)],
-                    )
-                  : const LinearGradient(
-                      colors: [Color(0xFF2D6A4F), Color(0xFF40916C)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: controller.ingredients.isEmpty
-                  ? []
-                  : [
-                      BoxShadow(
-                        color: AppTheme.primary.withOpacity(0.45),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+        child: ScaleTransition(
+          scale: const AlwaysStoppedAnimation(1.0),
+          child: GestureDetector(
+            onTap: controller.isLoading.value || controller.ingredients.isEmpty
+                ? null
+                : controller.generate,
+            child: Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                gradient: controller.ingredients.isEmpty
+                    ? const LinearGradient(
+                        colors: [Color(0xFFCCCCCC), Color(0xFFBBBBBB)],
+                      )
+                    : const LinearGradient(
+                        colors: [Color(0xFF2D6A4F), Color(0xFF40916C)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                       ),
-                    ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
-                const SizedBox(width: 10),
-                Text(
-                  controller.isLoading.value
-                      ? 'AI is creating a recipe...'
-                      : 'Create a recipe with AI',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    letterSpacing: 0.4,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: controller.ingredients.isEmpty
+                    ? []
+                    : [
+                        BoxShadow(
+                          color: AppTheme.primary.withOpacity(0.45),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+                  const SizedBox(width: 10),
+                  Text(
+                    controller.isLoading.value
+                        ? 'AI is creating a recipe...'
+                        : 'Create a recipe with AI',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 0.4,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
