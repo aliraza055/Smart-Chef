@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/route_manager.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Services/auth_wrapper.dart';
 
@@ -19,10 +20,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Smart Chef',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
       home: const AuthWrapper(),
       onGenerateRoute: PageRouter.generateRoute,
     );
   }
 }
+

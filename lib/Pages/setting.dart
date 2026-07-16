@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/settings_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Utils/app_responsive.dart';
@@ -13,7 +13,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -34,10 +34,13 @@ class SettingsPage extends StatelessWidget {
                       width: AppResponsive.width(context, 40),
                       height: AppResponsive.height(context, 40),
                       decoration: BoxDecoration(
-                        color: AppTheme.surface,
+                        color: AppTheme.getSurface(context),
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(color: AppTheme.cardShadow, blurRadius: 8),
+                          BoxShadow(
+                            color: AppTheme.getCardShadow(context),
+                            blurRadius: 8,
+                          ),
                         ],
                       ),
                       child: const Icon(
@@ -48,12 +51,12 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: AppResponsive.width(context, 14)),
-                  const Text(
+                  Text(
                     'Settings',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.textDark,
+                      color: AppTheme.getTextDark(context),
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -165,7 +168,10 @@ class SettingsPage extends StatelessWidget {
                     icon: Icons.logout_rounded,
                     label: 'Sign Out',
                     isDestructive: true,
-                    onTap: controller.signOut,
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      PageRouter.singIn,
+                    ),
                   ),
                 ],
               ),
@@ -191,10 +197,10 @@ class _Section extends StatelessWidget {
         if (title != null) ...[
           Text(
             title!.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppTheme.textMedium,
+              color: AppTheme.getTextMedium(context),
               letterSpacing: 1.2,
             ),
           ),
@@ -202,11 +208,11 @@ class _Section extends StatelessWidget {
         ],
         Container(
           decoration: BoxDecoration(
-            color: AppTheme.surface,
+            color: AppTheme.getSurface(context),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.cardShadow,
+                color: AppTheme.getCardShadow(context),
                 blurRadius: 14,
                 offset: const Offset(0, 4),
               ),
@@ -238,7 +244,7 @@ class _Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? AppTheme.primary : AppTheme.textDark;
+    final color = isDestructive ? AppTheme.primary : AppTheme.getTextDark(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -252,7 +258,9 @@ class _Tile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isDestructive
                     ? AppTheme.primary.withOpacity(0.08)
-                    : const Color(0xFFF2F2F2),
+                    : (Theme.of(context).brightness == Brightness.dark
+                          ? const Color(0xFF2A2A2A)
+                          : const Color(0xFFF2F2F2)),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 19, color: color),
@@ -275,9 +283,9 @@ class _Tile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       subtitle!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textMedium,
+                        color: AppTheme.getTextMedium(context),
                       ),
                     ),
                   ],
@@ -287,7 +295,9 @@ class _Tile extends StatelessWidget {
             trailing ??
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: isDestructive ? AppTheme.primary : AppTheme.textLight,
+                  color: isDestructive
+                      ? AppTheme.primary
+                      : AppTheme.getTextLight(context),
                   size: 20,
                 ),
           ],
@@ -301,10 +311,13 @@ class _TileDivider extends StatelessWidget {
   const _TileDivider();
 
   @override
-  Widget build(BuildContext context) => const Divider(
+  Widget build(BuildContext context) => Divider(
     height: 1,
     indent: 72,
     endIndent: 18,
-    color: Color(0xFFF0F0F0),
+    color: Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF2A2A2A)
+        : const Color(0xFFF0F0F0),
   );
 }
+

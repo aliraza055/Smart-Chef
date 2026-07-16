@@ -266,3 +266,4 @@ Analyze the food image and return exactly this format:
     );
   }
 }
+

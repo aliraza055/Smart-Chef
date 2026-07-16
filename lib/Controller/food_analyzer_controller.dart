@@ -102,3 +102,4 @@ class FoodAnalyzerController extends GetxController
     super.onClose();
   }
 }
+

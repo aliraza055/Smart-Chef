@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 
 class ChefCard extends StatelessWidget {
@@ -19,11 +19,11 @@ class ChefCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.cardShadow,
+            color: AppTheme.getCardShadow(context),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -58,7 +58,7 @@ class ChefCard extends StatelessWidget {
                       color: const Color(0xFFEEEEEE),
                       child: const Icon(
                         Icons.person_rounded,
-                        color: AppTheme.textLight,
+                        color: AppTheme.darkBackground,
                         size: 28,
                       ),
                     ),
@@ -75,7 +75,7 @@ class ChefCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.textDark,
+                        color: AppTheme.lightTextDark,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -97,3 +97,4 @@ class ChefCard extends StatelessWidget {
     );
   }
 }
+

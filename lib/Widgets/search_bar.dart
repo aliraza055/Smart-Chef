@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class SmartSearchBar extends StatelessWidget {
   final String hint;
@@ -53,3 +53,4 @@ class SmartSearchBar extends StatelessWidget {
     );
   }
 }
+

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class CategorySelector extends StatefulWidget {
   final List<String> categories;
@@ -72,7 +72,9 @@ class _CategorySelectorState extends State<CategorySelector> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.white : AppTheme.textMedium,
+                    color: isSelected
+                        ? Colors.white
+                        : AppTheme.getTextMedium(context),
                   ),
                 ),
               ),
@@ -83,3 +85,4 @@ class _CategorySelectorState extends State<CategorySelector> {
     );
   }
 }
+

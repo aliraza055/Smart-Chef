@@ -31,3 +31,4 @@ class AppResponsive {
     return height(context, size);
   }
 }
+

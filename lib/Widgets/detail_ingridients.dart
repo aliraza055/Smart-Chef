@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/ingredients_checklist_controller.dart';
 
 class IngredientsChecklist extends StatelessWidget {
@@ -128,3 +128,4 @@ class IngredientsChecklist extends StatelessWidget {
     );
   }
 }
+

@@ -83,3 +83,4 @@ class FoodAnalysis {
     'isEstimated': isEstimated,
   };
 }
+

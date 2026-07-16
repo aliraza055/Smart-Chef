@@ -183,3 +183,4 @@ Basic pantry (salt, oil, water, spices) are allowed.
     throw Exception('We could not parse the AI response. Please try again.');
   }
 }
+

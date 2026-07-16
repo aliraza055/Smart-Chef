@@ -61,3 +61,4 @@ class AiRecipeGeneratorController extends GetxController {
     super.onClose();
   }
 }
+

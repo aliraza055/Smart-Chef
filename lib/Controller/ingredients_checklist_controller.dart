@@ -12,3 +12,4 @@ class IngredientsChecklistController extends GetxController {
     checked[index] = !checked[index];
   }
 }
+

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/update_user_controller.dart';
 import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
@@ -305,3 +305,4 @@ class UpdateUser extends StatelessWidget {
     );
   }
 }
+

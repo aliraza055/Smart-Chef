@@ -1,6 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
-// import 'package:smart_chef/Constants/app_colors.dart';
+// import 'package:smart_chef/Constants/app_theme.dart';
 
 // class HomeHeader extends StatelessWidget {
 //   const HomeHeader({super.key});
@@ -68,3 +68,4 @@
 //     );
 //   }
 // }
+

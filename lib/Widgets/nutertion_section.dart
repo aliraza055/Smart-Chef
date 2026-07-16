@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Services/nutertion_services.dart';
 
 // ─────────────────────────────────────────────────────────────
@@ -739,3 +739,4 @@ class _IngredientRow extends StatelessWidget {
     );
   }
 }
+

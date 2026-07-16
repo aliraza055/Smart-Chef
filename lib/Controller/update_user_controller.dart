@@ -96,3 +96,4 @@ class UpdateUserController extends GetxController {
     super.onClose();
   }
 }
+

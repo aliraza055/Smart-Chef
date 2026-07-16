@@ -43,3 +43,4 @@ class FavoriteController extends GetxController {
     super.onClose();
   }
 }
+

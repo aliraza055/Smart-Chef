@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Widgets/detail_chef.dart';
 import 'package:smart_chef/Widgets/detail_ingridients.dart';
 import 'package:smart_chef/Widgets/detail_steps.dart';
@@ -198,3 +198,4 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 }
+

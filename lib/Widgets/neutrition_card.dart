@@ -89,3 +89,4 @@ class HealthScoreRing extends StatelessWidget {
     ),
   );
 }
+

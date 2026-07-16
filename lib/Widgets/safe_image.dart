@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class SafeNetworkImage extends StatelessWidget {
   final String? url;
@@ -77,3 +77,4 @@ class _DefaultPlaceholder extends StatelessWidget {
     );
   }
 }
+

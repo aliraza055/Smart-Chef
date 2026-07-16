@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class RecipeImagePicker extends StatelessWidget {
   final File? image;
@@ -74,3 +74,4 @@ class RecipeImagePicker extends StatelessWidget {
     );
   }
 }
+

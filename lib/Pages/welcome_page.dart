@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Utils/app_responsive.dart';
 
@@ -115,19 +115,19 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                     ),
                   ],
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Started',
                       style: TextStyle(
-                        color: AppTheme.surface,
+                        color: AppTheme.getSurface(context),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.8,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Icon(
                       Icons.storefront_rounded,
                       color: AppTheme.surface,

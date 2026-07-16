@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class CookingSteps extends StatelessWidget {
   final List<String> steps;
@@ -119,3 +119,4 @@ class CookingSteps extends StatelessWidget {
     );
   }
 }
+

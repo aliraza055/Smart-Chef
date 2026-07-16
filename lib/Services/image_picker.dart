@@ -10,3 +10,4 @@ class ImagePickerService {
     return File(picked.path);
   }
 }
+

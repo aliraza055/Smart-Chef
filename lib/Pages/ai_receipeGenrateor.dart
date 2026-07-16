@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/ai_recipe_generator_controller.dart';
 import 'package:smart_chef/Utils/app_responsive.dart';
 
@@ -18,7 +18,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(child: _buildHeader(context)),
 
-          SliverToBoxAdapter(child: _buildIngredientInput()),
+          SliverToBoxAdapter(child: _buildIngredientInput(context)),
 
           Obx(
             () => controller.ingredients.isNotEmpty
@@ -37,13 +37,13 @@ class AiRecipeGeneratorPage extends StatelessWidget {
 
           Obx(
             () => controller.isLoading.value
-                ? SliverToBoxAdapter(child: _buildLoadingCard())
+                ? SliverToBoxAdapter(child: _buildLoadingCard(context))
                 : const SliverToBoxAdapter(child: SizedBox.shrink()),
           ),
 
           Obx(
             () => controller.result.value != null && !controller.isLoading.value
-                ? SliverToBoxAdapter(child: _buildResultCard())
+                ? SliverToBoxAdapter(child: _buildResultCard(context))
                 : const SliverToBoxAdapter(child: SizedBox.shrink()),
           ),
 
@@ -139,7 +139,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _buildIngredientInput() {
+  Widget _buildIngredientInput(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
       child: Column(
@@ -167,20 +167,20 @@ class AiRecipeGeneratorPage extends StatelessWidget {
                       color: const Color(0xFFEEEEEE),
                       width: 1.5,
                     ),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: AppTheme.cardShadow,
+                        color: AppTheme.getCardShadow(context),
                         blurRadius: 8,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: TextField(
                     controller: controller.ingredientController,
                     onSubmitted: (_) => controller.addIngredient(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: AppTheme.textDark,
+                      color: AppTheme.getTextDark(context),
                     ),
                     decoration: const InputDecoration(
                       hintText: 'e.g. chicken, tomatoes, garlic...',
@@ -350,7 +350,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingCard() {
+  Widget _buildLoadingCard(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
       child: Container(
@@ -389,7 +389,7 @@ class AiRecipeGeneratorPage extends StatelessWidget {
     );
   }
 
-  Widget _buildResultCard() {
+  Widget _buildResultCard(BuildContext context) {
     final r = controller.result.value!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),

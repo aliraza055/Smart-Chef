@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Widgets/safe_image.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -168,3 +168,4 @@ class _Divider extends StatelessWidget {
     return Container(height: 32, width: 1.5, color: const Color(0xFFE0E0E0));
   }
 }
+

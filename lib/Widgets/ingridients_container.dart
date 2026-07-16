@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class IngredientsEditor extends StatefulWidget {
   final List<TextEditingController> controllers;
@@ -133,3 +133,4 @@ class _IngredientsEditorState extends State<IngredientsEditor> {
     );
   }
 }
+

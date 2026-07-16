@@ -7,3 +7,4 @@ class BottomNavigationController extends GetxController {
     currentIndex.value = index;
   }
 }
+

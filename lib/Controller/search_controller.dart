@@ -89,3 +89,4 @@ class SearchPageController extends GetxController {
     super.onClose();
   }
 }
+

@@ -11,3 +11,4 @@ class RecipeCardController extends GetxController {
     isFavorite.value = !isFavorite.value;
   }
 }
+

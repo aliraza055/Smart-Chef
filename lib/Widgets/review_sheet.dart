@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Services/review_serive.dart';
 
 class ReviewSheet extends StatefulWidget {
@@ -74,8 +74,8 @@ class _ReviewSheetState extends State<ReviewSheet> {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      decoration: const BoxDecoration(
-        color: AppTheme.surface,
+      decoration: BoxDecoration(
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Padding(
@@ -97,12 +97,12 @@ class _ReviewSheetState extends State<ReviewSheet> {
             ),
             const SizedBox(height: 20),
 
-            const Text(
+            Text(
               'Rate this Recipe',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: AppTheme.textDark,
+                color: AppTheme.getTextDark(context),
               ),
             ),
             const SizedBox(height: 4),

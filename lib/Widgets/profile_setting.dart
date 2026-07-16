@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class SettingsMenu extends StatelessWidget {
   final VoidCallback onEditProfile;
@@ -145,3 +145,4 @@ class _Separator extends StatelessWidget {
     );
   }
 }
+

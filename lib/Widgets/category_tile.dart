@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class CategoryItem {
   final String label;
@@ -108,3 +108,4 @@ class _CategoryRowState extends State<CategoryRow> {
     );
   }
 }
+

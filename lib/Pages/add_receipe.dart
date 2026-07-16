@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/add_receipe_controller.dart';
 import 'package:smart_chef/Utils/app_responsive.dart';
 import 'package:smart_chef/Widgets/image_container.dart';
@@ -16,7 +16,7 @@ class AddReceipe extends StatelessWidget {
   Widget build(BuildContext context) {
     final AddRecipeController controller = Get.put(AddRecipeController());
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -37,10 +37,10 @@ class AddReceipe extends StatelessWidget {
                       width: AppResponsive.width(context, 40),
                       height: AppResponsive.height(context, 40),
                       decoration: BoxDecoration(
-                        color: AppTheme.surface,
+                        color: AppTheme.getSurface(context),
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(color: AppTheme.cardShadow, blurRadius: 8),
+                          BoxShadow(color: AppTheme.getCardShadow(context), blurRadius: 8),
                         ],
                       ),
                       child: const Icon(
@@ -78,7 +78,7 @@ class AddReceipe extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AppResponsive.text(context, 28),
                   fontWeight: FontWeight.w800,
-                  color: AppTheme.textDark,
+                  color: AppTheme.getTextDark(context),
                 ),
               ),
             ),
@@ -115,7 +115,7 @@ class AddReceipe extends StatelessWidget {
                   Container(
                     height: 52,
                     decoration: BoxDecoration(
-                      color: AppTheme.surface,
+                      color: AppTheme.getSurface(context),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
                         color: const Color(0xFFEEEEEE),
@@ -259,3 +259,4 @@ class AddReceipe extends StatelessWidget {
     );
   }
 }
+

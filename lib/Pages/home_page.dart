@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 import 'package:smart_chef/Controller/home_page_controller.dart';
 import 'package:smart_chef/Routers/page_router.dart';
 import 'package:smart_chef/Widgets/analyzer_banner.dart';
@@ -60,7 +60,7 @@ class Homepage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Categories', style: AppTheme.headingMedium),
+                  Text('Categories', style: AppTheme.headingMedium(context)),
                   TextButton(
                     onPressed: () {},
                     child: const Text(
@@ -94,7 +94,10 @@ class Homepage extends StatelessWidget {
                 AppResponsive.horizontalPadding(context, size: 20),
                 AppResponsive.height(context, 16),
               ),
-              child: Text('Popular Today', style: AppTheme.headingMedium),
+              child: Text(
+                'Popular Today',
+                style: AppTheme.headingMedium(context),
+              ),
             ),
           ),
 
@@ -110,11 +113,11 @@ class Homepage extends StatelessWidget {
                   );
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const SliverFillRemaining(
+                  return SliverFillRemaining(
                     child: Center(
                       child: Text(
                         'No recipes found!',
-                        style: AppTheme.bodyMedium,
+                        style: AppTheme.bodyMedium(context),
                       ),
                     ),
                   );

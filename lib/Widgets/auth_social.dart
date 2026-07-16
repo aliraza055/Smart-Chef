@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chef/Constants/app_colors.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class SocialLoginRow extends StatelessWidget {
   final VoidCallback? onGoogleTap;
@@ -46,7 +46,7 @@ class SocialLoginRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textMedium,
+                  color: AppTheme.darkTextLight,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -96,7 +96,7 @@ class _SocialBtn extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textDark,
+                color: AppTheme.darkSurface,
               ),
             ),
           ],
@@ -105,3 +105,4 @@ class _SocialBtn extends StatelessWidget {
     );
   }
 }
+
