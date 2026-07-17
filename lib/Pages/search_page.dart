@@ -14,12 +14,12 @@ class SearchPage extends StatelessWidget {
     final SearchPageController controller = Get.put(SearchPageController());
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: Column(
         children: [
           // ── Header ──────────────────────────────
           Container(
-            color: AppTheme.surface,
+            color: AppTheme.getSurface(context),
             padding: EdgeInsets.only(
               top:
                   MediaQuery.of(context).padding.top +
@@ -35,8 +35,8 @@ class SearchPage extends StatelessWidget {
                   child: Container(
                     width: AppResponsive.width(context, 40),
                     height: AppResponsive.height(context, 40),
-                    decoration: const BoxDecoration(
-                      color: AppTheme.background,
+                    decoration: BoxDecoration(
+                      color: AppTheme.getBackground(context),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -54,25 +54,25 @@ class SearchPage extends StatelessWidget {
                   child: Container(
                     height: AppResponsive.height(context, 48),
                     decoration: BoxDecoration(
-                      color: AppTheme.background,
+                      color: AppTheme.getBackground(context),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: TextField(
                       controller: controller.searchController,
                       autofocus: true,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.textDark,
+                        color: AppTheme.getTextDark(context),
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Search recipes...',
                         border: InputBorder.none,
                         prefixIcon: Icon(
                           Icons.search_rounded,
                           size: 20,
-                          color: AppTheme.textLight,
+                          color: AppTheme.getTextLight(context),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 14,
                         ),
@@ -91,14 +91,14 @@ class SearchPage extends StatelessWidget {
                             child: Container(
                               width: AppResponsive.width(context, 36),
                               height: AppResponsive.height(context, 36),
-                              decoration: const BoxDecoration(
-                                color: AppTheme.background,
+                              decoration: BoxDecoration(
+                                color: AppTheme.getBackground(context),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.close_rounded,
                                 size: 18,
-                                color: AppTheme.textMedium,
+                                color: AppTheme.getTextMedium(context),
                               ),
                             ),
                           ),
@@ -207,16 +207,16 @@ class _EmptySearch extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             query.isEmpty ? 'Search recipes...' : 'No results for "$query"',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textDark,
+              color: AppTheme.getTextDark(context),
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Try a different name or category',
-            style: TextStyle(fontSize: 13, color: AppTheme.textMedium),
+            style: TextStyle(fontSize: 13, color: AppTheme.getTextMedium(context)),
           ),
         ],
       ),

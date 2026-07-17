@@ -35,10 +35,10 @@ class _AuthTextFieldState extends State<AuthTextField> {
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textDark,
+            color: AppTheme.getTextDark(context),
           ),
         ),
         const SizedBox(height: 8),
@@ -47,13 +47,13 @@ class _AuthTextFieldState extends State<AuthTextField> {
           obscureText: widget.isPassword && _obscure,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
-          style: const TextStyle(fontSize: 14, color: AppTheme.textDark),
+          style: TextStyle(fontSize: 14, color: AppTheme.getTextDark(context)),
           decoration: InputDecoration(
             hintText: widget.hint,
-            hintStyle: const TextStyle(color: AppTheme.textLight, fontSize: 14),
+            hintStyle: TextStyle(color: AppTheme.getTextLight(context), fontSize: 14),
             prefixIcon: Icon(
               widget.prefixIcon,
-              color: AppTheme.textMedium,
+              color: AppTheme.getTextMedium(context),
               size: 20,
             ),
             suffixIcon: widget.isPassword
@@ -63,13 +63,13 @@ class _AuthTextFieldState extends State<AuthTextField> {
                       _obscure
                           ? Icons.visibility_outlined
                           : Icons.visibility_off_outlined,
-                      color: AppTheme.textMedium,
+                      color: AppTheme.getTextMedium(context),
                       size: 20,
                     ),
                   )
                 : null,
             filled: true,
-            fillColor: const Color(0xFFF4F4F4),
+            fillColor: AppTheme.getBackground(context),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide.none,

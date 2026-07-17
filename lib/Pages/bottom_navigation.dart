@@ -24,7 +24,7 @@ class BottomNavigation extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: AppTheme.surface,
+      backgroundColor: AppTheme.getBackground(context),
       body: Obx(() => pages[controller.currentIndex.value]),
 
       // Floating Add Button
@@ -46,7 +46,7 @@ class BottomNavigation extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
-        color: AppTheme.divider,
+        color: AppTheme.getSurface(context),
         elevation: 10,
 
         child: Padding(
@@ -79,30 +79,34 @@ class BottomNavigation extends StatelessWidget {
   }
 
   Widget _buildNavItem(IconData icon, int index, String label) {
-    return Obx(() {
-      final bool isSelected = controller.currentIndex.value == index;
+    return Builder(
+      builder: (context) {
+        return Obx(() {
+          final bool isSelected = controller.currentIndex.value == index;
 
-      return InkWell(
-        onTap: () => controller.changeIndex(index),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? AppTheme.primary : Colors.grey,
-              size: isSelected ? 28 : 24,
+          return InkWell(
+            onTap: () => controller.changeIndex(index),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isSelected ? AppTheme.primary : AppTheme.getTextMedium(context),
+                  size: isSelected ? 28 : 24,
+                ),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isSelected ? AppTheme.primary : AppTheme.getTextMedium(context),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? AppTheme.primary : Colors.grey,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
+          );
+        });
+      }
+    );
   }
 }
 

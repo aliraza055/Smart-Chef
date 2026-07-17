@@ -93,12 +93,12 @@ class _NutritionSectionState extends State<NutritionSection>
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
+            Text(
               'Nutrition Info',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: AppTheme.textDark,
+                color: AppTheme.getTextDark(context),
               ),
             ),
             const SizedBox(width: 8),
@@ -254,15 +254,15 @@ class _LoadingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(color: AppTheme.cardShadow, blurRadius: 12),
+        boxShadow: [
+          BoxShadow(color: AppTheme.getCardShadow(context), blurRadius: 12),
         ],
       ),
-      child: const Row(
+      child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             width: 22,
             height: 22,
             child: CircularProgressIndicator(
@@ -270,13 +270,13 @@ class _LoadingCard extends StatelessWidget {
               strokeWidth: 2.5,
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Text(
             'AI nutrition is calculating...',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textDark,
+              color: AppTheme.getTextDark(context),
             ),
           ),
         ],
@@ -294,12 +294,15 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEBEB),
+        color: isDark ? const Color(0xFF2D1A1A) : const Color(0xFFFFEBEB),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFFFCDD2)),
+        border: Border.all(
+          color: isDark ? const Color(0xFF5C1E1E) : const Color(0xFFFFCDD2),
+        ),
       ),
       child: Row(
         children: [
@@ -330,10 +333,10 @@ class _ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(color: AppTheme.cardShadow, blurRadius: 16),
+        boxShadow: [
+          BoxShadow(color: AppTheme.getCardShadow(context), blurRadius: 16),
         ],
       ),
       child: Column(
@@ -475,16 +478,16 @@ class _ResultCard extends StatelessWidget {
                 ),
                 if (result.perIngredient.isNotEmpty) ...[
                   const SizedBox(height: 18),
-                  const Divider(color: AppTheme.divider),
+                  Divider(color: AppTheme.getDivider(context)),
                   const SizedBox(height: 14),
                   Row(
-                    children: const [
+                    children: [
                       Text(
                         'Per Ingredient',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.textDark,
+                          color: AppTheme.getTextDark(context),
                         ),
                       ),
                     ],
@@ -499,32 +502,39 @@ class _ResultCard extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 14),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFFAEB),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFFFFE082)),
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.info_outline_rounded,
-                        size: 14,
-                        color: Color(0xFFF5A623),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Yeh AI ka estimate hai, exact values vary ho sakti hain.',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF856404),
-                          ),
+                Builder(
+                  builder: (context) {
+                    final isDark = Theme.of(context).brightness == Brightness.dark;
+                    return Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF2D2A1C) : const Color(0xFFFFFAEB),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isDark ? const Color(0xFF5C541E) : const Color(0xFFFFE082),
                         ),
                       ),
-                    ],
-                  ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.info_outline_rounded,
+                            size: 14,
+                            color: Color(0xFFF5A623),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Yeh AI ka estimate hai, exact values vary ho sakti hain.',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: isDark ? const Color(0xFFFFD54F) : const Color(0xFF856404),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 ),
                 const SizedBox(height: 14),
                 GestureDetector(
@@ -617,9 +627,9 @@ class _MacroCard extends StatelessWidget {
                 ),
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
-                    color: AppTheme.textMedium,
+                    color: AppTheme.getTextMedium(context),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -654,9 +664,9 @@ class _MacroBar extends StatelessWidget {
           width: 50,
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
-              color: AppTheme.textMedium,
+              color: AppTheme.getTextMedium(context),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -708,7 +718,7 @@ class _IngredientRow extends StatelessWidget {
           Expanded(
             child: Text(
               name,
-              style: const TextStyle(fontSize: 12, color: AppTheme.textMedium),
+              style: TextStyle(fontSize: 12, color: AppTheme.getTextMedium(context)),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -719,7 +729,7 @@ class _IngredientRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
                 value: pct,
-                backgroundColor: const Color(0xFFEEEEEE),
+                backgroundColor: AppTheme.getDivider(context),
                 valueColor: const AlwaysStoppedAnimation(Color(0xFF52B788)),
                 minHeight: 6,
               ),
@@ -728,10 +738,10 @@ class _IngredientRow extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             '$calories kcal',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppTheme.textDark,
+              color: AppTheme.getTextDark(context),
             ),
           ),
         ],

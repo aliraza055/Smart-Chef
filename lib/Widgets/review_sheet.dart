@@ -108,7 +108,7 @@ class _ReviewSheetState extends State<ReviewSheet> {
             const SizedBox(height: 4),
             Text(
               widget.recipeName,
-              style: const TextStyle(fontSize: 14, color: AppTheme.textMedium),
+              style: TextStyle(fontSize: 14, color: AppTheme.getTextMedium(context)),
             ),
 
             const SizedBox(height: 20),
@@ -135,15 +135,15 @@ class _ReviewSheetState extends State<ReviewSheet> {
             TextField(
               controller: _commentController,
               maxLines: 3,
-              style: const TextStyle(fontSize: 14, color: AppTheme.textDark),
+              style: TextStyle(fontSize: 14, color: AppTheme.getTextDark(context)),
               decoration: InputDecoration(
                 hintText: 'Share your experience (optional)...',
-                hintStyle: const TextStyle(
-                  color: AppTheme.textLight,
+                hintStyle: TextStyle(
+                  color: AppTheme.getTextLight(context),
                   fontSize: 14,
                 ),
                 filled: true,
-                fillColor: const Color(0xFFF4F4F4),
+                fillColor: AppTheme.getBackground(context),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,

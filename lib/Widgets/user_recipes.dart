@@ -22,12 +22,12 @@ class MyRecipesGrid extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'My Recipes',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textDark,
+                color: AppTheme.getTextDark(context),
               ),
             ),
             GestureDetector(

@@ -18,7 +18,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
 
       floatingActionButton: FloatingActionButton.extended(
         heroTag: "home_ai_chef",
@@ -199,7 +199,7 @@ class _StickyCategories extends SliverPersistentHeaderDelegate {
   ) {
     return Container(
       height: _height,
-      color: AppTheme.background,
+      color: AppTheme.getBackground(context),
       padding: const EdgeInsets.only(left: 20),
       child: CategoryRow(onCategorySelected: onCategorySelected),
     );

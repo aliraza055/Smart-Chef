@@ -12,6 +12,15 @@ class LevelStreakRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final levelBg = isDark ? const Color(0xFF1E351F) : const Color(0xFFEDF7ED);
+    final levelColor = isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32);
+    final levelTrack = isDark ? const Color(0xFF2E5C31) : const Color(0xFFC8E6C9);
+
+    final streakBg = isDark ? const Color(0xFF332D24) : const Color(0xFFF5F0E8);
+    final streakColor = isDark ? const Color(0xFFFFD54F) : const Color(0xFF8B6914);
+
     return Row(
       children: [
         // ── Level card ───────────────────────────────
@@ -19,7 +28,7 @@ class LevelStreakRow extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFEDF7ED),
+              color: levelBg,
               borderRadius: BorderRadius.circular(18),
             ),
             child: Column(
@@ -27,18 +36,18 @@ class LevelStreakRow extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.restaurant_menu_rounded,
-                      color: Color(0xFF2E7D32),
+                      color: levelColor,
                       size: 16,
                     ),
                     const SizedBox(width: 6),
-                    const Text(
+                    Text(
                       'LEVEL',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF2E7D32),
+                        color: levelColor,
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -47,10 +56,10 @@ class LevelStreakRow extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   level,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF2E7D32),
+                    color: levelColor,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -60,8 +69,8 @@ class LevelStreakRow extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: _levelProgress(level),
                     minHeight: 5,
-                    backgroundColor: const Color(0xFFC8E6C9),
-                    color: const Color(0xFF2E7D32),
+                    backgroundColor: levelTrack,
+                    color: levelColor,
                   ),
                 ),
               ],
@@ -76,7 +85,7 @@ class LevelStreakRow extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFF5F0E8),
+              color: streakBg,
               borderRadius: BorderRadius.circular(18),
             ),
             child: Column(
@@ -84,18 +93,18 @@ class LevelStreakRow extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.local_fire_department_rounded,
-                      color: Color(0xFF8B6914),
+                      color: streakColor,
                       size: 16,
                     ),
                     const SizedBox(width: 6),
-                    const Text(
+                    Text(
                       'STREAK',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF8B6914),
+                        color: streakColor,
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -104,10 +113,10 @@ class LevelStreakRow extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   '$streakDays Days',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF8B6914),
+                    color: streakColor,
                   ),
                 ),
                 const SizedBox(height: 8),

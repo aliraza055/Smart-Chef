@@ -25,11 +25,11 @@ class IngredientsChecklist extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.cardShadow,
+            color: AppTheme.getCardShadow(context),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -42,12 +42,12 @@ class IngredientsChecklist extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Ingredients',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textDark,
+                  color: AppTheme.getTextDark(context),
                 ),
               ),
               Container(
@@ -91,7 +91,7 @@ class IngredientsChecklist extends StatelessWidget {
                           border: Border.all(
                             color: controller.checked[i]
                                 ? AppTheme.primary
-                                : const Color(0xFFCCCCCC),
+                                : AppTheme.getDivider(context),
                             width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(6),
@@ -110,8 +110,8 @@ class IngredientsChecklist extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           color: controller.checked[i]
-                              ? AppTheme.textLight
-                              : AppTheme.textDark,
+                              ? AppTheme.getTextLight(context)
+                              : AppTheme.getTextDark(context),
                           decoration: controller.checked[i]
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,

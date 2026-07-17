@@ -23,7 +23,7 @@ class ReviewsList extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.surface,
+              color: AppTheme.getSurface(context),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
@@ -48,13 +48,13 @@ class ReviewsList extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppTheme.surface,
+              color: AppTheme.getSurface(context),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
                 'No reviews yet. Be the first to review!',
-                style: TextStyle(fontSize: 13, color: AppTheme.textMedium),
+                style: TextStyle(fontSize: 13, color: AppTheme.getTextMedium(context)),
               ),
             ),
           );
@@ -67,12 +67,12 @@ class ReviewsList extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Reviews',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.textDark,
+                    color: AppTheme.getTextDark(context),
                   ),
                 ),
                 Container(
@@ -182,11 +182,11 @@ class _ReviewCardState extends State<_ReviewCard> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.cardShadow,
+            color: AppTheme.getCardShadow(context),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -240,17 +240,17 @@ class _ReviewCardState extends State<_ReviewCard> {
                   children: [
                     Text(
                       widget.userName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.textDark,
+                        color: AppTheme.getTextDark(context),
                       ),
                     ),
                     Text(
                       _timeAgo(widget.createdAt),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: AppTheme.textLight,
+                        color: AppTheme.getTextLight(context),
                       ),
                     ),
                   ],
@@ -276,9 +276,9 @@ class _ReviewCardState extends State<_ReviewCard> {
             const SizedBox(height: 10),
             Text(
               widget.comment,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: AppTheme.textMedium,
+                color: AppTheme.getTextMedium(context),
                 height: 1.5,
               ),
             ),

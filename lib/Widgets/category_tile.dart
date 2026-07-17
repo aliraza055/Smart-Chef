@@ -44,10 +44,10 @@ class CategoryChip extends StatelessWidget {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primary : Colors.white,
+          color: isSelected ? AppTheme.primary : AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(40),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : Color(0xFF1B4332),
+            color: isSelected ? AppTheme.primary : AppTheme.getDivider(context),
             width: .5,
           ),
         ),
@@ -61,7 +61,7 @@ class CategoryChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : Colors.grey.shade600,
+                color: isSelected ? Colors.white : AppTheme.getTextMedium(context),
               ),
             ),
           ],

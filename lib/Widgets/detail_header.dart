@@ -198,13 +198,16 @@ class _CircleIconBtn extends StatelessWidget {
         width: 38,
         height: 38,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: AppTheme.getSurface(context).withOpacity(0.9),
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8),
+            BoxShadow(
+              color: AppTheme.getCardShadow(context),
+              blurRadius: 8,
+            ),
           ],
         ),
-        child: Icon(icon, size: 18, color: AppTheme.textDark),
+        child: Icon(icon, size: 18, color: AppTheme.getTextDark(context)),
       ),
     );
   }

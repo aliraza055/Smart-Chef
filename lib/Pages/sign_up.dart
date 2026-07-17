@@ -16,7 +16,7 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -38,11 +38,11 @@ class SignUp extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.all(AppResponsive.width(context, 28)),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.getSurface(context),
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: AppTheme.getCardShadow(context),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
@@ -59,16 +59,16 @@ class SignUp extends StatelessWidget {
                         style: TextStyle(
                           fontSize: AppResponsive.text(context, 26),
                           fontWeight: FontWeight.w800,
-                          color: AppTheme.textDark,
+                          color: AppTheme.getTextDark(context),
                           letterSpacing: -0.3,
                         ),
                       ),
                       const SizedBox(height: 6),
-                      const Text(
+                      Text(
                         'Join thousands of home chefs today.',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.textMedium,
+                          color: AppTheme.getTextMedium(context),
                         ),
                       ),
 
@@ -176,11 +176,11 @@ class SignUp extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               'Already have an account? ',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.textMedium,
+                                color: AppTheme.getTextMedium(context),
                               ),
                             ),
                             GestureDetector(
@@ -237,9 +237,9 @@ class _FooterLink extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 13,
-          color: AppTheme.textMedium,
+          color: AppTheme.getTextMedium(context),
           fontWeight: FontWeight.w500,
         ),
       ),

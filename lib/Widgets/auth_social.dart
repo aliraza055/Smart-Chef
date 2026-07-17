@@ -79,7 +79,7 @@ class _SocialBtn extends StatelessWidget {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: AppTheme.primary.withOpacity(0.3),
@@ -93,10 +93,10 @@ class _SocialBtn extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.darkSurface,
+                color: AppTheme.getTextDark(context),
               ),
             ),
           ],

@@ -14,7 +14,7 @@ class FavoritePage extends StatelessWidget {
     final FavoriteController controller = Get.put(FavoriteController());
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -82,14 +82,14 @@ class FavoritePage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.textDark,
+                      color: AppTheme.getTextDark(context),
                       letterSpacing: -0.5,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     'Recipes you love, all in one place.',
-                    style: TextStyle(fontSize: 13, color: AppTheme.textMedium),
+                    style: TextStyle(fontSize: 13, color: AppTheme.getTextMedium(context)),
                   ),
                 ],
               ),

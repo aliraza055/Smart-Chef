@@ -48,11 +48,11 @@ class ProfileHeader extends StatelessWidget {
                   url: imageUrl,
                   fit: BoxFit.cover,
                   placeholder: Container(
-                    color: const Color(0xFFEEEEEE),
-                    child: const Icon(
+                    color: AppTheme.getDivider(context),
+                    child: Icon(
                       Icons.person_rounded,
                       size: 50,
-                      color: AppTheme.textLight,
+                      color: AppTheme.getTextLight(context),
                     ),
                   ),
                 ),
@@ -69,7 +69,7 @@ class ProfileHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppTheme.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
+                    border: Border.all(color: AppTheme.getSurface(context), width: 2),
                   ),
                   child: const Icon(
                     Icons.edit_rounded,
@@ -87,10 +87,10 @@ class ProfileHeader extends StatelessWidget {
         // ── Name ────────────────────────────────────
         Text(
           name,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: AppTheme.textDark,
+            color: AppTheme.getTextDark(context),
             letterSpacing: -0.3,
           ),
         ),
@@ -100,7 +100,7 @@ class ProfileHeader extends StatelessWidget {
         // ── Bio ─────────────────────────────────────
         Text(
           bio.isNotEmpty ? bio : 'Home Cook & Food Enthusiast',
-          style: const TextStyle(fontSize: 13, color: AppTheme.textMedium),
+          style: TextStyle(fontSize: 13, color: AppTheme.getTextMedium(context)),
           textAlign: TextAlign.center,
         ),
 
@@ -149,10 +149,10 @@ class _StatItem extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textMedium,
+              color: AppTheme.getTextMedium(context),
               letterSpacing: 0.8,
             ),
           ),
@@ -165,7 +165,7 @@ class _StatItem extends StatelessWidget {
 class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(height: 32, width: 1.5, color: const Color(0xFFE0E0E0));
+    return Container(height: 32, width: 1.5, color: AppTheme.getDivider(context));
   }
 }
 

@@ -20,11 +20,11 @@ class SmartSearchBar extends StatelessWidget {
       child: Container(
         height: 52,
         decoration: BoxDecoration(
-          color: AppTheme.surface,
+          color: AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.cardShadow,
+              color: AppTheme.getCardShadow(context),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -32,17 +32,17 @@ class SmartSearchBar extends StatelessWidget {
         ),
         child: TextField(
           onChanged: onChanged,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
-            color: AppTheme.textDark,
+            color: AppTheme.getTextDark(context),
             fontWeight: FontWeight.w400,
           ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: AppTheme.textLight, fontSize: 14),
-            prefixIcon: const Icon(
+            hintStyle: TextStyle(color: AppTheme.getTextLight(context), fontSize: 14),
+            prefixIcon: Icon(
               Icons.search_rounded,
-              color: AppTheme.textLight,
+              color: AppTheme.getTextLight(context),
               size: 22,
             ),
             border: InputBorder.none,

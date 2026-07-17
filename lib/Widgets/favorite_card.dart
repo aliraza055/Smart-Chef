@@ -32,11 +32,11 @@ class FavoriteCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.surface,
+          color: AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.cardShadow,
+              color: AppTheme.getCardShadow(context),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -60,7 +60,7 @@ class FavoriteCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
                       height: 200,
-                      color: const Color(0xFFF0F0F0),
+                      color: AppTheme.getDivider(context),
                       child: const Center(
                         child: CircularProgressIndicator(
                           color: AppTheme.primary,
@@ -70,10 +70,10 @@ class FavoriteCard extends StatelessWidget {
                     ),
                     errorWidget: (context, url, error) => Container(
                       height: 200,
-                      color: const Color(0xFFF0F0F0),
-                      child: const Icon(
+                      color: AppTheme.getDivider(context),
+                      child: Icon(
                         Icons.image_not_supported_outlined,
-                        color: AppTheme.textLight,
+                        color: AppTheme.getTextLight(context),
                         size: 40,
                       ),
                     ),
@@ -88,11 +88,11 @@ class FavoriteCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: AppTheme.surface.withOpacity(0.92),
+                        color: AppTheme.getSurface(context).withOpacity(0.92),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: AppTheme.getCardShadow(context),
                             blurRadius: 8,
                           ),
                         ],
@@ -101,7 +101,7 @@ class FavoriteCard extends StatelessWidget {
                         isFavorite
                             ? Icons.favorite_rounded
                             : Icons.favorite_border_rounded,
-                        color: isFavorite ? Colors.red : AppTheme.textLight,
+                        color: isFavorite ? Colors.red : AppTheme.getTextLight(context),
                         size: 18,
                       ),
                     ),
@@ -121,10 +121,10 @@ class FavoriteCard extends StatelessWidget {
                     name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textDark,
+                      color: AppTheme.getTextDark(context),
                       height: 1.3,
                     ),
                   ),
@@ -161,15 +161,15 @@ class _TagChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: AppTheme.getDivider(context),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w700,
-          color: AppTheme.textMedium,
+          color: AppTheme.getTextMedium(context),
           letterSpacing: 0.8,
         ),
       ),

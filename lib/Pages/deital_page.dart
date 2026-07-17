@@ -66,7 +66,7 @@ class _DetailPageState extends State<DetailPage> {
     final chefLevel = _chefData?['gmail'] ?? 'Chef';
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
 
       // ── ✅ Sticky Rate Recipe Button ──────────────────────────────────────
       bottomNavigationBar: docId != null
@@ -139,7 +139,7 @@ class _DetailPageState extends State<DetailPage> {
             child: Transform.translate(
               offset: const Offset(0, -28),
               child: Container(
-                color: AppTheme.background,
+                color: AppTheme.getBackground(context),
                 padding: EdgeInsets.fromLTRB(
                   AppResponsive.horizontalPadding(context, size: 20),
                   AppResponsive.height(context, 40),
@@ -159,9 +159,9 @@ class _DetailPageState extends State<DetailPage> {
                       const SizedBox(height: 20),
                       Text(
                         description,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.textMedium,
+                          color: AppTheme.getTextMedium(context),
                           height: 1.6,
                         ),
                       ),

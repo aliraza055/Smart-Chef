@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class NutrientCard extends StatelessWidget {
   final String label, value;
@@ -32,8 +33,8 @@ class NutrientCard extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: AppTheme.getTextDark(context),
             fontSize: 10,
             fontWeight: FontWeight.w500,
           ),
@@ -89,4 +90,3 @@ class HealthScoreRing extends StatelessWidget {
     ),
   );
 }
-

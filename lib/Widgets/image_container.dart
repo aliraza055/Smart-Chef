@@ -20,7 +20,7 @@ class RecipeImagePicker extends StatelessWidget {
         height: 180,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFFF2F2F2),
+          color: AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppTheme.primary.withOpacity(0.5),
@@ -38,7 +38,7 @@ class RecipeImagePicker extends StatelessWidget {
                   Stack(
                     alignment: Alignment.topRight,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.camera_alt_rounded,
                         color: AppTheme.primary,
                         size: 40,
@@ -59,12 +59,12 @@ class RecipeImagePicker extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     'TAP TO UPLOAD RECIPE PHOTO',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textMedium,
+                      color: AppTheme.getTextMedium(context),
                       letterSpacing: 0.8,
                     ),
                   ),

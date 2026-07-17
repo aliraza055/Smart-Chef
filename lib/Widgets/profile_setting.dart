@@ -22,22 +22,22 @@ class SettingsMenu extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Settings & Preferences',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppTheme.textDark,
+            color: AppTheme.getTextDark(context),
           ),
         ),
         const SizedBox(height: 14),
         Container(
           decoration: BoxDecoration(
-            color: AppTheme.surface,
+            color: AppTheme.getSurface(context),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.cardShadow,
+                color: AppTheme.getCardShadow(context),
                 blurRadius: 14,
                 offset: const Offset(0, 4),
               ),
@@ -92,7 +92,7 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? AppTheme.primary : AppTheme.textDark;
+    final color = isDestructive ? AppTheme.primary : AppTheme.getTextDark(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -106,7 +106,9 @@ class _SettingsTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isDestructive
                     ? AppTheme.primary.withOpacity(0.08)
-                    : const Color(0xFFF2F2F2),
+                    : (Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF2A2A2A)
+                        : const Color(0xFFF2F2F2)),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 18, color: color),
@@ -124,7 +126,7 @@ class _SettingsTile extends StatelessWidget {
             ),
             Icon(
               Icons.chevron_right_rounded,
-              color: isDestructive ? AppTheme.primary : AppTheme.textLight,
+              color: isDestructive ? AppTheme.primary : AppTheme.getTextLight(context),
               size: 20,
             ),
           ],
@@ -137,11 +139,11 @@ class _SettingsTile extends StatelessWidget {
 class _Separator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    return Divider(
       height: 1,
       indent: 70,
       endIndent: 18,
-      color: Color(0xFFF0F0F0),
+      color: AppTheme.getDivider(context),
     );
   }
 }

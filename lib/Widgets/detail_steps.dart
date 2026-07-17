@@ -20,7 +20,7 @@ class CookingSteps extends StatelessWidget {
       //  margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        color: AppTheme.getSurface(context),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,12 +29,12 @@ class CookingSteps extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Cooking Steps',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textDark,
+                  color: AppTheme.getTextDark(context),
                 ),
               ),
               Container(
@@ -103,9 +103,9 @@ class CookingSteps extends StatelessWidget {
                   Expanded(
                     child: Text(
                       steps[i],
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.textMedium,
+                        color: AppTheme.getTextMedium(context),
                         height: 1.5,
                       ),
                     ),

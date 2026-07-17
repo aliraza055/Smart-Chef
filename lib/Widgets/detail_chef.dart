@@ -55,10 +55,10 @@ class ChefCard extends StatelessWidget {
                     url: photoUrl,
                     fit: BoxFit.cover,
                     placeholder: Container(
-                      color: const Color(0xFFEEEEEE),
-                      child: const Icon(
+                      color: AppTheme.getDivider(context),
+                      child: Icon(
                         Icons.person_rounded,
-                        color: AppTheme.darkBackground,
+                        color: AppTheme.getTextLight(context),
                         size: 28,
                       ),
                     ),
@@ -72,10 +72,10 @@ class ChefCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.lightTextDark,
+                        color: AppTheme.getTextDark(context),
                       ),
                     ),
                     const SizedBox(height: 2),

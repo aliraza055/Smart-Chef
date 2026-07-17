@@ -23,11 +23,11 @@ class _IngredientsEditorState extends State<IngredientsEditor> {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: AppTheme.getSurface(context),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.cardShadow,
+            color: AppTheme.getCardShadow(context),
             blurRadius: 14,
             offset: const Offset(0, 4),
           ),
@@ -39,12 +39,12 @@ class _IngredientsEditorState extends State<IngredientsEditor> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Ingredients',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textDark,
+                  color: AppTheme.getTextDark(context),
                 ),
               ),
               GestureDetector(
@@ -79,14 +79,14 @@ class _IngredientsEditorState extends State<IngredientsEditor> {
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF7F7F7),
+                        color: AppTheme.getBackground(context),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: TextField(
                         controller: widget.controllers[i],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.textDark,
+                          color: AppTheme.getTextDark(context),
                         ),
                         decoration: InputDecoration(
                           hintText: i == 0
@@ -94,8 +94,8 @@ class _IngredientsEditorState extends State<IngredientsEditor> {
                               : i == 1
                               ? '2 Large Eggs'
                               : 'Add ingredient...',
-                          hintStyle: const TextStyle(
-                            color: AppTheme.textLight,
+                          hintStyle: TextStyle(
+                            color: AppTheme.getTextLight(context),
                             fontSize: 14,
                           ),
                           border: InputBorder.none,

@@ -60,17 +60,22 @@ class _RecipeCardState extends State<RecipeCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: Colors.white70,
+          color: AppTheme.getSurface(context),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Color(0xFF1B4332), width: 0.2),
+          border: Border.all(
+            color: isDark ? AppTheme.getDivider(context) : const Color(0xFF1B4332).withOpacity(0.2),
+            width: 0.5,
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.cardShadow,
+              color: AppTheme.getCardShadow(context),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -84,7 +89,7 @@ class _RecipeCardState extends State<RecipeCard> {
               children: [
                 // Image
                 Padding(
-                  padding: EdgeInsetsGeometry.all(0),
+                  padding: const EdgeInsets.all(0),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(20),
@@ -96,7 +101,7 @@ class _RecipeCardState extends State<RecipeCard> {
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         height: 200,
-                        color: const Color(0xFFF0F0F0),
+                        color: AppTheme.getDivider(context),
                         child: const Center(
                           child: CircularProgressIndicator(
                             color: AppTheme.primary,
@@ -106,10 +111,10 @@ class _RecipeCardState extends State<RecipeCard> {
                       ),
                       errorWidget: (context, url, error) => Container(
                         height: 200,
-                        color: const Color(0xFFF0F0F0),
-                        child: const Icon(
+                        color: AppTheme.getDivider(context),
+                        child: Icon(
                           Icons.image_not_supported_outlined,
-                          color: AppTheme.textLight,
+                          color: AppTheme.getTextLight(context),
                           size: 40,
                         ),
                       ),
@@ -125,11 +130,11 @@ class _RecipeCardState extends State<RecipeCard> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.getSurface(context),
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: AppTheme.getCardShadow(context),
                           blurRadius: 8,
                         ),
                       ],
@@ -145,10 +150,10 @@ class _RecipeCardState extends State<RecipeCard> {
                         const SizedBox(width: 4),
                         Text(
                           '${widget.avgRating} ( ${widget.totalReviews}+ Review )',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.textDark,
+                            color: AppTheme.getTextDark(context),
                           ),
                         ),
                       ],
@@ -165,11 +170,11 @@ class _RecipeCardState extends State<RecipeCard> {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.95),
+                        color: AppTheme.getSurface(context).withOpacity(0.95),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: AppTheme.getCardShadow(context),
                             blurRadius: 8,
                           ),
                         ],
@@ -181,7 +186,7 @@ class _RecipeCardState extends State<RecipeCard> {
                               ? Icons.favorite_rounded
                               : Icons.favorite_border_rounded,
                           key: ValueKey(_isFav),
-                          color: _isFav ? Colors.red : AppTheme.textLight,
+                          color: _isFav ? Colors.red : AppTheme.getTextLight(context),
                           size: 18,
                         ),
                       ),
@@ -205,19 +210,19 @@ class _RecipeCardState extends State<RecipeCard> {
                           widget.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.textDark,
+                            color: AppTheme.getTextDark(context),
                           ),
                         ),
                         const SizedBox(height: 4),
                         if (widget.userName.isNotEmpty)
                           Text(
                             'By ${widget.userName}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppTheme.textMedium,
+                              color: AppTheme.getTextMedium(context),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -239,7 +244,7 @@ class _RecipeCardState extends State<RecipeCard> {
                       ),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.access_time_rounded,
                             size: 13,
                             color: AppTheme.primary,

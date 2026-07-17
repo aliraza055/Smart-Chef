@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/Constants/app_theme.dart';
 
 class HomeContainer extends StatelessWidget {
   const HomeContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
         height: 170,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xFFFFF3DC),
-          border: Border.all(color: Color(0xFF1B4332), width: 0.3),
+          color: isDark
+              ? AppTheme.getSurface(context)
+              : const Color(0xFFFFF3DC),
+          border: Border.all(
+            color: isDark
+                ? AppTheme.getDivider(context)
+                : const Color(0xFF1B4332),
+            width: 0.3,
+          ),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -27,7 +37,9 @@ class HomeContainer extends StatelessWidget {
                   height: 180,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFFFAC775).withOpacity(0.35),
+                    color: isDark
+                        ? AppTheme.primary.withOpacity(0.1)
+                        : const Color(0xFFFAC775).withOpacity(0.35),
                   ),
                 ),
               ),
@@ -39,7 +51,9 @@ class HomeContainer extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFFFAC775).withOpacity(0.2),
+                    color: isDark
+                        ? AppTheme.primary.withOpacity(0.05)
+                        : const Color(0xFFFAC775).withOpacity(0.2),
                   ),
                 ),
               ),
@@ -55,12 +69,14 @@ class HomeContainer extends StatelessWidget {
                   children: [
                     // Tag pill
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFFEF9F27),
+                        color: isDark
+                            ? AppTheme.primary
+                            : const Color(0xFFEF9F27),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -68,12 +84,14 @@ class HomeContainer extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF412402),
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF412402),
                           letterSpacing: 0.4,
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
                     // Title
                     RichText(
@@ -81,29 +99,37 @@ class HomeContainer extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF412402),
+                          color: isDark
+                              ? AppTheme.getTextDark(context)
+                              : const Color(0xFF412402),
                           height: 1.3,
                         ),
                         children: [
-                          TextSpan(text: 'Cook the '),
+                          const TextSpan(text: 'Cook the '),
                           TextSpan(
                             text: 'best',
-                            style: TextStyle(color: Color(0xFF854F0B)),
+                            style: TextStyle(
+                              color: isDark
+                                  ? const Color(0xFF7ecba1)
+                                  : const Color(0xFF854F0B),
+                            ),
                           ),
-                          TextSpan(text: '\nrecipes today!'),
+                          const TextSpan(text: '\nrecipes today!'),
                         ],
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // Button
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 18,
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFF412402),
+                        color: isDark
+                            ? AppTheme.primary
+                            : const Color(0xFF412402),
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: Row(
@@ -114,14 +140,18 @@ class HomeContainer extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFFFFF3DC),
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFFFFF3DC),
                             ),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Icon(
                             Icons.arrow_forward,
                             size: 13,
-                            color: Color(0xFFFFF3DC),
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFFFFF3DC),
                           ),
                         ],
                       ),
@@ -149,4 +179,3 @@ class HomeContainer extends StatelessWidget {
     );
   }
 }
-

@@ -15,7 +15,7 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -37,11 +37,11 @@ class SignIn extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.all(AppResponsive.width(context, 28)),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.getSurface(context),
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: AppTheme.getCardShadow(context),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
@@ -58,16 +58,16 @@ class SignIn extends StatelessWidget {
                         style: TextStyle(
                           fontSize: AppResponsive.text(context, 26),
                           fontWeight: FontWeight.w800,
-                          color: AppTheme.textDark,
+                          color: AppTheme.getTextDark(context),
                           letterSpacing: -0.3,
                         ),
                       ),
                       SizedBox(height: AppResponsive.height(context, 6)),
-                      const Text(
+                      Text(
                         'Please enter your details to continue cooking.',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.textMedium,
+                          color: AppTheme.getTextMedium(context),
                           height: 1.4,
                         ),
                       ),
@@ -108,12 +108,12 @@ class SignIn extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Password',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark,
+                              color: AppTheme.getTextDark(context),
                             ),
                           ),
                           GestureDetector(
@@ -182,11 +182,11 @@ class SignIn extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               'New to Smart Chef? ',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.textMedium,
+                                color: AppTheme.getTextMedium(context),
                               ),
                             ),
                             GestureDetector(
@@ -243,9 +243,9 @@ class _FooterLink extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 13,
-          color: AppTheme.textMedium,
+          color: AppTheme.getTextMedium(context),
           fontWeight: FontWeight.w500,
         ),
       ),

@@ -14,13 +14,12 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: Stack(
         children: [
           Column(
             children: [
               Expanded(
-                flex: 52,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: AppResponsive.horizontalPadding(
@@ -36,7 +35,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                         width: AppResponsive.width(context, 110),
                         height: AppResponsive.height(context, 110),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppTheme.getSurface(context),
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
@@ -74,7 +73,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                         'Your culinary journey starts here.',
                         style: TextStyle(
                           fontSize: AppResponsive.text(context, 16),
-                          color: Colors.grey[500],
+                          color: AppTheme.getTextMedium(context),
                           fontWeight: FontWeight.w400,
                           letterSpacing: 0.1,
                         ),
@@ -87,7 +86,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
               ),
 
               // Bottom section – kitchen image
-              Expanded(flex: 48, child: _KitchenImage()),
+              Expanded(child: _KitchenImage()),
             ],
           ),
 
@@ -109,7 +108,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                   borderRadius: BorderRadius.circular(40),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: AppTheme.getCardShadow(context),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -121,16 +120,16 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                     Text(
                       'Started',
                       style: TextStyle(
-                        color: AppTheme.getSurface(context),
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.8,
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Icon(
+                    const Icon(
                       Icons.storefront_rounded,
-                      color: AppTheme.surface,
+                      color: Colors.white,
                       size: 20,
                     ),
                   ],
@@ -147,6 +146,7 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
 class _KitchenImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bgColor = AppTheme.getBackground(context);
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(24),
@@ -164,8 +164,8 @@ class _KitchenImage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color(0xFFF5F3F0).withOpacity(0.92),
-                  const Color(0xFFF5F3F0).withOpacity(0.55),
+                  bgColor.withOpacity(0.92),
+                  bgColor.withOpacity(0.55),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.3, 1.0],

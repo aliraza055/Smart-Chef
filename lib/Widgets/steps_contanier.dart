@@ -18,12 +18,12 @@ class PreparationStepsEditor extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Preparation Steps',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppTheme.textDark,
+            color: AppTheme.getTextDark(context),
           ),
         ),
         const SizedBox(height: 14),
@@ -59,10 +59,10 @@ class PreparationStepsEditor extends StatelessWidget {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.surface,
+                      color: AppTheme.getSurface(context),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: const Color(0xFFEEEEEE),
+                        color: AppTheme.getDivider(context),
                         width: 1.5,
                       ),
                     ),
@@ -70,18 +70,18 @@ class PreparationStepsEditor extends StatelessWidget {
                       controller: controllers[i],
                       maxLines: 3,
                       minLines: 2,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.textDark,
+                        color: AppTheme.getTextDark(context),
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Describe the first step...',
                         hintStyle: TextStyle(
-                          color: AppTheme.textLight,
+                          color: AppTheme.getTextLight(context),
                           fontSize: 14,
                         ),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(14),
+                        contentPadding: const EdgeInsets.all(14),
                       ),
                     ),
                   ),
@@ -104,21 +104,21 @@ class PreparationStepsEditor extends StatelessWidget {
                 width: 1.5,
               ),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.add_circle_outline_rounded,
-                  color: AppTheme.textMedium,
+                  color: AppTheme.getTextMedium(context),
                   size: 20,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   'ADD ANOTHER STEP',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.textMedium,
+                    color: AppTheme.getTextMedium(context),
                     letterSpacing: 0.6,
                   ),
                 ),

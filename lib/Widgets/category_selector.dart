@@ -63,7 +63,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                   border: Border.all(
                     color: isSelected
                         ? AppTheme.primary
-                        : const Color(0xFFDDDDDD),
+                        : AppTheme.getDivider(context),
                     width: 1.5,
                   ),
                 ),
