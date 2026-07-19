@@ -142,7 +142,7 @@ class SignUp extends StatelessWidget {
                                 BoxShadow(
                                   color: AppTheme.primary.withOpacity(0.4),
                                   blurRadius: 16,
-                                  offset: const Offset(0, 6),
+                                  offset: const Offset(0, 7),
                                 ),
                               ],
                             ),
@@ -246,4 +246,3 @@ class _FooterLink extends StatelessWidget {
     );
   }
 }
-
