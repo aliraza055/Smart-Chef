@@ -17,7 +17,7 @@ class UserInfo extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.getBackground(context),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -53,9 +53,11 @@ class UserInfo extends StatelessWidget {
                   Container(
                     width: AppResponsive.width(context, 42),
                     height: AppResponsive.height(context, 42),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppTheme.primary, width: 2),
+                      border: Border.fromBorderSide(
+                        BorderSide(color: AppTheme.primary, width: 2),
+                      ),
                     ),
                     child: ClipOval(
                       child: Obx(
@@ -105,11 +107,11 @@ class UserInfo extends StatelessWidget {
                               url: controller.photoUrl,
                               fit: BoxFit.cover,
                               placeholder: Container(
-                                color: const Color(0xFFEEEEEE),
-                                child: const Icon(
+                                color: AppTheme.getDivider(context),
+                                child: Icon(
                                   Icons.person_rounded,
                                   size: 50,
-                                  color: AppTheme.textLight,
+                                  color: AppTheme.getTextLight(context),
                                 ),
                               ),
                             ),
@@ -127,7 +129,10 @@ class UserInfo extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppTheme.primary,
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(
+                                color: AppTheme.getSurface(context),
+                                width: 2,
+                              ),
                             ),
                             child: const Icon(
                               Icons.edit_rounded,
@@ -143,10 +148,10 @@ class UserInfo extends StatelessWidget {
                   Obx(
                     () => Text(
                       controller.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: AppTheme.textDark,
+                        color: AppTheme.getTextDark(context),
                         letterSpacing: -0.3,
                       ),
                     ),
@@ -155,9 +160,9 @@ class UserInfo extends StatelessWidget {
                   Obx(
                     () => Text(
                       controller.email,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: AppTheme.textMedium,
+                        color: AppTheme.getTextMedium(context),
                       ),
                     ),
                   ),
@@ -169,14 +174,14 @@ class UserInfo extends StatelessWidget {
                   // ke liye) tab inko wire karenge. Abhi ke liye
                   // as-is chhoड़ diya, sirf navigation/state pattern
                   // migrate kiya hai.
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _StatItem(value: '48', label: 'RECIPES'),
-                      _Divider(),
-                      _StatItem(value: '1.2k', label: 'FOLLOWERS'),
-                      _Divider(),
-                      _StatItem(value: '342', label: 'FOLLOWING'),
+                      const _StatItem(value: '48', label: 'RECIPES'),
+                      _Divider(context: context),
+                      const _StatItem(value: '1.2k', label: 'FOLLOWERS'),
+                      _Divider(context: context),
+                      const _StatItem(value: '342', label: 'FOLLOWING'),
                     ],
                   ),
                 ],
@@ -197,7 +202,7 @@ class UserInfo extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEDF7ED),
+                        color: AppTheme.getPrimarySoft(context),
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Column(
@@ -207,7 +212,7 @@ class UserInfo extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.restaurant_menu_rounded,
-                                color: Color(0xFF2E7D32),
+                                color: AppTheme.primary,
                                 size: 15,
                               ),
                               SizedBox(width: 6),
@@ -216,7 +221,7 @@ class UserInfo extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: Color(0xFF2E7D32),
+                                  color: AppTheme.primary,
                                   letterSpacing: 0.8,
                                 ),
                               ),
@@ -228,17 +233,17 @@ class UserInfo extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF2E7D32),
+                              color: AppTheme.primary,
                             ),
                           ),
                           const SizedBox(height: 8),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: const LinearProgressIndicator(
+                            child: LinearProgressIndicator(
                               value: 1.0,
                               minHeight: 5,
-                              backgroundColor: Color(0xFFC8E6C9),
-                              color: Color(0xFF2E7D32),
+                              backgroundColor: AppTheme.getDivider(context),
+                              color: AppTheme.primary,
                             ),
                           ),
                         ],
@@ -250,13 +255,13 @@ class UserInfo extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F0E8),
+                        color: AppTheme.getCardBg(context),
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Icon(
                                 Icons.local_fire_department_rounded,
@@ -275,16 +280,20 @@ class UserInfo extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             '12 Days',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF8B6914),
+                              color:
+                                  AppTheme.getTextDark(context) ==
+                                      AppTheme.darkTextDark
+                                  ? const Color(0xFFD9A441)
+                                  : const Color(0xFF8B6914),
                             ),
                           ),
-                          SizedBox(height: 13),
+                          const SizedBox(height: 13),
                         ],
                       ),
                     ),
@@ -304,22 +313,22 @@ class UserInfo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Settings & Preferences',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textDark,
+                      color: AppTheme.getTextDark(context),
                     ),
                   ),
                   const SizedBox(height: 14),
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.surface,
+                      color: AppTheme.getSurface(context),
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.cardShadow,
+                          color: AppTheme.getCardShadow(context),
                           blurRadius: 14,
                           offset: const Offset(0, 4),
                         ),
@@ -332,19 +341,19 @@ class UserInfo extends StatelessWidget {
                           label: 'Saved Collections',
                           onTap: () => Get.toNamed(PageRouter.favoritePage),
                         ),
-                        const _TileDivider(),
+                        _TileDivider(context: context),
                         _SettingsTile(
                           icon: Icons.notifications_outlined,
                           label: 'Cooking Reminders',
                           onTap: () {},
                         ),
-                        const _TileDivider(),
+                        _TileDivider(context: context),
                         _SettingsTile(
                           icon: Icons.settings_outlined,
                           label: 'Account Settings',
                           onTap: () => Get.toNamed(PageRouter.updateProfile),
                         ),
-                        const _TileDivider(),
+                        _TileDivider(context: context),
                         _SettingsTile(
                           icon: Icons.logout_rounded,
                           label: 'Sign Out',
@@ -389,10 +398,10 @@ class _StatItem extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textMedium,
+              color: AppTheme.getTextMedium(context),
               letterSpacing: 0.8,
             ),
           ),
@@ -403,10 +412,11 @@ class _StatItem extends StatelessWidget {
 }
 
 class _Divider extends StatelessWidget {
-  const _Divider();
+  final BuildContext context;
+  const _Divider({required this.context});
   @override
-  Widget build(BuildContext context) =>
-      Container(width: 1.5, height: 32, color: const Color(0xFFE0E0E0));
+  Widget build(BuildContext _) =>
+      Container(width: 1.5, height: 32, color: AppTheme.getDivider(context));
 }
 
 class _SettingsTile extends StatelessWidget {
@@ -424,7 +434,9 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? AppTheme.primary : AppTheme.textDark;
+    final color = isDestructive
+        ? AppTheme.primary
+        : AppTheme.getTextDark(context);
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -437,7 +449,7 @@ class _SettingsTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isDestructive
                     ? AppTheme.primary.withOpacity(0.08)
-                    : const Color(0xFFF2F2F2),
+                    : AppTheme.getCardBg(context),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 18, color: color),
@@ -455,7 +467,9 @@ class _SettingsTile extends StatelessWidget {
             ),
             Icon(
               Icons.chevron_right_rounded,
-              color: isDestructive ? AppTheme.primary : AppTheme.textLight,
+              color: isDestructive
+                  ? AppTheme.primary
+                  : AppTheme.getTextLight(context),
               size: 20,
             ),
           ],
@@ -466,13 +480,13 @@ class _SettingsTile extends StatelessWidget {
 }
 
 class _TileDivider extends StatelessWidget {
-  const _TileDivider();
+  final BuildContext context;
+  const _TileDivider({required this.context});
   @override
-  Widget build(BuildContext context) => const Divider(
+  Widget build(BuildContext _) => Divider(
     height: 1,
     indent: 70,
     endIndent: 18,
-    color: Color(0xFFF0F0F0),
+    color: AppTheme.getDivider(context),
   );
 }
-
