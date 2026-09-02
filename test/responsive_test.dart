@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_chef/Utils/app_responsive.dart';
+import 'package:smart_chef/core/utils/app_responsive.dart';
 
 void main() {
   testWidgets('responsive helper scales values for different screen sizes', (

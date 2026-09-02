@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_chef/Constants/app_theme.dart';
-import 'package:smart_chef/Controller/settings_controller.dart';
-import 'package:smart_chef/Routers/page_router.dart';
-import 'package:smart_chef/Services/auth_wrapper.dart';
+import 'package:smart_chef/core/constants/app_theme.dart';
+import 'package:smart_chef/features/settings/controllers/settings_controller.dart';
+import 'package:smart_chef/core/routes/page_router.dart';
+import 'package:smart_chef/features/auth/presentation/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
