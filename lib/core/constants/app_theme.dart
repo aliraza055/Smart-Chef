@@ -95,7 +95,6 @@ class AppTheme {
       ? darkCardShadow
       : lightCardShadow;
 
-  // ── Context-aware text styles ────────────────────────────
   static TextStyle headingLarge(BuildContext context) => TextStyle(
     fontSize: 26,
     fontWeight: FontWeight.w800,
