@@ -32,24 +32,25 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
                     children: [
                       SizedBox(height: AppResponsive.height(context, 60)),
                       Container(
-                        width: AppResponsive.width(context, 110),
-                        height: AppResponsive.height(context, 110),
+                        width: AppResponsive.width(context, 140),
+                        height: AppResponsive.height(context, 140),
                         decoration: BoxDecoration(
-                          color: AppTheme.getSurface(context),
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius: BorderRadius.circular(32),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.primary.withOpacity(0.18),
+                              color: AppTheme.primary.withOpacity(0.25),
                               blurRadius: 32,
-                              spreadRadius: 4,
-                              offset: const Offset(0, 8),
+                              spreadRadius: 2,
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.restaurant,
-                          color: AppTheme.primary,
-                          size: 52,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(32),
+                          child: Image.asset(
+                            'images/smart_chef_logo.jpg',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
 
