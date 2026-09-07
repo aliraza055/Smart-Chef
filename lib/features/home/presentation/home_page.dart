@@ -62,7 +62,9 @@ class Homepage extends StatelessWidget {
                 children: [
                   Text('Categories', style: AppTheme.headingMedium(context)),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, PageRouter.allRecipes);
+                    },
                     child: const Text(
                       'SEE ALL',
                       style: TextStyle(
@@ -78,11 +80,13 @@ class Homepage extends StatelessWidget {
             ),
           ),
 
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _StickyCategories(
-              selectedCategory: controller.selectedCategory.value,
-              onCategorySelected: controller.selectCategory,
+          Obx(
+            () => SliverPersistentHeader(
+              pinned: true,
+              delegate: _StickyCategories(
+                selectedCategory: controller.selectedCategory.value,
+                onCategorySelected: controller.selectCategory,
+              ),
             ),
           ),
 
@@ -101,29 +105,62 @@ class Homepage extends StatelessWidget {
             ),
           ),
 
-          Obx(
-            () => StreamBuilder<QuerySnapshot>(
-              stream: controller.getRecipesStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
+          StreamBuilder<QuerySnapshot>(
+            stream: controller.getRecipesStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      'Error loading recipes!',
+                      style: AppTheme.bodyMedium(context),
                     ),
-                  );
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  ),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppTheme.primary),
+                  ),
+                );
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      'No recipes found!',
+                      style: AppTheme.bodyMedium(context),
+                    ),
+                  ),
+                );
+              }
+
+              final allDocs = snapshot.data!.docs;
+
+              return Obx(() {
+                final selectedCat = controller.selectedCategory.value;
+                final recipes = selectedCat == 'All'
+                    ? allDocs
+                    : allDocs.where((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        final cat = (data['category'] ?? '')
+                            .toString()
+                            .trim()
+                            .toLowerCase();
+                        return cat == selectedCat.toLowerCase();
+                      }).toList();
+
+                if (recipes.isEmpty) {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
-                        'No recipes found!',
+                        'No recipes found in "$selectedCat"!',
                         style: AppTheme.bodyMedium(context),
                       ),
                     ),
                   );
                 }
-
-                final recipes = snapshot.data!.docs;
 
                 return SliverPadding(
                   padding: EdgeInsets.fromLTRB(
@@ -165,8 +202,8 @@ class Homepage extends StatelessWidget {
                     }, childCount: recipes.length),
                   ),
                 );
-              },
-            ),
+              });
+            },
           ),
         ],
       ),
@@ -201,7 +238,10 @@ class _StickyCategories extends SliverPersistentHeaderDelegate {
       height: _height,
       color: AppTheme.getBackground(context),
       padding: const EdgeInsets.only(left: 20),
-      child: CategoryRow(onCategorySelected: onCategorySelected),
+      child: CategoryRow(
+        selectedCategory: selectedCategory,
+        onCategorySelected: onCategorySelected,
+      ),
     );
   }
 

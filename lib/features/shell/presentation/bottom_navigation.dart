@@ -48,28 +48,29 @@ class BottomNavigation extends StatelessWidget {
         notchMargin: 8,
         color: AppTheme.getSurface(context),
         elevation: 10,
-
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
             children: [
-              Row(
-                children: [
-                  _buildNavItem(Icons.home, 0, "Home"),
-                  const SizedBox(width: 20),
-                  _buildNavItem(Icons.favorite, 1, "Favorite"),
-                ],
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildNavItem(Icons.home, 0, "Home"),
+                    _buildNavItem(Icons.favorite, 1, "Favorite"),
+                  ],
+                ),
               ),
-
-              Row(
-                children: [
-                  _buildNavItem(Icons.person, 3, "Profile"),
-                  const SizedBox(width: 20),
-                  _buildNavItem(Icons.settings, 4, "Settings"),
-                ],
+              const SizedBox(width: 48), // Gap for floating action button
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildNavItem(Icons.person, 3, "Profile"),
+                    _buildNavItem(Icons.settings, 4, "Settings"),
+                  ],
+                ),
               ),
             ],
           ),
@@ -91,13 +92,17 @@ class BottomNavigation extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: isSelected ? AppTheme.primary : AppTheme.getTextMedium(context),
+                  color: isSelected
+                      ? AppTheme.primary
+                      : AppTheme.getTextMedium(context),
                   size: isSelected ? 28 : 24,
                 ),
                 Text(
                   label,
                   style: TextStyle(
-                    color: isSelected ? AppTheme.primary : AppTheme.getTextMedium(context),
+                    color: isSelected
+                        ? AppTheme.primary
+                        : AppTheme.getTextMedium(context),
                     fontSize: 12,
                   ),
                 ),
@@ -105,8 +110,7 @@ class BottomNavigation extends StatelessWidget {
             ),
           );
         });
-      }
+      },
     );
   }
 }
-

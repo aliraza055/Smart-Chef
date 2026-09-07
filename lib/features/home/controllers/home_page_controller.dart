@@ -14,7 +14,7 @@ class HomePageController extends GetxController {
   void onInit() {
     super.onInit();
     _favoriteSub = _favService.favoritesStream().listen((ids) {
-      favoriteIds.value = ids;
+      favoriteIds.assignAll(ids);
     });
   }
 
@@ -27,12 +27,8 @@ class HomePageController extends GetxController {
   }
 
   Stream<QuerySnapshot> getRecipesStream() {
-    final col = FirebaseFirestore.instance.collection('Receipes');
-    if (selectedCategory.value == 'All') {
-      return col.orderBy('createdAt', descending: true).snapshots();
-    }
-    return col
-        .where('category', isEqualTo: selectedCategory.value)
+    return FirebaseFirestore.instance
+        .collection('Receipes')
         .orderBy('createdAt', descending: true)
         .snapshots();
   }
@@ -43,4 +39,3 @@ class HomePageController extends GetxController {
     super.onClose();
   }
 }
-

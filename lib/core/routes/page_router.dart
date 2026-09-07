@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chef/features/all_recipes/presentation/all_recipes_page.dart';
 import 'package:smart_chef/features/ai_recipe/presentation/ai_recipe_generator_page.dart';
 import 'package:smart_chef/features/food_analyzer/presentation/food_analyzer_page.dart';
+import 'package:smart_chef/features/settings/presentation/change_password_page.dart';
 import 'package:smart_chef/features/shell/presentation/bottom_navigation.dart';
 import 'package:smart_chef/features/recipe_detail/presentation/detail_page.dart';
 import 'package:smart_chef/features/favorites/presentation/favorite_page.dart';
@@ -21,6 +23,8 @@ class PageRouter {
   static const bottomNav = '/bottomNav';
   static const updateProfile = '/update profile';
   static const settingPage = '/settingPage';
+  static const changePassword = '/changePassword';
+  static const allRecipes = '/allRecipes';
   static const receipeAi = '/receipeAi';
   static const foodAnalyser = '/foodAnalyser';
 
@@ -49,6 +53,10 @@ class PageRouter {
         return MaterialPageRoute(builder: (_) => UpdateUser());
       case settingPage:
         return MaterialPageRoute(builder: (_) => SettingsPage());
+      case changePassword:
+        return MaterialPageRoute(builder: (_) => const ChangePasswordPage());
+      case allRecipes:
+        return MaterialPageRoute(builder: (_) => const AllRecipesPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(body: Center(child: Text('no page found'))),
@@ -56,4 +64,3 @@ class PageRouter {
     }
   }
 }
-

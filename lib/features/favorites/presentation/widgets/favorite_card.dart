@@ -43,57 +43,56 @@ class FavoriteCard extends StatelessWidget {
           ],
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image with favorite button overlay
+            // Responsive Image with favorite button overlay
             Stack(
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(20),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: image,
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      height: 200,
-                      color: AppTheme.getDivider(context),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.primary,
-                          strokeWidth: 2,
+                  child: AspectRatio(
+                    aspectRatio: 1.35,
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: AppTheme.getDivider(context),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppTheme.primary,
+                            strokeWidth: 2,
+                          ),
                         ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 200,
-                      color: AppTheme.getDivider(context),
-                      child: Icon(
-                        Icons.image_not_supported_outlined,
-                        color: AppTheme.getTextLight(context),
-                        size: 40,
+                      errorWidget: (context, url, error) => Container(
+                        color: AppTheme.getDivider(context),
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          color: AppTheme.getTextLight(context),
+                          size: 32,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 8,
+                  right: 8,
                   child: GestureDetector(
                     onTap: onFavoriteToggle,
                     child: Container(
-                      width: 34,
-                      height: 34,
+                      width: 32,
+                      height: 32,
                       decoration: BoxDecoration(
                         color: AppTheme.getSurface(context).withOpacity(0.92),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: AppTheme.getCardShadow(context),
-                            blurRadius: 8,
+                            blurRadius: 6,
                           ),
                         ],
                       ),
@@ -101,8 +100,10 @@ class FavoriteCard extends StatelessWidget {
                         isFavorite
                             ? Icons.favorite_rounded
                             : Icons.favorite_border_rounded,
-                        color: isFavorite ? Colors.red : AppTheme.getTextLight(context),
-                        size: 18,
+                        color: isFavorite
+                            ? Colors.red
+                            : AppTheme.getTextLight(context),
+                        size: 16,
                       ),
                     ),
                   ),
@@ -110,39 +111,62 @@ class FavoriteCard extends StatelessWidget {
               ],
             ),
 
-            // Content
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Recipe name
-                  Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.getTextDark(context),
-                      height: 1.3,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Tag or time
-                  if (tag != null && tag!.isNotEmpty)
-                    _TagChip(label: tag!)
-                  else if (time.isNotEmpty)
+            // Content section dynamically taking remaining space
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Text(
-                      '$time MIN',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.primary,
+                      name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.getTextDark(context),
+                        height: 1.2,
                       ),
                     ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (tag != null && tag!.isNotEmpty)
+                          Flexible(child: _TagChip(label: tag!))
+                        else if (time.isNotEmpty)
+                          Text(
+                            '$time MIN',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.primary,
+                            ),
+                          ),
+                        if (likes.isNotEmpty && likes != '0')
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                size: 14,
+                                color: AppTheme.starColor,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                likes,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.getTextMedium(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -176,4 +200,3 @@ class _TagChip extends StatelessWidget {
     );
   }
 }
-

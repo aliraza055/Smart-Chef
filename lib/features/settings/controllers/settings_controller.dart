@@ -38,8 +38,7 @@ class SettingsController extends GetxController {
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     if (Get.context != null && Get.context!.mounted) {
-      Get.offAllNamed(PageRouter.singIn);
+      Get.offAllNamed(PageRouter.singUp);
     }
   }
 }
-

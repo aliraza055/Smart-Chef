@@ -61,7 +61,9 @@ class CategoryChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : AppTheme.getTextMedium(context),
+                color: isSelected
+                    ? Colors.white
+                    : AppTheme.getTextMedium(context),
               ),
             ),
           ],
@@ -71,22 +73,17 @@ class CategoryChip extends StatelessWidget {
   }
 }
 
-class CategoryRow extends StatefulWidget {
+class CategoryRow extends StatelessWidget {
+  final String selectedCategory;
   final ValueChanged<String> onCategorySelected;
   final List<CategoryItem> categories;
 
   const CategoryRow({
     super.key,
+    this.selectedCategory = 'All',
     required this.onCategorySelected,
     this.categories = defaultCategories,
   });
-
-  @override
-  State<CategoryRow> createState() => _CategoryRowState();
-}
-
-class _CategoryRowState extends State<CategoryRow> {
-  String _selected = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -94,13 +91,14 @@ class _CategoryRowState extends State<CategoryRow> {
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       child: Row(
-        children: widget.categories.map((cat) {
+        children: categories.map((cat) {
+          final isSelected =
+              selectedCategory.toLowerCase() == cat.label.toLowerCase();
           return CategoryChip(
             item: cat,
-            isSelected: _selected == cat.label,
+            isSelected: isSelected,
             onTap: () {
-              setState(() => _selected = cat.label);
-              widget.onCategorySelected(cat.label);
+              onCategorySelected(cat.label);
             },
           );
         }).toList(),
@@ -108,4 +106,3 @@ class _CategoryRowState extends State<CategoryRow> {
     );
   }
 }
-

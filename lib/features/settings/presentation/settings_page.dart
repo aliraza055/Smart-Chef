@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_chef/core/constants/app_theme.dart';
 import 'package:smart_chef/features/settings/controllers/settings_controller.dart';
+import 'package:smart_chef/features/shell/controllers/bottom_navigation_controller.dart';
 import 'package:smart_chef/core/routes/page_router.dart';
 import 'package:smart_chef/core/utils/app_responsive.dart';
 
@@ -28,8 +29,14 @@ class SettingsPage extends StatelessWidget {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () =>
-                        Navigator.pushNamed(context, PageRouter.bottomNav),
+                    onTap: () {
+                      if (Get.isRegistered<BottomNavigationController>()) {
+                        Get.find<BottomNavigationController>().changeIndex(0);
+                      }
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Container(
                       width: AppResponsive.width(context, 40),
                       height: AppResponsive.height(context, 40),
@@ -95,7 +102,8 @@ class SettingsPage extends StatelessWidget {
                     icon: Icons.lock_outline_rounded,
                     label: 'Change Password',
                     subtitle: 'Update your password',
-                    onTap: () {},
+                    onTap: () =>
+                        Navigator.pushNamed(context, PageRouter.changePassword),
                   ),
                 ],
               ),
@@ -168,10 +176,7 @@ class SettingsPage extends StatelessWidget {
                     icon: Icons.logout_rounded,
                     label: 'Sign Out',
                     isDestructive: true,
-                    onTap: () => Navigator.pushReplacementNamed(
-                      context,
-                      PageRouter.singIn,
-                    ),
+                    onTap: () => controller.signOut(),
                   ),
                 ],
               ),
@@ -244,7 +249,9 @@ class _Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? AppTheme.primary : AppTheme.getTextDark(context);
+    final color = isDestructive
+        ? AppTheme.primary
+        : AppTheme.getTextDark(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -320,4 +327,3 @@ class _TileDivider extends StatelessWidget {
         : const Color(0xFFF0F0F0),
   );
 }
-
