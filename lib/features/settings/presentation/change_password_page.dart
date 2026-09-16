@@ -194,7 +194,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ),
                   SizedBox(width: AppResponsive.width(context, 14)),
                   Text(
-                    'Change Password',
+                    'Change Password ',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -232,7 +232,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     AuthTextField(
                       controller: _currentPasswordController,
                       label: 'Current Password',
-                      hint: '••••••••',
+                      hint: '•••••••',
                       prefixIcon: Icons.lock_outline_rounded,
                       isPassword: true,
                       validator: (val) {

@@ -12,9 +12,11 @@ import 'package:smart_chef/features/auth/presentation/sign_in.dart';
 import 'package:smart_chef/features/auth/presentation/sign_up.dart';
 import 'package:smart_chef/features/profile/presentation/update_user.dart';
 import 'package:smart_chef/features/auth/presentation/welcome_page.dart';
+import 'package:smart_chef/features/onboarding/presentation/onboarding_page.dart';
 
 class PageRouter {
   static const initial = '/';
+  static const onboarding = '/onboarding';
   static const singUp = 'singUp';
   static const singIn = 'singIn';
   static const homePage = '/homePage';
@@ -32,6 +34,8 @@ class PageRouter {
     switch (settings.name) {
       case initial:
         return MaterialPageRoute(builder: (_) => SmartChefSplashScreen());
+      case onboarding:
+        return MaterialPageRoute(builder: (_) => OnboardingPage());
       case singUp:
         return MaterialPageRoute(builder: (_) => SignUp());
       case singIn:

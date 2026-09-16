@@ -97,8 +97,10 @@ class _SmartChefSplashScreenState extends State<SmartChefSplashScreen> {
             left: AppResponsive.horizontalPadding(context, size: 20),
             right: AppResponsive.horizontalPadding(context, size: 20),
             child: GestureDetector(
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, PageRouter.singIn),
+              onTap: () => Navigator.pushReplacementNamed(
+                context,
+                PageRouter.onboarding,
+              ),
               child: Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: AppResponsive.width(context, 28),

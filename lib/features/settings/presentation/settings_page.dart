@@ -152,6 +152,15 @@ class SettingsPage extends StatelessWidget {
                 title: 'Support',
                 children: [
                   _Tile(
+                    icon: Icons.slideshow_rounded,
+                    label: 'View App Intro',
+                    subtitle: 'Replay app onboarding screens',
+                    onTap: () {
+                      Navigator.pushNamed(context, PageRouter.onboarding);
+                    },
+                  ),
+                  const _TileDivider(),
+                  _Tile(
                     icon: Icons.privacy_tip_outlined,
                     label: 'Privacy Policy',
                     onTap: () {},
