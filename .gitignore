@@ -4,6 +4,7 @@
 *.pyc
 *.swp
 .env
+.env*.local
 .DS_Store
 .atom/
 .build/
@@ -13,16 +14,22 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# Editors & IDEs
 *.iml
 *.ipr
 *.iws
 .idea/
+.vscode/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Build Artifacts & Dependencies (Recursive for Monorepo)
+build/
+**/build/
+.cxx/
+**/android/.cxx/
+node_modules/
+**/node_modules/
+.next/
+**/.next/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -31,16 +38,14 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
-/coverage/
+coverage/
+**/coverage/
 
-# Symbolication related
+# Symbolication & Obfuscation
 app.*.symbols
-
-# Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Android Build Artifacts
+**/android/app/debug
+**/android/app/profile
+**/android/app/release

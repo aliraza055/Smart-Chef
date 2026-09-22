@@ -1,16 +1,45 @@
-# smart_chef
+# SmartChef Monorepo
 
-A new Flutter project.
+This repository now contains a clean monorepo structure for the SmartChef product:
 
-## Getting Started
+## Structure
 
-This project is a starting point for a Flutter application.
+- App/ — existing Flutter mobile application
+- Admin/ — separate Next.js admin panel foundation
 
-A few resources to get you started if this is your first Flutter project:
+## Apps
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Flutter App
+The original SmartChef mobile application was preserved and moved into the App directory without changing the project architecture or existing feature set.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Quick start:
+
+```bash
+cd App
+flutter pub get
+flutter run
+```
+
+### Admin App
+A separate Next.js + TypeScript + Tailwind application was initialized for the admin panel foundation.
+
+Quick start:
+
+```bash
+cd Admin
+npm install
+npm run dev
+```
+
+Production build check:
+
+```bash
+cd Admin
+npm run build
+```
+
+## Notes
+
+- The Flutter app remains independent and runnable from the App folder.
+- The Next.js admin app remains independent and runnable from the Admin folder.
+- Firebase and existing Flutter app configuration were kept intact as part of the move.
