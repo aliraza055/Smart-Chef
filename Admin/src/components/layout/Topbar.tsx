@@ -2,15 +2,21 @@
 
 import { Bell, Search, Menu, User, LogOut } from "lucide-react";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { navItems } from "./Sidebar";
 
 export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const currentItem = navItems.find((item) => item.href === pathname);
   const pageTitle = currentItem ? currentItem.name : "Dashboard";
+
+  async function handleLogout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.replace("/");
+  }
 
   return (
     <header className="h-16 flex items-center justify-between px-4 sm:px-6 bg-surface border-b border-border sticky top-0 z-10 transition-colors">
@@ -61,7 +67,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
               <button className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-background flex items-center gap-2">
                 <User size={16} /> Profile
               </button>
-              <button className="w-full text-left px-4 py-2 text-sm text-danger hover:bg-red-50 flex items-center gap-2">
+              <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-danger hover:bg-red-50 flex items-center gap-2">
                 <LogOut size={16} /> Logout
               </button>
             </div>

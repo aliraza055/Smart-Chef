@@ -1,11 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pathname === "/") {
+      return;
+    }
+
+    async function verifySession() {
+      const response = await fetch("/api/admin/session");
+      const data = await response.json().catch(() => ({ authenticated: false }));
+
+      if (!data.authenticated) {
+        router.replace("/");
+      }
+    }
+
+    verifySession();
+  }, [pathname, router]);
 
   return (
     <div className="flex h-screen bg-background overflow-hidden font-sans">

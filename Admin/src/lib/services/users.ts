@@ -1,3 +1,4 @@
+import { getAuth } from "firebase-admin/auth";
 import { getAdminDb } from "../firebase/server";
 import { COLLECTIONS } from "../firebase/constants";
 
@@ -87,6 +88,55 @@ export async function getUsersSnapshot() {
     .limit(20)
     .get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function getAllUsersSnapshot() {
+  const adminDb = getAdminDb();
+  const snapshot = await adminDb
+    .collection(COLLECTIONS.USERS)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function updateUserRestriction(userId: string, restricted: boolean) {
+  const adminDb = getAdminDb();
+  const userRef = adminDb.collection(COLLECTIONS.USERS).doc(userId);
+  const currentDoc = await userRef.get();
+  const currentData = currentDoc.data() || {};
+  const nextStatus = restricted ? "restricted" : "active";
+
+  await Promise.all([
+    userRef.set(
+      {
+        ...currentData,
+        isRestricted: restricted,
+        accountStatus: nextStatus,
+        updatedAt: new Date(),
+      },
+      { merge: true },
+    ),
+    getAuth().updateUser(userId, { disabled: restricted }),
+  ]);
+
+  return { id: userId, isRestricted: restricted, accountStatus: nextStatus };
+}
+
+export async function deleteUserAccount(userId: string) {
+  const adminDb = getAdminDb();
+
+  try {
+    await getAuth().deleteUser(userId);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (!message.includes("auth/user-not-found")) {
+      throw error;
+    }
+  }
+
+  await adminDb.collection(COLLECTIONS.USERS).doc(userId).delete();
+  return { id: userId, deleted: true };
 }
 
 export async function getRecipesSnapshot() {

@@ -1,6 +1,7 @@
 import { initializeApp, getApps, cert, applicationDefault } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fs from "node:fs";
+import { getAdminSessionSecret } from "@/lib/admin-auth";
 
 let _adminDb: ReturnType<typeof getFirestore> | null = null;
 
@@ -95,11 +96,7 @@ export function getAdminDb(): ReturnType<typeof getFirestore> {
 }
 
 export function isAdminAuthenticated(secret: string | undefined): boolean {
-  const configuredSecret = getEffectiveSecret();
-
-  if (!configuredSecret) {
-    return true;
-  }
+  const configuredSecret = getEffectiveSecret() || getAdminSessionSecret();
 
   return secret === configuredSecret;
 }

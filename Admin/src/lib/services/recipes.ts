@@ -35,3 +35,39 @@ export async function getRecipeCount(): Promise<number> {
   const snapshot = await adminDb.collection(COLLECTIONS.RECIPES).count().get();
   return snapshot.data().count;
 }
+
+export async function getAllRecipesSnapshot() {
+  const adminDb = getAdminDb();
+  const snapshot = await adminDb
+    .collection(COLLECTIONS.RECIPES)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function updateRecipeStatus(recipeId: string, status: string) {
+  const adminDb = getAdminDb();
+  const recipeRef = adminDb.collection(COLLECTIONS.RECIPES).doc(recipeId);
+  const currentDoc = await recipeRef.get();
+  const currentData = currentDoc.data() || {};
+
+  const nextStatus = status === "hidden" ? "hidden" : "active";
+
+  await recipeRef.set(
+    {
+      ...currentData,
+      status: nextStatus,
+      updatedAt: new Date(),
+    },
+    { merge: true },
+  );
+
+  return { id: recipeId, status: nextStatus };
+}
+
+export async function deleteRecipe(recipeId: string) {
+  const adminDb = getAdminDb();
+  await adminDb.collection(COLLECTIONS.RECIPES).doc(recipeId).delete();
+  return { id: recipeId, deleted: true };
+}
